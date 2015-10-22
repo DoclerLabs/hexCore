@@ -1,2 +1,2 @@
 # haXeMachina
-Modular MVC framework written in Haxe language
+Independent core elements for building OOP projects and frameworks
