@@ -9,13 +9,13 @@ import hex.error.UnsupportedOperationException;
  */
 class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher<IEventListener, EventType>
 {
-    private var _callbacks      : Map<String, Array<EventType->Void>>;
-    private var _callbackSize   : Int;
+    private var _callbacks      	: Map<String, Array<EventType->Void>>;
+    private var _callbackSize   	: Int;
 
     public function new<ListenerType>()
     {
-        this._callbacks         = new Map();
-        this._callbackSize      = 0;
+        this._callbacks         	= new Map();
+        this._callbackSize      	= 0;
     }
 
     public function dispatchEvent( e : EventType ) : Void
@@ -23,7 +23,7 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
         var eventType : String = e.type;
         if ( this._callbacks.exists( eventType ) )
         {
-			var callbacks = this._callbacks.get( eventType );
+			var callbacks = this._callbacks.get( eventType ).copy();
             for ( f in callbacks )
             {
                 f( e );

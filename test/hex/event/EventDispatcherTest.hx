@@ -193,6 +193,68 @@ class EventDispatcherTest
         Assert.failTrue( this._dispatcher.hasEventListener( "onAnotherEvent" ), "'hasEventListener' should return false" );
         Assert.failTrue( this._dispatcher.hasEventListener( "onAnotherEvent", ( new MockEventListener() ).onEvent ), "'hasEventListener' should return false" );
     }
+	
+	@test( "Test seal activation on 'removeListener' during dispatching" )
+    public function testSealActivationOnRemoveListener() : Void
+	{
+		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveListener( this._listener );
+		this._dispatcher.addListener( mockEventListener );
+		this._dispatcher.addListener( this._listener );
+		
+		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
+		Assert.assertEquals( 1, this._listener.eventReceivedCount, "Event should be received once" );
+		Assert.failTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return false" );
+	}
+	
+	@test( "Test seal activation on 'addListener' during dispatching" )
+    public function testSealActivationOnAddListener() : Void
+	{
+		var mockEventListener = new MockEventListenerForTestingSealingOnAddListener( this._listener );
+		this._dispatcher.addListener( mockEventListener );
+		var mockListener : MockEventListener = new MockEventListener();
+		this._dispatcher.addListener( mockListener );
+		
+		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
+		Assert.assertEquals( 0, this._listener.eventReceivedCount, "Event shouldn't be received" );
+		Assert.assertTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return true" );
+	}
+	
+	@test( "Test seal activation on 'removeEventListener' during dispatching" )
+    public function testSealActivationOnRemoveEventListener() : Void
+	{
+		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveEventListener( this._listener );
+		this._dispatcher.addEventListener( "onEvent", mockEventListener.onEvent );
+		this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
+		
+		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
+		Assert.assertEquals( 1, this._listener.eventReceivedCount, "Event should be received once" );
+		Assert.failTrue( this._dispatcher.hasEventListener( "onEvent", this._listener.onEvent ), "'hasEventListener' should return false" );
+	}
+	
+	@test( "Test seal activation on 'addEventListener' during dispatching" )
+    public function testSealActivationOnAddEventListener() : Void
+	{
+		var mockEventListener = new MockEventListenerForTestingSealingOnAddEventListener( this._listener );
+		this._dispatcher.addEventListener( "onEvent", mockEventListener.onEvent );
+		var mockListener : MockEventListener = new MockEventListener();
+		this._dispatcher.addEventListener( "onEvent", mockListener.onEvent );
+		
+		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
+		Assert.assertEquals( 0, this._listener.eventReceivedCount, "Event shouldn't be received" );
+		Assert.assertTrue( this._dispatcher.hasEventListener( "onEvent", this._listener.onEvent ), "'hasEventListener' should return true" );
+	}
+	
+	@test( "Test seal activation on 'removeAllListeners' during dispatching" )
+    public function testSealActivationOnRemoveAllListeners() : Void
+	{
+		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveAllListeners();
+		this._dispatcher.addEventListener( "onEvent", mockEventListener.onEvent );
+		this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
+		
+		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
+		Assert.assertEquals( 1, this._listener.eventReceivedCount, "Event should be received once" );
+		Assert.failTrue( this._dispatcher.hasEventListener( "onEvent", this._listener.onEvent ), "'hasEventListener' should return false" );
+	}
 }
 
 private interface IMockEventListener extends IEventListener
@@ -237,5 +299,87 @@ private class MockListener implements IEventListener
     {
         this.eventReceivedCount++;
         this.lastEventReceived = cast e;
+    }
+}
+
+private class MockEventListenerForTestingSealingOnRemoveListener extends MockEventListener
+{
+    public var listener : IMockEventListener;
+
+    public function new( listener : IMockEventListener )
+    {
+		super();
+		this.listener = listener;
+    }
+
+    override public function onEvent( e : BasicEvent ) : Void
+    {
+        super.onEvent( e );
+		e.target.removeListener( listener );
+    }
+}
+
+private class MockEventListenerForTestingSealingOnAddListener extends MockEventListener
+{
+    public var listener : IMockEventListener;
+
+    public function new( listener : IMockEventListener )
+    {
+		super();
+		this.listener = listener;
+    }
+
+    override public function onEvent( e : BasicEvent ) : Void
+    {
+        super.onEvent( e );
+		e.target.addListener( listener );
+    }
+}
+
+private class MockEventListenerForTestingSealingOnRemoveEventListener extends MockEventListener
+{
+    public var listener : IMockEventListener;
+
+    public function new( listener : IMockEventListener )
+    {
+		super();
+		this.listener = listener;
+    }
+
+    override public function onEvent( e : BasicEvent ) : Void
+    {
+        super.onEvent( e );
+		e.target.removeEventListener( "onEvent", listener.onEvent );
+    }
+}
+
+private class MockEventListenerForTestingSealingOnAddEventListener extends MockEventListener
+{
+    public var listener : IMockEventListener;
+
+    public function new( listener : IMockEventListener )
+    {
+		super();
+		this.listener = listener;
+    }
+
+    override public function onEvent( e : BasicEvent ) : Void
+    {
+        super.onEvent( e );
+		e.target.addEventListener( "onEvent", listener.onEvent );
+    }
+}
+
+private class MockEventListenerForTestingSealingOnRemoveAllListeners extends MockEventListener
+{
+    public function new()
+    {
+		super();
+    }
+
+    override public function onEvent( e : BasicEvent ) : Void
+    {
+        super.onEvent( e );
+		e.target.removeAllListeners();
     }
 }

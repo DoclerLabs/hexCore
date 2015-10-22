@@ -1,7 +1,7 @@
 package hex.event;
 
-import hex.log.Stringifier;
 import hex.error.UnsupportedOperationException;
+import hex.log.Stringifier;
 
 /**
  * ...
@@ -19,8 +19,9 @@ class LightweightListenerDispatcher<ListenerType:IEventListener, EventType:IEven
     public function dispatchEvent( event : EventType ) : Void
     {
         var eventType : String = event.type;
+		var listeners = this._listeners.copy();
 
-        for ( listener in this._listeners )
+        for ( listener in listeners )
         {
             var callback = Reflect.field( listener, eventType );
             if ( callback != null )
