@@ -293,6 +293,8 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 				{
 					cachedMethodCall();
 				}
+				
+				this._cachedMethodCalls = [];
 			}
 		}
 	}
