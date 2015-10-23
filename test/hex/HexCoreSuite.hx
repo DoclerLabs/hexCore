@@ -4,7 +4,6 @@ import hex.collection.CollectionSuite;
 import hex.core.CoreSuite;
 import hex.domain.DomainSuite;
 import hex.event.EventSuite;
-import hex.inject.InjectorTest;
 
 /**
  * ...
@@ -12,6 +11,6 @@ import hex.inject.InjectorTest;
  */
 class HexCoreSuite
 {
-    @suite( "ExMachina suite" )
-    public var list : Array<Class<Dynamic>> = [CollectionSuite, CoreSuite, DomainSuite, EventSuite, InjectorTest];
+    @suite( "HexCore suite" )
+    public var list : Array<Class<Dynamic>> = [CollectionSuite, CoreSuite, DomainSuite, EventSuite];
 }
