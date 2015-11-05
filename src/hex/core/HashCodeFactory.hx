@@ -6,6 +6,7 @@ import hex.error.PrivateConstructorException;
  * ...
  * @author Francis Bourre
  */
+@:final 
 class HashCodeFactory
 {
     /** @private */
