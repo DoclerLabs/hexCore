@@ -8,6 +8,6 @@ interface IEvent
 	var type     : String;
 	var target   : Dynamic;
 
-    function clone() : BasicEvent;
+    function clone() : IEvent;
     function toString() : String;
 }
