@@ -45,7 +45,7 @@ class MockDependencyInjector implements IDependencyInjector
 	
 	public function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic 
 	{
-		return null;
+		return Type.createInstance( type, [] );
 	}
 	
 	public function destroyInstance( instance : Dynamic ) : Void 
