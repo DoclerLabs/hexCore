@@ -6,30 +6,55 @@ import hex.error.NoSuchElementException;
 import hex.event.IEventDispatcher;
 import hex.event.EventDispatcher;
 
-class BaseLocator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
+/**
+ * ...
+ * @author Francis Bourre
+ */
+class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
 {
     private var _ed     : IEventDispatcher<ILocatorListener<KeyType, ValueType>, LocatorEvent<KeyType, ValueType>>;
-    private var _map    : Map<KeyType, ValueType>;
+    private var _map    : HashMap<KeyType, ValueType>;
 
     public function new()
     {
-        this._map   = new Map<KeyType, ValueType>();
+        this._map   = new HashMap<KeyType, ValueType>();
         this._ed    = new EventDispatcher<ILocatorListener<KeyType, ValueType>, LocatorEvent<KeyType, ValueType>>();
     }
+	
+	public function clear() : Void
+	{
+		this._map = new HashMap<KeyType, ValueType>();
+	}
+	
+	public function isEmpty() : Bool
+	{
+		return this._map.size() == 0;
+	}
 
-    public function keys() : Iterator<KeyType>
+    public function keys() : Array<KeyType>
     {
-        return this._map.keys();
+        return this._map.getKeys();
     }
-
-    public function values() : Iterator<ValueType>
+	
+	/*public function getKeys() : Array<KeyType>
     {
-        return this._map.iterator();
+		var a : Array<KeyType> = [];
+		var it = this._map.keys();
+		while ( it.hasNext() )
+		{
+			a.push( it.next() );
+		}
+        return a;
+    }*/
+
+    public function values() : Array<ValueType>
+    {
+        return this._map.getValues();
     }
 
     public function isRegisteredWithKey( key : KeyType ) : Bool
     {
-        return this._map.exists( key );
+        return this._map.containsKey( key );
     }
 
     public function locate( key : KeyType ) : ValueType
@@ -57,13 +82,14 @@ class BaseLocator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, Value
 
     public function register( key : KeyType, element : ValueType ) : Bool
     {
-        if ( this._map.exists( key ) )
+        if ( this._map.containsKey( key ) )
         {
             throw new IllegalArgumentException( "item is already registered with '" + key + "' key in " + this.toString() );
         }
         else
         {
-            this._map.set( key, element );
+//			trace( "register", key, element );
+            this._map.put( key, element );
             this.onRegister( key, element );
             return true;
         }

@@ -6,9 +6,9 @@ package hex.collection;
  */
 interface ILocator<KeyType, ValueType>
 {
-    function keys() : Iterator<KeyType>;
+    function keys() : Array<KeyType>;
 
-    function values() : Iterator<ValueType>;
+    function values() : Array<ValueType>;
 
     function isRegisteredWithKey( key : KeyType ) : Bool;
 
