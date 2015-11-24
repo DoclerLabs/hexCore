@@ -1,0 +1,4 @@
+-main MainCoreTest
+-cp src
+-cp test
+-cp hexunit/src

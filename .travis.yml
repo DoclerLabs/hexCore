@@ -1,0 +1,20 @@
+language: haxe
+
+os:
+  - linux
+  - osx
+  
+install:
+	- git clone --recursive https://github.com/DoclerLabs/hexUnit.git ~/hexunit
+
+haxe:
+  - "3.2.1"
+  - development
+
+matrix:
+  # Allow Haxe development to fail.
+  allow_failures:
+    - haxe: development
+	
+script:
+  - haxe build-js.hxml           && node bin/MainCoreTest.js
