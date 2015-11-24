@@ -5,7 +5,7 @@ haxe:
   - development
 
 install:
-  - git clone --recursive https://github.com/DoclerLabs/hexUnit.git /hexunit
+  - git clone --recursive https://github.com/DoclerLabs/hexUnit.git ~/hexunit
 
 script:
   - haxe build-js.hxml           && node bin/MainCoreTest.js
