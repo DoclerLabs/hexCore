@@ -10,7 +10,7 @@ import hex.event.EventDispatcher;
  * ...
  * @author Francis Bourre
  */
-class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent>
+class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements IDomainDispatcher<ListenerType, EventType>
 {
     private var _domains 			: Map<Domain, IEventDispatcher<ListenerType, EventType>>;
     private var _defaultDomain 	    : Domain;
