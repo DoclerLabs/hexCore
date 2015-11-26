@@ -1,9 +1,7 @@
 package hex.event;
 
-import Lambda;
-import hex.log.Stringifier;
-import hex.error.IllegalArgumentException;
 import hex.error.UnsupportedOperationException;
+import hex.log.Stringifier;
 
 /**
  * ...
@@ -13,13 +11,17 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 {
 	private var _isSealed 			: Bool;
 	private var _cachedMethodCalls 	: Array<Void->Void>;
-    private var _listeners 			: Map<ListenerType, Map<String, EventType->Void>>;
+    private var _listeners 			: Array<ListenerType>;
+    private var _closures 			: Map<String, Array<EventType->Void>>;
+    private var _closureSize 		: UInt;
 
     public function new()
     {
 		this._isSealed 				= false;
 		this._cachedMethodCalls 	= [];
-        this._listeners 			= new Map();
+        this._listeners 			= [];
+		this._closures         		= new Map();
+        this._closureSize      		= 0;
     }
 
     public function dispatchEvent( e : EventType ) : Void
@@ -27,42 +29,39 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 		this._seal( true );
 		
         var eventType : String = e.type;
-		
-        var iterator = this._listeners.keys();
-        while ( iterator.hasNext() )
+
+		var listeners = this._listeners.copy();
+
+        for ( listener in listeners )
         {
-            var listener : ListenerType            = iterator.next();
-            var m : Map<String, EventType->Void>   = this._listeners.get( listener );
-			
-            if ( Lambda.count( m ) > 0 )
+            var callback = Reflect.field( listener, eventType );
+            if ( callback != null )
             {
-				if ( m.exists( eventType ) )
-				{
-					m.get( eventType )( e );
-				}
+				Reflect.callMethod ( listener, callback, [ e ] );
             }
-            else
+			else
+			{
+				var handleEvent = Reflect.field( listener, "handleEvent" );
+				if ( handleEvent != null )
+				{
+					Reflect.callMethod ( listener, handleEvent, [ e ] );
+				}
+				else
+				{
+					var msg : String = Stringifier.stringify( this ) + ".dispatchEvent failed. " +
+					" You must implement '" + eventType + "' method or 'handleEvent' method in '" +
+					Stringifier.stringify( listener ) + "' instance.";
+					throw( new UnsupportedOperationException( msg ) );
+				}
+			}
+        }
+		
+		if ( this._closures.exists( eventType ) )
+        {
+			var callbacks = this._closures.get( eventType ).copy();
+            for ( f in callbacks )
             {
-                var callback = Reflect.field( listener, eventType );
-                if ( callback != null )
-                {
-                    Reflect.callMethod ( listener, callback, [ e ] );
-                }
-                else
-                {
-                    var handleEvent = Reflect.field( listener, "handleEvent" );
-                    if ( handleEvent != null )
-                    {
-                        Reflect.callMethod ( listener, handleEvent, [ e ] );
-                    }
-                    else
-                    {
-                        var msg : String = Stringifier.stringify( this ) + ".dispatchEvent failed. " +
-                        " You must implement '" + eventType + "' method or 'handleEvent' method in '" +
-                        Stringifier.stringify( listener ) + "' instance.";
-                        throw( new UnsupportedOperationException( msg ) );
-                    }
-                }
+                f( e );
             }
         }
 
@@ -73,34 +72,24 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
     {
 		if ( !this._isSealed )
 		{
-			var listener : Dynamic = Reflect.field( callback, "scope" );
-			if ( this._listeners.exists( listener ) )
+			if ( !this._closures.exists( eventType ) )
 			{
-				var m : Map<String, EventType->Void> = this._listeners.get( listener );
+				this._closures.set( eventType, [] );
+			}
 
-				if ( Lambda.count( m ) == 0 )
-				{
-					var msg : String = Stringifier.stringify( this ) + ".addEventListener failed. " +
-					Stringifier.stringify( listener ) + " is already registered for all event types.";
-					throw ( new IllegalArgumentException( msg ) );
-				}
-				else if ( m.exists( eventType ) )
-				{
-					return false;
-				}
-				else
-				{
-					m.set( eventType, callback );
-					return true;
-				}
+			var callbacks : Array<EventType->Void> = this._closures.get( eventType );
+			var index : Int = callbacks.indexOf( callback );
+			if ( index == -1 )
+			{
+				callbacks.push( callback );
+				this._closureSize++;
+				return true;
 			}
 			else
 			{
-				var m : Map<String, EventType->Void> = new Map();
-				m.set( eventType, callback );
-				this._listeners.set( listener, m );
-				return true;
+				return false;
 			}
+
 		}
 		else
 		{
@@ -113,35 +102,28 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
     {
 		if ( !this._isSealed )
 		{
-			var listener : Dynamic = Reflect.field( callback, "scope" );
-			if ( this._listeners.exists( listener ) )
+			if ( !this._closures.exists( eventType ) )
 			{
-				var m : Map<String, EventType->Void> = this._listeners.get( listener );
+				return false;
+			}
 
-				if ( Lambda.count( m ) == 0 )
-				{
-					var msg : String = Stringifier.stringify( this ) + ".removeEventListener failed. " +
-					Stringifier.stringify( listener ) + " is registered for all event types." +
-					" Use removeListener to unsubscribe.";
-					throw ( new IllegalArgumentException( msg ) );
-				}
-				else if ( m.exists( eventType ) )
-				{
-					m.remove( eventType );
-					if ( Lambda.count( m ) == 0 )
-					{
-						this._listeners.remove( listener );
-					}
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+			var callbacks : Array<EventType->Void> = this._closures.get( eventType );
+			var index : Int = callbacks.indexOf( callback );
+			if ( index == -1 )
+			{
+				return false;
 			}
 			else
 			{
-				return false;
+				callbacks.splice( index, 1 );
+				this._closureSize--;
+
+				if ( callbacks.length == 0 )
+				{
+					this._closures.remove( eventType );
+				}
+
+				return true;
 			}
 		}
 		else
@@ -155,31 +137,15 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
     {
 		if ( !this._isSealed )
 		{
-			if ( this._listeners.exists( listener ) )
+			var index : Int = this._listeners.indexOf( listener );
+			if ( index == -1 )
 			{
-				var m : Map<String, EventType->Void> = this._listeners.get( listener );
-				if ( Lambda.count( m ) > 0 )
-				{
-					var msg : String = Stringifier.stringify( this ) + ".addListener failed. " +
-					Stringifier.stringify( listener ) + " is already registered to ";
-					var iterator = m.keys();
-					while ( iterator.hasNext() )
-					{
-						msg += "'" + iterator.next() + "' ";
-					}
-					msg += "event types.";
-
-					throw ( new IllegalArgumentException( msg ) );
-				}
-				else
-				{
-					return false;
-				}
+				this._listeners.push( listener );
+				return true;
 			}
 			else
 			{
-				this._listeners.set( listener, new Map<String, EventType->Void>() );
-				return true;
+				return false;
 			}
 		}
 		else
@@ -193,14 +159,15 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
     {
 		if ( !this._isSealed )
 		{
-			if ( this._listeners.exists( listener ) )
+			var index : Int = this._listeners.indexOf( listener );
+			if ( index == -1 )
 			{
-				this._listeners.remove( listener );
-				return true;
+				return false;
 			}
 			else
 			{
-				return false;
+				this._listeners.splice( index, 1 );
+				return true;
 			}
 		}
 		else
@@ -214,7 +181,9 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
     {
 		if ( !this._isSealed )
 		{
-			this._listeners = new Map();
+			this._listeners 	= [];
+			this._closures 		= new Map();
+			this._closureSize 	= 0;
 		}
 		else
 		{
@@ -224,61 +193,28 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 
     public function isEmpty() : Bool
     {
-        return Lambda.count( this._listeners ) == 0;
+		return this._listeners.length == 0 && this._closureSize == 0;
     }
 
     public function isRegistered( listener : ListenerType, ?eventType : String ) : Bool
     {
-        if ( this._listeners.exists( listener ) )
-        {
-            if ( eventType == null )
-            {
-                return true;
-            }
-            else
-            {
-                var m : Map<String, EventType->Void> = this._listeners.get( listener );
-                return m.exists( eventType );
-            }
-        }
-        else
-        {
-            return false;
-        }
+		return this._listeners.indexOf( listener ) != -1;
     }
 
     public function hasEventListener( eventType : String, ?callback : EventType->Void  ) : Bool
     {
+		if ( !this._closures.exists( eventType ) )
+        {
+            return false;
+        }
+
         if ( callback == null )
         {
-            var iterator = this._listeners.keys();
-            while ( iterator.hasNext() )
-            {
-                var listener : ListenerType = iterator.next();
-				var m : Map<String, EventType->Void> = this._listeners.get( listener );
-				if ( Lambda.count( m ) == 0 )
-				{
-					return true;
-				}
-				else if ( m.exists( eventType ) )
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return true;
         }
         else
         {
-            var listener : Dynamic = Reflect.field( callback, "scope" );
-            if ( this._listeners.exists( listener ) )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return this._closures.get( eventType ).indexOf( callback ) != -1;
         }
     }
 	

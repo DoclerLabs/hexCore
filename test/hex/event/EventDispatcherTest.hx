@@ -43,11 +43,6 @@ class EventDispatcherTest
 
         Assert.assertEquals( this._listener.eventReceivedCount, 2, "Event should be received twice" );
         Assert.assertEquals( this._listener.lastEventReceived, anotherEvent, "Event received should be the same that was dispatched" );
-
-        this._dispatcher.removeListener( this._listener );
-        this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
-
-        Assert.assertMethodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addListener, [ this._listener ], "addListener should throw IllegalArgumentException when addEventListener was used previously on the same target" );
     }
 
     @test( "Test 'removeListener' behavior" )
@@ -62,13 +57,6 @@ class EventDispatcherTest
         Assert.assertEquals( this._listener.eventReceivedCount, 0, "Event should be received once" );
         Assert.assertIsNull( this._listener.lastEventReceived, "Event received should be the same that was dispatched" );
         Assert.failTrue( this._dispatcher.removeListener( this._listener ), "Same 'removeListener' call should return false second time" );
-
-        this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
-        this._dispatcher.removeListener( this._listener );
-        this._dispatcher.dispatchEvent( event );
-
-        Assert.assertEquals( this._listener.eventReceivedCount, 0, "Event should be received once" );
-        Assert.assertIsNull( this._listener.lastEventReceived, "Event received should be the same that was dispatched" );
     }
 
     @test( "Test 'addEventListener' behavior" )
@@ -87,10 +75,6 @@ class EventDispatcherTest
 
         Assert.assertEquals( this._listener.eventReceivedCount, 2, "Event should be received twice" );
         Assert.assertEquals( this._listener.lastEventReceived, anotherEvent, "Event received should be the same that was dispatched" );
-
-        this._dispatcher.removeEventListener( "onEvent", this._listener.onEvent );
-        this._dispatcher.addListener( this._listener );
-        Assert.assertMethodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addEventListener, ["onEvent", this._listener.onEvent ], "addEventListener should throw IllegalArgumentException when addListener was used previously" );
     }
 
     @test( "Test 'removeEventListener' behavior" )
@@ -169,11 +153,9 @@ class EventDispatcherTest
         Assert.assertTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return true" );
 
         this._dispatcher.removeAllListeners();
+		Assert.failTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return false" );
         this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
-        Assert.assertTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return true" );
-        Assert.assertTrue( this._dispatcher.isRegistered( this._listener, "onEvent" ), "'isRegistered' should return true" );
-        Assert.failTrue( this._dispatcher.isRegistered( this._listener, "onAnotherEvent" ), "'isRegistered' should return false" );
-        Assert.failTrue( this._dispatcher.isRegistered( new MockEventListener(), "onEvent" ), "'isRegistered' should return false" );
+        Assert.failTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return false" );
     }
 
     @test( "Test 'hasEventListener' behavior" )
@@ -182,9 +164,9 @@ class EventDispatcherTest
         Assert.failTrue( this._dispatcher.hasEventListener( "onEvent" ), "'hasEventListener' should return false" );
         Assert.failTrue( this._dispatcher.hasEventListener( "onEvent", this._listener.onEvent ), "'hasEventListener' should return false" );
         this._dispatcher.addListener( this._listener );
-        Assert.assertTrue( this._dispatcher.hasEventListener( "onEvent" ), "'hasEventListener' should return true" );
-        Assert.assertTrue( this._dispatcher.hasEventListener( "onEvent", this._listener.onEvent ), "'hasEventListener' should return true" );
-		Assert.assertTrue( this._dispatcher.hasEventListener( "onAnotherEvent" ), "'hasEventListener' should return true" );
+        Assert.failTrue( this._dispatcher.hasEventListener( "onEvent" ), "'hasEventListener' should return false" );
+        Assert.failTrue( this._dispatcher.hasEventListener( "onEvent", this._listener.onEvent ), "'hasEventListener' should return false" );
+		Assert.failTrue( this._dispatcher.hasEventListener( "onAnotherEvent" ), "'hasEventListener' should return false" );
 
         this._dispatcher.removeAllListeners();
         this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );

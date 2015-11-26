@@ -10,7 +10,7 @@ import hex.error.UnsupportedOperationException;
 class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher<IEventListener, EventType>
 {
     private var _callbacks      	: Map<String, Array<EventType->Void>>;
-    private var _callbackSize   	: Int;
+    private var _callbackSize   	: UInt;
 
     public function new<ListenerType>()
     {
