@@ -29,13 +29,13 @@ class LightweightClosureDispatcherTest
     @test( "Test 'addListener' behavior" )
     public function testAddListener() : Void
     {
-        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher.addListener, [ this._listener ], "addListener should throw UnsupportedOperationException" );
+        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.addListener, [ this._listener ], "addListener should throw UnsupportedOperationException" );
     }
 	
 	@test( "Test 'removeListener' behavior" )
     public function testRemoveListener() : Void
     {
-        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher.removeListener, [ this._listener ], "removeListener should throw UnsupportedOperationException" );
+        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.removeListener, [ this._listener ], "removeListener should throw UnsupportedOperationException" );
     }
 	
 	@test( "Test 'addEventListener' behavior" )
@@ -115,7 +115,7 @@ class LightweightClosureDispatcherTest
 	@test( "Test 'isRegistered' behavior" )
     public function testIsRegistered() : Void
     {
-		Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher.isRegistered, [ this._listener ], "isRegistered should throw UnsupportedOperationException" );
+		Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.isRegistered, [ this._listener ], "isRegistered should throw UnsupportedOperationException" );
     }
 	
 	@test( "Test 'hasEventListener' behavior" )
