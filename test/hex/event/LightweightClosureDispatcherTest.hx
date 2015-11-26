@@ -1,6 +1,7 @@
 package hex.event;
 
 import hex.error.UnsupportedOperationException;
+import hex.event.IEvent;
 import hex.unittest.assertion.Assert;
 
 /**
@@ -166,7 +167,7 @@ class LightweightClosureDispatcherTest
 	}
 }
 
-private class MockEventListener
+private class MockEventListener implements IEventListener
 {
     public var eventReceivedCount : Int = 0;
     public var lastEventReceived : BasicEvent = null;
@@ -181,6 +182,11 @@ private class MockEventListener
         this.eventReceivedCount++;
         this.lastEventReceived = e;
     }
+	
+	public function handleEvent(e:IEvent):Void 
+	{
+		
+	}
 }
 
 private class MockEventListenerForTestingSealingOnRemoveEventListener extends MockEventListener
