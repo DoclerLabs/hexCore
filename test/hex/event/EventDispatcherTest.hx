@@ -47,7 +47,7 @@ class EventDispatcherTest
         this._dispatcher.removeListener( this._listener );
         this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
 
-        Assert.assertMethodCallThrows( IllegalArgumentException, this._dispatcher.addListener, [ this._listener ], "addListener should throw IllegalArgumentException when addEventListener was used previously on the same target" );
+        Assert.assertMethodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addListener, [ this._listener ], "addListener should throw IllegalArgumentException when addEventListener was used previously on the same target" );
     }
 
     @test( "Test 'removeListener' behavior" )
@@ -90,7 +90,7 @@ class EventDispatcherTest
 
         this._dispatcher.removeEventListener( "onEvent", this._listener.onEvent );
         this._dispatcher.addListener( this._listener );
-        Assert.assertMethodCallThrows( IllegalArgumentException, this._dispatcher.addEventListener, ["onEvent", this._listener.onEvent ], "addEventListener should throw IllegalArgumentException when addListener was used previously" );
+        Assert.assertMethodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addEventListener, ["onEvent", this._listener.onEvent ], "addEventListener should throw IllegalArgumentException when addListener was used previously" );
     }
 
     @test( "Test 'removeEventListener' behavior" )

@@ -61,13 +61,13 @@ class LightweightListenerDispatcherTest
 	@test( "Test 'addEventListener' behavior" )
     public function testAddEventListener() : Void
     {
-        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher.addEventListener, [ "onEvent", this._listener.onEvent ], "'addEventListener' should throw UnsupportedOperationException" );
+        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.addEventListener, [ "onEvent", this._listener.onEvent ], "'addEventListener' should throw UnsupportedOperationException" );
     }
 	
 	@test( "Test 'removeEventListener' behavior" )
     public function testRemoveEventListener() : Void
     {
-        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher.removeEventListener, [ "onEvent", this._listener.onEvent ], "'removeEventListener' should throw UnsupportedOperationException" );
+        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.removeEventListener, [ "onEvent", this._listener.onEvent ], "'removeEventListener' should throw UnsupportedOperationException" );
     }
 	
 	@test( "Test 'isEmpty' behavior with 'addListener'" )
@@ -125,7 +125,7 @@ class LightweightListenerDispatcherTest
 	@test( "Test 'hasEventListener' behavior" )
     public function testHasEventListener() : Void
     {
-        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher.hasEventListener, [ "onEvent", this._listener.onEvent ], "'hasEventListener' should throw UnsupportedOperationException" );
+        Assert.assertMethodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.hasEventListener, [ "onEvent", this._listener.onEvent ], "'hasEventListener' should throw UnsupportedOperationException" );
 	}
 	
 	@test( "Test seal activation on 'removeListener' during dispatching" )
