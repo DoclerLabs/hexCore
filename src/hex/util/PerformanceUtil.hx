@@ -1,11 +1,12 @@
 package hex.util;
+
 import haxe.ds.HashMap;
 
 /**
  * ...
  * @author duke
  */
-class Performance
+class PerformanceUtil
 {
 	private static var timers:Map<String,PerformanceVO> = new Map<String,PerformanceVO>();
 
@@ -13,11 +14,9 @@ class Performance
 	 * Start speed test.
 	 * @param	name Name of test.
 	 */
-	public static function startTimer(name:String = "test"):Void
+	public static function startTimer( name : String = "test" ) : Void
 	{
-		
-		
-		timers[name] = new PerformanceVO( Date.now().getTime(), getMemory() );
+		PerformanceUtil.timers[ name ] = new PerformanceVO( Date.now().getTime(), getMemory() );
 		trace( "*** TEST STARTED:  " + name + " ***" );
 	}
 	
@@ -25,12 +24,15 @@ class Performance
 	 * Stop speed test. It outputs the result
 	 * @param	name The name of started test.
 	 */
-	public static function stopTimer(name:String = "test"):Void
+	public static function stopTimer( name : String = "test") : Void
 	{
-		if ( timers[name] != null )
+		if ( PerformanceUtil.timers[ name ] != null )
 		{
-			trace( "*** TEST FINISHED: " + name + "  time: " + ( Date.now().getTime() - timers[name].startTime ) + " ms  memory: " + (Math.round((getMemory() - timers[name].memory) / 1024 * 100) / 100) + " KB ***" );
-			timers.remove(name);
+			trace( 	"*** TEST FINISHED: " + name + "  time: " + 
+					( Date.now().getTime() - PerformanceUtil.timers[ name ].startTime ) + " ms  memory: " + 
+					( Math.round( ( PerformanceUtil.getMemory() - PerformanceUtil.timers[ name ].memory ) / 1024 * 100) / 100 ) + " KB ***" );
+					
+			PerformanceUtil.timers.remove( name );
 		}
 		else
 		{
@@ -53,12 +55,12 @@ class Performance
 
 private class PerformanceVO
 {
-	public var memory:Float;
-	public var startTime:Float;
+	public var memory		: Float;
+	public var startTime	: Float;
 	
-	public function new( startTime:Float, memory:Float )
+	public function new( startTime : Float, memory : Float )
 	{
-		this.startTime = startTime;
-		this.memory = memory;
+		this.startTime 	= startTime;
+		this.memory 	= memory;
 	}
 }
