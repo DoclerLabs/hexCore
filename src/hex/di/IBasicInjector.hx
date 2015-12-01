@@ -12,7 +12,7 @@ interface IBasicInjector
 
     function mapToSingleton( clazz : Class<Dynamic>, type : Class<Dynamic>, name:String = '' ) : Void;
 
-    function getInstance( type : Class<Dynamic>, name : String = "" ) : Dynamic;
+    function getInstance( type : Class<Dynamic>, name : String = '', targetType : Class<Dynamic> = null ) : Dynamic;
 
     function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic;
 
