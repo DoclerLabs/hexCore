@@ -26,7 +26,6 @@ class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements
     public function setDispatcherClass( ?dispatcherClass : Class<IEventDispatcher<ListenerType, EventType>> ) : Void
 	{
         this._dispatcherClass = dispatcherClass != null ? dispatcherClass : EventDispatcher;
-
 	}
 
     public function getDefaultDispatcher() : IEventDispatcher<ListenerType, EventType>
