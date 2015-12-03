@@ -7,9 +7,9 @@ import hex.log.Stringifier;
  * ...
  * @author Francis Bourre
  */
-class CompositeClosureDispatcher<ListenerType:IEventListener, EventType:IEvent> implements IEventDispatcher<ListenerType, EventType>
+class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<IEventListener, EventType>
 {
-	private var _dispatchers 		: Array<IEventDispatcher<ListenerType, EventType>>;
+	private var _dispatchers 		: Array<IEventDispatcher<IEventListener, EventType>>;
 	private var _isSealed 			: Bool;
 	private var _cachedMethodCalls 	: Array<Void->Void>;
 	
@@ -70,12 +70,12 @@ class CompositeClosureDispatcher<ListenerType:IEventListener, EventType:IEvent> 
 		}
 	}
 	
-	public function addListener( listener : ListenerType ) : Bool 
+	public function addListener( listener : IEventListener ) : Bool 
 	{
 		throw ( new UnsupportedOperationException( "'addListener' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
 	}
 	
-	public function removeListener( listener : ListenerType ) : Bool 
+	public function removeListener( listener : IEventListener ) : Bool 
 	{
 		throw ( new UnsupportedOperationException( "'removeListener' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
 	}
@@ -105,7 +105,7 @@ class CompositeClosureDispatcher<ListenerType:IEventListener, EventType:IEvent> 
 		return b;
 	}
 	
-	public function isRegistered( listener : ListenerType, ?eventType : String ) : Bool 
+	public function isRegistered( listener : IEventListener, ?eventType : String ) : Bool 
 	{
 		throw ( new UnsupportedOperationException( "'isRegistered' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
 	}
@@ -120,7 +120,7 @@ class CompositeClosureDispatcher<ListenerType:IEventListener, EventType:IEvent> 
 		return b;
 	}
 	
-	public function add( dispatcher : IEventDispatcher<ListenerType, EventType> ) : Bool
+	public function add( dispatcher : IEventDispatcher<IEventListener, EventType> ) : Bool
 	{
 		if ( !this._isSealed )
 		{
@@ -141,7 +141,7 @@ class CompositeClosureDispatcher<ListenerType:IEventListener, EventType:IEvent> 
 		}
 	}
 	
-	public function remove( dispatcher : IEventDispatcher<ListenerType, EventType> ) : Bool
+	public function remove( dispatcher : IEventDispatcher<IEventListener, EventType> ) : Bool
 	{
 		if ( !this._isSealed )
 		{

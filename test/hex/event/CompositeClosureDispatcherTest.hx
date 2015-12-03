@@ -4,16 +4,16 @@ package hex.event;
  * ...
  * @author Francis Bourre
  */
-class CompositeDispatcherTest
+class CompositeClosureDispatcherTest
 {
 
-	private var _dispatcher : CompositeClosureDispatcher<IMockEventListener, BasicEvent>;
+	private var _dispatcher : CompositeClosureDispatcher<BasicEvent>;
 	private var _listener 	: MockEventListener;
 	
 	@setUp
     public function setUp() : Void
     {
-        this._dispatcher    = new CompositeClosureDispatcher<IMockEventListener, BasicEvent>();
+        this._dispatcher    = new CompositeClosureDispatcher<BasicEvent>();
         this._listener      = new MockEventListener();
     }
 
