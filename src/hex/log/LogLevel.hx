@@ -66,4 +66,27 @@ class LogLevel
     {
         this.value = value;
     }
+	
+	public function toString() : String
+	{
+		switch( this.value )
+		{
+			case 0 :
+				return "ALL";
+			case 10000 :
+				return "DEBUG";
+			case 20000 :
+				return "INFO";
+			case 30000 :
+				return "WARN";
+			case 40000 :
+				return "ERROR";
+			case 50000 :
+				return "FATAL";
+			case 60000 :
+				return "OFF";
+		}
+		
+		return "";
+	}
 }

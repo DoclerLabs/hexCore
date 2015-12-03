@@ -9,14 +9,26 @@ import hex.domain.DomainDispatcher;
  */
 class Logger
 {
-    private var _dispatcher 	: DomainDispatcher<ILogListener, LogEvent>;
-    private var _level 		    : LogLevel;
+	private static var _Instance 	: Logger = null;
+	
+    private var _dispatcher 		: DomainDispatcher<ILogListener, LogEvent>;
+    private var _level 		    	: LogLevel;
 
     public function new()
     {
         this.setLevel( LogLevel.ALL );
         this._dispatcher = new DomainDispatcher<ILogListener, LogEvent>();
     }
+	
+	public static function getInstance() : Logger
+	{
+		if ( Logger._Instance == null ) 
+		{
+			Logger._Instance = new Logger();
+		}
+		
+		return Logger._Instance;
+	}
 
     public function setLevel( level : LogLevel ) : Void
     {
@@ -70,4 +82,34 @@ class Logger
     {
         return Stringifier.stringify( this );
     }
+	
+	public static function LOG( o : Dynamic, level : LogLevel, ?domain : Domain, ?target : Dynamic ) : Bool
+	{
+		return Logger.getInstance().log( new LogEvent( level, target != null ? target : Logger.getInstance(), o ), domain );
+	}
+	
+	public static function DEBUG( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	{
+		return Logger.LOG( o, LogLevel.DEBUG, domain, target );
+	}
+	
+	public static function INFO( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	{
+		return Logger.LOG( o, LogLevel.INFO, domain, target );
+	}
+	
+	public static function WARN( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	{
+		return Logger.LOG( o, LogLevel.WARN, domain, target );
+	}
+	
+	public static function ERROR( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	{
+		return Logger.LOG( o, LogLevel.ERROR, domain, target );
+	}
+	
+	public static function FATAL( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	{
+		return Logger.LOG( o, LogLevel.FATAL, domain, target );
+	}
 }
