@@ -26,9 +26,9 @@ class LocatorTest
     public function testRegisterKeyString() : Void
     {
         var locator : Locator<String, String> = new Locator();
-		Assert.assertTrue( locator.register( "hello", "world" ), "'register' call should return true" );
-		Assert.assertTrue( locator.register( "hola", "mundo" ), "'register' call should return true" );
-        Assert.assertEquals( "world", locator.locate( "hello" ), "'locate' should return registered value" );
+		Assert.isTrue( locator.register( "hello", "world" ), "'register' call should return true" );
+		Assert.isTrue( locator.register( "hola", "mundo" ), "'register' call should return true" );
+        Assert.equals( "world", locator.locate( "hello" ), "'locate' should return registered value" );
     }
 	
 	@test( "Test 'isEmpty' behavior" )
@@ -37,9 +37,9 @@ class LocatorTest
         var mockKey     : MockKeyClass 		= new MockKeyClass();
         var mockValue   : MockValueClass 	= new MockValueClass();
 
-        Assert.assertTrue( this._locator.isEmpty(), "'isEmpty' should return true" );
+        Assert.isTrue( this._locator.isEmpty(), "'isEmpty' should return true" );
         this._locator.register( mockKey, mockValue );
-        Assert.failTrue( this._locator.isEmpty(), "'isEmpty' should return false" );
+        Assert.isFalse( this._locator.isEmpty(), "'isEmpty' should return false" );
     }
 	
 }

@@ -15,19 +15,19 @@ class DomainTest
     public function testConstructor() : Void
     {
         var domain : Domain = new Domain( "testConstructor" );
-        Assert.assertEquals( "testConstructor", domain.getName(), "'name' property should be the same passed to constructor" );
+        Assert.equals( "testConstructor", domain.getName(), "'name' property should be the same passed to constructor" );
     }
 
     @test( "Test null 'name' value passed to constructor" )
     public function testConstructorNullException() : Void
     {
-        Assert.assertConstructorCallThrows( NullPointerException, Domain, [], "" );
+        Assert.constructorCallThrows( NullPointerException, Domain, [], "" );
     }
 
     @test( "Test using twice the same 'name' value" )
     public function testConstructorWithNameValues() : Void
     {
         var domain : Domain = new Domain( "testConstructorWithNameValues" );
-        Assert.assertConstructorCallThrows( IllegalArgumentException, Domain, ["testConstructorWithNameValues"], "" );
+        Assert.constructorCallThrows( IllegalArgumentException, Domain, ["testConstructorWithNameValues"], "" );
     }
 }
