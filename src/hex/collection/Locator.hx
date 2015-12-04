@@ -23,7 +23,19 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 	
 	public function clear() : Void
 	{
-		this._map = new HashMap<KeyType, ValueType>();
+		this._map.clear();
+	}
+	
+	public function release() : Void
+	{
+		this.clear();
+		this._map = null;
+
+		if ( this._ed != null )
+		{
+			this._ed.removeAllListeners();
+			this._ed = null;
+		}
 	}
 	
 	public function isEmpty() : Bool
@@ -36,17 +48,6 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         return this._map.getKeys();
     }
 	
-	/*public function getKeys() : Array<KeyType>
-    {
-		var a : Array<KeyType> = [];
-		var it = this._map.keys();
-		while ( it.hasNext() )
-		{
-			a.push( it.next() );
-		}
-        return a;
-    }*/
-
     public function values() : Array<ValueType>
     {
         return this._map.getValues();
@@ -88,9 +89,8 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         }
         else
         {
-//			trace( "register", key, element );
             this._map.put( key, element );
-            this.onRegister( key, element );
+            this._onRegister( key, element );
             return true;
         }
     }
@@ -100,7 +100,7 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         if ( this.isRegisteredWithKey( key ) )
         {
             this._map.remove( key );
-            this.onUnregister( key );
+            this._onUnregister( key );
             return true;
         }
         else
@@ -124,12 +124,12 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         return Stringifier.stringify( this );
     }
 
-    private function onRegister( key : KeyType, element : ValueType ) : Void
+    private function _onRegister( key : KeyType, element : ValueType ) : Void
     {
         this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.REGISTER, this, key, element ) );
     }
 
-    private function  onUnregister( key : KeyType ) : Void
+    private function  _onUnregister( key : KeyType ) : Void
     {
         this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.UNREGISTER, this, key ) );
     }
