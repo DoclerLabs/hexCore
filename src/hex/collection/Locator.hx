@@ -1,5 +1,6 @@
 package hex.collection;
 
+import hex.error.VirtualMethodException;
 import hex.event.IEvent;
 import hex.log.Stringifier;
 import hex.error.IllegalArgumentException;
@@ -13,13 +14,13 @@ import hex.event.EventDispatcher;
  */
 class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<KeyType, ValueType, EventType>
 {
-    private var _ed     : IEventDispatcher<ILocatorListener<EventType>, EventType>;
-    private var _map    : HashMap<KeyType, ValueType>;
+    private var _dispatcher     : IEventDispatcher<ILocatorListener<EventType>, EventType>;
+    private var _map    		: HashMap<KeyType, ValueType>;
 
     public function new()
     {
         this._map   = new HashMap<KeyType, ValueType>();
-        this._ed    = new EventDispatcher<ILocatorListener<EventType>, EventType>();
+        this._dispatcher    = new EventDispatcher<ILocatorListener<EventType>, EventType>();
     }
 	
 	public function clear() : Void
@@ -32,10 +33,10 @@ class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<
 		this.clear();
 		this._map = null;
 
-		if ( this._ed != null )
+		if ( this._dispatcher != null )
 		{
-			this._ed.removeAllListeners();
-			this._ed = null;
+			this._dispatcher.removeAllListeners();
+			this._dispatcher = null;
 		}
 	}
 	
@@ -91,7 +92,7 @@ class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<
         else
         {
             this._map.put( key, element );
-            this._onRegister( key, element );
+            this._dispatchRegisterEvent( key, element );
             return true;
         }
     }
@@ -101,7 +102,7 @@ class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<
         if ( this.isRegisteredWithKey( key ) )
         {
             this._map.remove( key );
-            this._onUnregister( key );
+            this._dispatchUnregisterEvent( key );
             return true;
         }
         else
@@ -112,12 +113,12 @@ class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<
 
     public function addListener( listener : ILocatorListener<EventType> ) : Bool
     {
-        return this._ed.addListener( listener );
+        return this._dispatcher.addListener( listener );
     }
 
     public function removeListener( listener : ILocatorListener<EventType> ) : Bool
     {
-        return this._ed.removeListener( listener );
+        return this._dispatcher.removeListener( listener );
     }
 
     public function toString() : String
@@ -125,13 +126,13 @@ class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<
         return Stringifier.stringify( this );
     }
 
-    private function _onRegister( key : KeyType, element : ValueType ) : Void
+    private function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {
-        //this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.REGISTER, this, key, element ) );
+		
     }
 
-    private function  _onUnregister( key : KeyType ) : Void
+    private function  _dispatchUnregisterEvent( key : KeyType ) : Void
     {
-        //this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.UNREGISTER, this, key ) );
+		
     }
 }
