@@ -7,7 +7,7 @@ import hex.error.NullPointerException;
  * ...
  * @author Francis Bourre
  */
-class HashMap<K, V>
+class HashMap<K, V> implements IHashMap<K, V>
 {
 
 	private var _keys			: Map<String, V>;
