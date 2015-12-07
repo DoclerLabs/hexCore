@@ -1,10 +1,12 @@
 package hex.collection;
 
+import hex.event.IEvent;
+
 /**
  * ...
  * @author Francis Bourre
  */
-interface ILocator<KeyType, ValueType>
+interface ILocator<KeyType, ValueType, EventType:IEvent>
 {
     function keys() : Array<KeyType>;
 
@@ -20,7 +22,7 @@ interface ILocator<KeyType, ValueType>
 
     function add( map : Map<KeyType, ValueType> ) : Void;
 
-    function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool;
+    function addListener( listener : ILocatorListener<EventType> ) : Bool;
 
-    function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool;
+    function removeListener( listener : ILocatorListener<EventType> ) : Bool;
 }

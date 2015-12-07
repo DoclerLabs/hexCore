@@ -1,13 +1,14 @@
 package hex.collection;
 
+import hex.event.IEvent;
 import hex.event.IEventListener;
 
 /**
  * ...
  * @author Francis Bourre
  */
-interface ILocatorListener<KeyType, ValueType> extends IEventListener
+interface ILocatorListener<EventType:IEvent> extends IEventListener
 {
-    function onRegister( event : LocatorEvent<KeyType, ValueType> ) : Void;
-    function onUnregister( event : LocatorEvent<KeyType, ValueType> ) : Void;
+    function onRegister( event : EventType ) : Void;
+    function onUnregister( event : EventType ) : Void;
 }

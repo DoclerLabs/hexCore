@@ -1,5 +1,6 @@
 package hex.collection;
 
+import hex.event.IEvent;
 import hex.log.Stringifier;
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
@@ -10,15 +11,15 @@ import hex.event.EventDispatcher;
  * ...
  * @author Francis Bourre
  */
-class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
+class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<KeyType, ValueType, EventType>
 {
-    private var _ed     : IEventDispatcher<ILocatorListener<KeyType, ValueType>, LocatorEvent<KeyType, ValueType>>;
+    private var _ed     : IEventDispatcher<ILocatorListener<EventType>, EventType>;
     private var _map    : HashMap<KeyType, ValueType>;
 
     public function new()
     {
         this._map   = new HashMap<KeyType, ValueType>();
-        this._ed    = new EventDispatcher<ILocatorListener<KeyType, ValueType>, LocatorEvent<KeyType, ValueType>>();
+        this._ed    = new EventDispatcher<ILocatorListener<EventType>, EventType>();
     }
 	
 	public function clear() : Void
@@ -109,12 +110,12 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         }
     }
 
-    public function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
+    public function addListener( listener : ILocatorListener<EventType> ) : Bool
     {
         return this._ed.addListener( listener );
     }
 
-    public function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
+    public function removeListener( listener : ILocatorListener<EventType> ) : Bool
     {
         return this._ed.removeListener( listener );
     }
@@ -126,11 +127,11 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 
     private function _onRegister( key : KeyType, element : ValueType ) : Void
     {
-        this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.REGISTER, this, key, element ) );
+        //this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.REGISTER, this, key, element ) );
     }
 
     private function  _onUnregister( key : KeyType ) : Void
     {
-        this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.UNREGISTER, this, key ) );
+        //this._ed.dispatchEvent( new LocatorEvent( LocatorEvent.UNREGISTER, this, key ) );
     }
 }

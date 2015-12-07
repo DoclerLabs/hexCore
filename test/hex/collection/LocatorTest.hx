@@ -1,4 +1,6 @@
 package hex.collection;
+
+import hex.event.IEvent;
 import hex.unittest.assertion.Assert;
 
 /**
@@ -7,12 +9,12 @@ import hex.unittest.assertion.Assert;
  */
 class LocatorTest
 {
-	private var _locator : Locator<MockKeyClass, MockValueClass>;
+	private var _locator : Locator<MockKeyClass, MockValueClass, IEvent>;
 
 	@setUp
     public function setUp() : Void
     {
-        this._locator = new Locator<MockKeyClass, MockValueClass>();
+        this._locator = new Locator<MockKeyClass, MockValueClass, IEvent>();
     }
 
     @tearDown
@@ -25,7 +27,7 @@ class LocatorTest
 	@test( "Test building a locator with String keys" )
     public function testRegisterKeyString() : Void
     {
-        var locator : Locator<String, String> = new Locator();
+        var locator : Locator<String, String, IEvent> = new Locator();
 		Assert.isTrue( locator.register( "hello", "world" ), "'register' call should return true" );
 		Assert.isTrue( locator.register( "hola", "mundo" ), "'register' call should return true" );
         Assert.equals( "world", locator.locate( "hello" ), "'locate' should return registered value" );
