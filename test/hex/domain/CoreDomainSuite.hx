@@ -4,9 +4,9 @@ package hex.domain;
  * ...
  * @author Francis Bourre
  */
-class DomainSuite
+class CoreDomainSuite
 {
-    @suite( "Domain suite" )
+    @suite( "Domain" )
     public var list : Array<Class<Dynamic>> = [DomainTest];
 	
 }

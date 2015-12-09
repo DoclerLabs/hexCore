@@ -4,8 +4,8 @@ package hex.core;
  * ...
  * @author Francis Bourre
  */
-class CoreSuite
+class CoreCoreSuite
 {
-    @suite( "Core suite" )
+    @suite( "Core" )
     public var list : Array<Class<Dynamic>> = [HashCodeFactoryTest];
 }

@@ -4,8 +4,8 @@ package hex.collection;
  * ...
  * @author Francis Bourre
  */
-class CollectionSuite
+class CoreCollectionSuite
 {
-	@suite( "Core suite" )
+	@suite( "Collection" )
     public var list : Array<Class<Dynamic>> = [HashMapTest, LocatorTest];
 }

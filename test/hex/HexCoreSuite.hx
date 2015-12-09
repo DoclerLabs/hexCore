@@ -1,8 +1,8 @@
 package hex;
 
-import hex.collection.CollectionSuite;
-import hex.core.CoreSuite;
-import hex.domain.DomainSuite;
+import hex.collection.CoreCollectionSuite;
+import hex.core.CoreCoreSuite;
+import hex.domain.CoreDomainSuite;
 import hex.event.CoreEventSuite;
 
 /**
@@ -11,6 +11,6 @@ import hex.event.CoreEventSuite;
  */
 class HexCoreSuite
 {
-    @suite( "HexCore suite" )
-    public var list : Array<Class<Dynamic>> = [CoreEventSuite, CollectionSuite, CoreSuite, DomainSuite];
+    @suite( "HexCore" )
+    public var list : Array<Class<Dynamic>> = [CoreEventSuite, CoreCollectionSuite, CoreCoreSuite, CoreDomainSuite];
 }
