@@ -7,7 +7,7 @@ import hex.log.Stringifier;
  * ...
  * @author Francis Bourre
  */
-class LightweightListenerDispatcher<ListenerType:IEventListener, EventType:IEvent> implements IEventDispatcher<ListenerType, EventType>
+class LightweightListenerDispatcher<ListenerType:IEventListener, EventType:Event> implements IEventDispatcher<ListenerType, EventType>
 {
     private var _listeners : Array<ListenerType>;
 
