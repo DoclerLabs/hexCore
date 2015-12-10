@@ -7,13 +7,13 @@ package hex.event;
 class CompositeClosureDispatcherTest
 {
 
-	private var _dispatcher : CompositeClosureDispatcher<BasicEvent>;
+	private var _dispatcher : CompositeClosureDispatcher;
 	private var _listener 	: MockEventListener;
 	
 	@setUp
     public function setUp() : Void
     {
-        this._dispatcher    = new CompositeClosureDispatcher<BasicEvent>();
+        this._dispatcher    = new CompositeClosureDispatcher();
         this._listener      = new MockEventListener();
     }
 

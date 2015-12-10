@@ -7,9 +7,9 @@ import hex.log.Stringifier;
  * ...
  * @author Francis Bourre
  */
-class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<IEventListener, EventType>
+class CompositeClosureDispatcher implements IEventDispatcher<IEventListener, Dynamic>
 {
-	private var _dispatchers 		: Array<IEventDispatcher<IEventListener, EventType>>;
+	private var _dispatchers 		: Array<IEventDispatcher<IEventListener, Dynamic>>;
 	private var _isSealed 			: Bool;
 	private var _cachedMethodCalls 	: Array<Void->Void>;
 	
@@ -20,7 +20,7 @@ class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<I
 		this._dispatchers 			= [];
 	}
 	
-	public function dispatchEvent( event : EventType ) : Void 
+	public function dispatchEvent( event : Event ) : Void 
 	{
 		this._seal( true );
 		
@@ -32,7 +32,7 @@ class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<I
 		this._seal( false );
 	}
 	
-	public function addEventListener( eventType : String, callback : EventType->Void ) : Bool 
+	public function addEventListener( eventType : String, callback : Dynamic->Void ) : Bool 
 	{
 		if ( !this._isSealed )
 		{
@@ -51,7 +51,7 @@ class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<I
 		}
 	}
 	
-	public function removeEventListener( eventType : String, callback : EventType->Void ) : Bool 
+	public function removeEventListener( eventType : String, callback : Dynamic->Void ) : Bool 
 	{
 		if ( !this._isSealed )
 		{
@@ -110,7 +110,7 @@ class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<I
 		throw ( new UnsupportedOperationException( "'isRegistered' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
 	}
 	
-	public function hasEventListener( eventType : String, ?callback : EventType->Void ) : Bool 
+	public function hasEventListener( eventType : String, ?callback : Dynamic->Void ) : Bool 
 	{
 		var b : Bool = true;
 		for ( dispatcher in this._dispatchers )
@@ -120,7 +120,7 @@ class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<I
 		return b;
 	}
 	
-	public function add( dispatcher : IEventDispatcher<IEventListener, EventType> ) : Bool
+	public function add( dispatcher : IEventDispatcher<IEventListener, Dynamic> ) : Bool
 	{
 		if ( !this._isSealed )
 		{
@@ -141,7 +141,7 @@ class CompositeClosureDispatcher<EventType:IEvent> implements IEventDispatcher<I
 		}
 	}
 	
-	public function remove( dispatcher : IEventDispatcher<IEventListener, EventType> ) : Bool
+	public function remove( dispatcher : IEventDispatcher<IEventListener, Dynamic> ) : Bool
 	{
 		if ( !this._isSealed )
 		{

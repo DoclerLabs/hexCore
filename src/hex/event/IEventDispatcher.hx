@@ -4,7 +4,7 @@ package hex.event;
  * ...
  * @author Francis Bourre
  */
-interface IEventDispatcher<ListenerType:IEventListener, EventType:IEvent>
+interface IEventDispatcher<ListenerType:IEventListener, EventType:Event>
 {
     function dispatchEvent( event : EventType ) : Void;
     function addEventListener( eventType : String, callback : EventType->Void ) : Bool;
