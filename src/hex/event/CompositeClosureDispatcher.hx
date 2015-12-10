@@ -20,7 +20,7 @@ class CompositeClosureDispatcher implements IEventDispatcher<IEventListener, Dyn
 		this._dispatchers 			= [];
 	}
 	
-	public function dispatchEvent( event : Event ) : Void 
+	public function dispatchEvent( event : Dynamic ) : Void 
 	{
 		this._seal( true );
 		
