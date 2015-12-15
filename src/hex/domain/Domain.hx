@@ -20,7 +20,7 @@ class Domain
             throw new NullPointerException( "Domain's name can't be null" );
         }
         else if ( Domain._domainNames.exists( domainName ) )
-        {trace("Domain has already been registered with name '" + domainName + "'");
+        {
             throw new IllegalArgumentException( "Domain has already been registered with name '" + domainName + "'" );
         }
         else
