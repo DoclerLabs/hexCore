@@ -8,5 +8,5 @@ import hex.domain.Domain;
  */
 class DefaultDomain extends Domain
 {
-    public static var DOMAIN : DefaultDomain = new DefaultDomain( "DefaultDomain" );
+	public static var DOMAIN : DefaultDomain = DomainUtil.getDomain( "DefaultDomain", DefaultDomain );
 }

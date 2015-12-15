@@ -8,5 +8,5 @@ import hex.domain.Domain;
  */
 class NoDomain extends Domain
 {
-    public static var DOMAIN : NoDomain = new NoDomain( "NoDomain" );
+    public static var DOMAIN : NoDomain = DomainUtil.getDomain( "NoDomain", NoDomain );
 }
