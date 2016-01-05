@@ -22,8 +22,8 @@ class Exception
 
     public function toString() : String
     {
-        return this.posInfos != null ?
+        return (this.posInfos != null ?
             this.name + " at " + this.posInfos.className + "#" + this.posInfos.methodName + " line:" + this.posInfos.lineNumber + " in file '" + this.posInfos.fileName + "'"
-                : this.name;
+                : this.name) + " | " + this.message;
     }
 }
