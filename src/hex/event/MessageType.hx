@@ -6,10 +6,10 @@ package hex.event;
  */
 class MessageType
 {
-	public var messageName( default, null ) : String;
+	public var name( default, null ) : String;
 	
 	public function new( ?messageName : String = "handleMessage" ) 
 	{
-		this.messageName = messageName;
+		this.name = messageName;
 	}
 }
