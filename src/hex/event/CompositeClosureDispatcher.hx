@@ -36,10 +36,10 @@ class CompositeClosureDispatcher implements IEventDispatcher<IEventListener, Dyn
 	{
 		if ( !this._isSealed )
 		{
-			var b : Bool = true;
+			var b : Bool = false;
 			for ( dispatcher in this._dispatchers )
 			{
-				b = dispatcher.addEventListener( eventType, callback ) && b;
+				b = dispatcher.addEventListener( eventType, callback ) || b;
 			}
 
 			return b;
@@ -55,10 +55,10 @@ class CompositeClosureDispatcher implements IEventDispatcher<IEventListener, Dyn
 	{
 		if ( !this._isSealed )
 		{
-			var b : Bool = true;
+			var b : Bool = false;
 			for ( dispatcher in this._dispatchers )
 			{
-				b = dispatcher.removeEventListener( eventType, callback ) && b;
+				b = dispatcher.removeEventListener( eventType, callback ) || b;
 			}
 			
 			return b;
@@ -97,12 +97,14 @@ class CompositeClosureDispatcher implements IEventDispatcher<IEventListener, Dyn
 	
 	public function isEmpty() : Bool 
 	{
-		var b : Bool = true;
 		for ( dispatcher in this._dispatchers )
 		{
-			b = dispatcher.isEmpty() && b;
+			if ( !dispatcher.isEmpty() )
+			{
+				return false;
+			}
 		}
-		return b;
+		return true;
 	}
 	
 	public function isRegistered( listener : IEventListener, ?eventType : String ) : Bool 
@@ -112,10 +114,10 @@ class CompositeClosureDispatcher implements IEventDispatcher<IEventListener, Dyn
 	
 	public function hasEventListener( eventType : String, ?callback : Dynamic->Void ) : Bool 
 	{
-		var b : Bool = true;
+		var b : Bool = false;
 		for ( dispatcher in this._dispatchers )
 		{
-			b = dispatcher.hasEventListener( eventType, callback ) && b;
+			b = dispatcher.hasEventListener( eventType, callback ) || b;
 		}
 		return b;
 	}
