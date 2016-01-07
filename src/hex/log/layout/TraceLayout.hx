@@ -1,8 +1,7 @@
 package hex.log.layout;
 
-import hex.event.IEvent;
+import hex.domain.Domain;
 import hex.log.ILogListener;
-import hex.log.LogEvent;
 
 /**
  * ...
@@ -15,13 +14,8 @@ class TraceLayout implements ILogListener
 		
 	}
 
-	public function onLog( e : LogEvent ) : Void 
+	public function onLog( message : Dynamic, level : LogLevel, domain : Domain ) : Void 
 	{
-		trace( ">>> " + e.level + ":" + e.message );
-	}
-	
-	public function handleEvent( e : IEvent ) : Void 
-	{
-		
+		trace( ">>> " + level + ":" + message );
 	}
 }

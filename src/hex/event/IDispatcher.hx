@@ -3,7 +3,7 @@ package hex.event;
 /**
  * @author Francis Bourre
  */
-interface IDispatcher<ListenerType:Dynamic> 
+interface IDispatcher<ListenerType:{}> 
 {
 	function dispatch( messageType : MessageType, data : Array<Dynamic> ) : Void;
 	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;

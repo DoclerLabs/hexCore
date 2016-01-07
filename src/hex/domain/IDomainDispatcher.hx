@@ -7,10 +7,8 @@ import hex.event.IEventListener;
 /**
  * @author Francis Bourre
  */
-
 interface IDomainDispatcher<ListenerType:IEventListener, EventType:IEvent>
 {
-	
 	function setDispatcherClass( ?dispatcherClass : Class<IEventDispatcher<ListenerType, EventType>> ) : Void;
 
     function getDefaultDispatcher() : IEventDispatcher<ListenerType, EventType>;

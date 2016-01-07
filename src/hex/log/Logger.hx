@@ -1,7 +1,7 @@
 package hex.log;
 
 import hex.domain.Domain;
-import hex.domain.DomainDispatcher;
+import hex.domain.NewDomainDispatcher;
 
 /**
  * ...
@@ -11,13 +11,13 @@ class Logger
 {
 	private static var _Instance 	: Logger = null;
 	
-    private var _dispatcher 		: DomainDispatcher<ILogListener, LogEvent>;
+    private var _dispatcher 		: NewDomainDispatcher<ILogListener>;
     private var _level 		    	: LogLevel;
 
     public function new()
     {
         this.setLevel( LogLevel.ALL );
-        this._dispatcher = new DomainDispatcher<ILogListener, LogEvent>();
+        this._dispatcher = new NewDomainDispatcher<ILogListener>();
     }
 	
 	public static function getInstance() : Logger
@@ -40,37 +40,24 @@ class Logger
         return this._level;
     }
 
-    public function log( e : LogEvent, ?domain : Domain ) : Bool
+    public function log( o : Dynamic, level : LogLevel, ?domain : Domain) : Void
     {
-        if ( e.level.value >= this._level.value )
-        {
-            if ( domain != null )
-            {
-                e.domain = domain;
-            }
-
-            this._dispatcher.dispatchEvent( e, domain );
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        this._dispatcher.dispatch( LoggerMessage.LOG, domain, [ o, level, domain ] );
     }
 
     public function addLogListener( listener : ILogListener, ?domain : Domain ) : Bool
     {
-        return this._dispatcher.addEventListener( LogEvent.onLogEVENT, listener.onLog, domain );
+        return this._dispatcher.addHandler( LoggerMessage.LOG, listener, listener.onLog, domain );
     }
 
     public function removeLogListener( listener : ILogListener, ?domain : Domain ) : Bool
     {
-        return this._dispatcher.removeEventListener( LogEvent.onLogEVENT, listener.onLog, domain );
+        return this._dispatcher.removeHandler( LoggerMessage.LOG, listener, listener.onLog, domain );
     }
 
     public function isRegistered( listener : ILogListener, ?domain : Domain ) : Bool
     {
-        return this._dispatcher.isRegistered( listener, LogEvent.onLogEVENT, domain );
+        return this._dispatcher.isRegistered( listener, LoggerMessage.LOG, domain );
     }
 
     public function removeAllListeners() : Void
@@ -83,33 +70,28 @@ class Logger
         return Stringifier.stringify( this );
     }
 	
-	public static function LOG( o : Dynamic, level : LogLevel, ?domain : Domain, ?target : Dynamic ) : Bool
+	public static function DEBUG( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Void
 	{
-		return Logger.getInstance().log( new LogEvent( level, target != null ? target : Logger.getInstance(), o ), domain );
+		Logger.getInstance().log( o, LogLevel.DEBUG, domain );
 	}
 	
-	public static function DEBUG( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	public static function INFO( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Void
 	{
-		return Logger.LOG( o, LogLevel.DEBUG, domain, target );
+		Logger.getInstance().log( o, LogLevel.INFO, domain );
 	}
 	
-	public static function INFO( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	public static function WARN( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Void
 	{
-		return Logger.LOG( o, LogLevel.INFO, domain, target );
+		Logger.getInstance().log( o, LogLevel.WARN, domain );
 	}
 	
-	public static function WARN( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	public static function ERROR( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Void
 	{
-		return Logger.LOG( o, LogLevel.WARN, domain, target );
+		Logger.getInstance().log( o, LogLevel.ERROR, domain );
 	}
 	
-	public static function ERROR( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
+	public static function FATAL( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Void
 	{
-		return Logger.LOG( o, LogLevel.ERROR, domain, target );
-	}
-	
-	public static function FATAL( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Bool
-	{
-		return Logger.LOG( o, LogLevel.FATAL, domain, target );
+		Logger.getInstance().log( o, LogLevel.FATAL, domain );
 	}
 }
