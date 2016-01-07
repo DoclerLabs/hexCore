@@ -40,9 +40,15 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             }
             else
             {
-                var callback = Reflect.field( listener, messageType.name );
+				var messageName : String = messageType.name;
+                var callback = Reflect.field( listener, messageName );
                 if ( callback != null )
                 {
+					if ( messageName == 'handleMessage' )
+					{
+						data.unshift( data );
+					}
+
                     Reflect.callMethod ( listener, callback, data );
                 }
                 else

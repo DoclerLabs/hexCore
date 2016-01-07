@@ -277,6 +277,48 @@ class DispatcherTest
 		Assert.equals( 1, this._listener.eventReceivedCount, "Message should have been received once" );
 		Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return false" );
 	}
+	
+	@test( "Test 'dispatch' behavior with 'handleMessage' callback" )
+    public function testDispatchWithHandleMessageCallback() : Void
+    {
+		var messageType : MessageType = new MessageType();
+		
+        var dispatcher : Dispatcher<IMockListener> = new Dispatcher<IMockListener>();
+        var mockListener : MockHandleMessageListener = new MockHandleMessageListener();
+        dispatcher.addListener( mockListener );
+
+        var message : MessageType = new MessageType();
+        dispatcher.dispatch( messageType, ["something", 7] );
+
+        Assert.equals( mockListener.eventReceivedCount, 1, "Message should be received once" );
+        Assert.equals( messageType, messageTypeReceived, "MessageType received should be the same" );
+        Assert.deepEquals(  ["something", 7], mockListener.lastDataReceived, "Message content should be the same that was dispatched" );
+
+        var anotherMessageType : MessageType = new MessageType();
+        dispatcher.dispatch( anotherMessageType, ["somethingElse", 13] );
+
+        Assert.equals( mockListener.eventReceivedCount, 2, "Message should have been received twice" );
+        Assert.deepEquals( ["somethingElse", 13], mockListener.lastEventReceived, "Message content received should be the same that was dispatched" );
+	}
+}
+
+private class MockHandleMessageListener implements IMockListener
+{
+    public var messageTypeReceived 	: MessageType;
+    public var eventReceivedCount 	: Int = 0;
+    public var lastDataReceived 	: Array<Dynamic> = null;
+
+    public function new()
+    {
+
+    }
+
+    public function handleMessage( messageType : MessageType, s : String, i : Int ) : Void
+    {
+        this.eventReceivedCount++;
+		this.messageTypeReceived = messageType;
+        this.lastEventReceived = [ s, i ];
+    }
 }
 
 private class MockListener implements IMockListener
@@ -294,12 +336,6 @@ private class MockListener implements IMockListener
         this.eventReceivedCount++;
         this.lastEventReceived = [ s, i ];
     }
-	
-	public function onMessage( s : String, i : Int ) : Void 
-	{
-		this.eventReceivedCount++;
-        this.lastEventReceived = [ s, i ];
-	}
 }
 
 private interface IMockListener
@@ -322,12 +358,6 @@ private class MockEventListener implements IMockListener
         this.eventReceivedCount++;
         this.lastEventReceived = [ s, i ];
     }
-	
-	public function handleMessage( s : String, i : Int ) : Void
-    {
-		this.eventReceivedCount++;
-        this.lastEventReceived = [ s, i ];
-	}
 }
 
 
