@@ -7,8 +7,8 @@ import hex.event.IEventListener;
  * ...
  * @author Francis Bourre
  */
-interface ILocatorListener<EventType:IEvent> extends IEventListener
+interface ILocatorListener<KeyType, ValueType>
 {
-    function onRegister( event : EventType ) : Void;
-    function onUnregister( event : EventType ) : Void;
+    function onRegister( key : KeyType, value : ValueType ) : Void;
+    function onUnregister( key : KeyType ) : Void;
 }

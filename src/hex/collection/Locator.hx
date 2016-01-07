@@ -1,6 +1,8 @@
 package hex.collection;
 
 import hex.error.VirtualMethodException;
+import hex.event.Dispatcher;
+import hex.event.IDispatcher;
 import hex.event.IEvent;
 import hex.log.Stringifier;
 import hex.error.IllegalArgumentException;
@@ -14,13 +16,13 @@ import hex.event.EventDispatcher;
  */
 class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<KeyType, ValueType, EventType>
 {
-    private var _dispatcher     : IEventDispatcher<ILocatorListener<EventType>, EventType>;
+    private var _dispatcher     : IDispatcher<ILocatorListener<KeyType, ValueType>>;
     private var _map    		: HashMap<KeyType, ValueType>;
 
     public function new()
     {
         this._map   = new HashMap<KeyType, ValueType>();
-        this._dispatcher    = new EventDispatcher<ILocatorListener<EventType>, EventType>();
+        this._dispatcher    = new Dispatcher<ILocatorListener<KeyType, ValueType>>();
     }
 	
 	public function clear() : Void
@@ -111,12 +113,12 @@ class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<
         }
     }
 
-    public function addListener( listener : ILocatorListener<EventType> ) : Bool
+    public function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
         return this._dispatcher.addListener( listener );
     }
 
-    public function removeListener( listener : ILocatorListener<EventType> ) : Bool
+    public function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
         return this._dispatcher.removeListener( listener );
     }

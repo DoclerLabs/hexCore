@@ -22,7 +22,7 @@ interface ILocator<KeyType, ValueType, EventType:IEvent>
 
     function add( map : Map<KeyType, ValueType> ) : Void;
 
-    function addListener( listener : ILocatorListener<EventType> ) : Bool;
+    function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool;
 
-    function removeListener( listener : ILocatorListener<EventType> ) : Bool;
+    function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool;
 }
