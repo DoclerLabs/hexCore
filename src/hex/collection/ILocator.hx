@@ -6,7 +6,7 @@ import hex.event.IEvent;
  * ...
  * @author Francis Bourre
  */
-interface ILocator<KeyType, ValueType, EventType:IEvent>
+interface ILocator<KeyType, ValueType>
 {
     function keys() : Array<KeyType>;
 

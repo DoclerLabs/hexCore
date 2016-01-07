@@ -14,7 +14,7 @@ import hex.event.EventDispatcher;
  * ...
  * @author Francis Bourre
  */
-class Locator<KeyType:Dynamic, ValueType, EventType:IEvent> implements ILocator<KeyType, ValueType, EventType>
+class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
 {
     private var _dispatcher     : IDispatcher<ILocatorListener<KeyType, ValueType>>;
     private var _map    		: HashMap<KeyType, ValueType>;
