@@ -283,26 +283,26 @@ class DispatcherTest
     {
 		var messageType : MessageType = new MessageType();
 		
-        var dispatcher : Dispatcher<IMockListener> = new Dispatcher<IMockListener>();
+        var dispatcher : Dispatcher<MockHandleMessageListener> = new Dispatcher<MockHandleMessageListener>();
         var mockListener : MockHandleMessageListener = new MockHandleMessageListener();
         dispatcher.addListener( mockListener );
 
-        var message : MessageType = new MessageType();
+        var message : MessageType = new MessageType( "messageTypeName" );
         dispatcher.dispatch( messageType, ["something", 7] );
 
         Assert.equals( mockListener.eventReceivedCount, 1, "Message should be received once" );
-        Assert.equals( messageType, messageTypeReceived, "MessageType received should be the same" );
+        Assert.equals( messageType, mockListener.messageTypeReceived, "MessageType received should be the same" );
         Assert.deepEquals(  ["something", 7], mockListener.lastDataReceived, "Message content should be the same that was dispatched" );
 
-        var anotherMessageType : MessageType = new MessageType();
+        var anotherMessageType : MessageType = new MessageType( "anotherMessageTypeName" );
         dispatcher.dispatch( anotherMessageType, ["somethingElse", 13] );
 
         Assert.equals( mockListener.eventReceivedCount, 2, "Message should have been received twice" );
-        Assert.deepEquals( ["somethingElse", 13], mockListener.lastEventReceived, "Message content received should be the same that was dispatched" );
+        Assert.deepEquals( ["somethingElse", 13], mockListener.lastDataReceived, "Message content received should be the same that was dispatched" );
 	}
 }
 
-private class MockHandleMessageListener implements IMockListener
+private class MockHandleMessageListener
 {
     public var messageTypeReceived 	: MessageType;
     public var eventReceivedCount 	: Int = 0;
@@ -317,12 +317,13 @@ private class MockHandleMessageListener implements IMockListener
     {
         this.eventReceivedCount++;
 		this.messageTypeReceived = messageType;
-        this.lastEventReceived = [ s, i ];
+        this.lastDataReceived = [ s, i ];
     }
 }
 
 private class MockListener implements IMockListener
 {
+	public var messageTypeReceived 	: MessageType;
     public var eventReceivedCount : Int = 0;
     public var lastEventReceived : Array<Dynamic> = null;
 
@@ -331,11 +332,17 @@ private class MockListener implements IMockListener
 
     }
 
-    public function handleMessage( s : String, i : Int ) : Void
+    public function handleMessage( messageType : MessageType, s : String, i : Int ) : Void
     {
+		this.messageTypeReceived = messageType;
         this.eventReceivedCount++;
         this.lastEventReceived = [ s, i ];
     }
+	
+	public function onMessage( s : String, i : Int ) : Void 
+	{
+		
+	}
 }
 
 private interface IMockListener
@@ -345,8 +352,9 @@ private interface IMockListener
 
 private class MockEventListener implements IMockListener
 {
-    public var eventReceivedCount : Int = 0;
-    public var lastEventReceived : Array<Dynamic> = null;
+	public var messageTypeReceived 	: MessageType;
+    public var eventReceivedCount 	: Int = 0;
+    public var lastEventReceived 	: Array<Dynamic> = null;
 
     public function new()
     {
@@ -358,8 +366,14 @@ private class MockEventListener implements IMockListener
         this.eventReceivedCount++;
         this.lastEventReceived = [ s, i ];
     }
+	
+	public function handleMessage( messageType : MessageType, s : String, i : Int ) : Void
+    {
+		this.messageTypeReceived = messageType;
+        this.eventReceivedCount++;
+        this.lastEventReceived = [ s, i ];
+    }
 }
-
 
 private class MockEventListenerForTestingSealingOnRemoveListener extends MockEventListener
 {

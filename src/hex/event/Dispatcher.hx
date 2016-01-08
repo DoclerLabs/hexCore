@@ -42,21 +42,26 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             {
 				var messageName : String = messageType.name;
                 var callback = Reflect.field( listener, messageName );
-                if ( callback != null )
+                if ( callback != null && messageName != 'handleMessage' )
                 {
-					if ( messageName == 'handleMessage' )
-					{
-						data.unshift( data );
-					}
-
-                    Reflect.callMethod ( listener, callback, data );
+					Reflect.callMethod ( listener, callback, data );
                 }
                 else
                 {
-					var msg : String = Stringifier.stringify( this ) + ".dispatch failed. " +
-					" You must implement '" + messageType.name + "' or handleMessage' method in '" +
-					Stringifier.stringify( listener ) + "' instance.";
-					throw( new UnsupportedOperationException( msg ) );
+					callback = Reflect.field( listener, 'handleMessage' );
+					
+					if ( callback != null )
+					{
+						data.unshift( messageType );
+						Reflect.callMethod ( listener, callback, data );
+						
+					} else
+					{
+						var msg : String = Stringifier.stringify( this ) + ".dispatch failed. " +
+						" You must implement '" + messageType.name + "' or 'handleMessage' method in '" +
+						Stringifier.stringify( listener ) + "' instance.";
+						throw( new UnsupportedOperationException( msg ) );
+					}
                 }
             }
         }
