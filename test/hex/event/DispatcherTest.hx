@@ -192,16 +192,16 @@ class DispatcherTest
 		var messageType : MessageType = new MessageType();
 		
         Assert.isFalse( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return false" );
-        Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return false" );
+        Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return false" );
         this._dispatcher.addListener( this._listener );
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
-        Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return true" );
+        Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
 		Assert.isTrue( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return true" );
 
         this._dispatcher.removeAllListeners();
         this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
-        Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return true" );
+        Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return false" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), ( new MockEventListener() ).onMessage ), "'hasHandler' should return false" );
     }
@@ -243,10 +243,11 @@ class DispatcherTest
 		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveEventListener( this._dispatcher, this._listener, messageType );
 		this._dispatcher.addHandler( messageType, mockEventListener, mockEventListener.onMessage );
 		this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
+		Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
 		
 		this._dispatcher.dispatch( messageType, ["something", 7] );
 		Assert.equals( 1, this._listener.eventReceivedCount, "Message should have beeen received once" );
-		Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return true" );
+		Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return false" );
 	}
 	
 	@test( "Test seal activation on 'addHandler' during dispatching" )
@@ -261,7 +262,7 @@ class DispatcherTest
 		
 		this._dispatcher.dispatch( messageType, ["something", 7] );
 		Assert.equals( 0, this._listener.eventReceivedCount, "Message shouldn't have been received" );
-		Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return true" );
+		Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
 	}
 	
 	@test( "Test seal activation on 'removeAllListeners' during dispatching" )
@@ -373,6 +374,11 @@ private class MockEventListener implements IMockListener
         this.eventReceivedCount++;
         this.lastEventReceived = [ s, i ];
     }
+	
+	public function emptyMethod() : Void
+	{
+		
+	}
 }
 
 private class MockEventListenerForTestingSealingOnRemoveListener extends MockEventListener

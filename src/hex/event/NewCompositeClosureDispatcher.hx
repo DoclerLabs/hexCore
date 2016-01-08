@@ -112,12 +112,12 @@ class NewCompositeClosureDispatcher implements IDispatcher<{}>
 		throw ( new UnsupportedOperationException( "'isRegistered' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
 	}
 	
-	public function hasHandler( messageType : MessageType, ?scope : Dynamic, ?callback : Dynamic  ) : Bool
+	public function hasHandler( messageType : MessageType, ?scope : Dynamic ) : Bool
 	{
 		var b : Bool = false;
 		for ( dispatcher in this._dispatchers )
 		{
-			b = dispatcher.hasHandler( messageType, scope, callback ) || b;
+			b = dispatcher.hasHandler( messageType, scope ) || b;
 		}
 		return b;
 	}

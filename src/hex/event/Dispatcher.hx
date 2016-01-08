@@ -253,9 +253,9 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         }
     }
 
-    public function hasHandler( messageType : MessageType, ?scope : Dynamic, ?callback : Dynamic  ) : Bool
+    public function hasHandler( messageType : MessageType, ?scope : Dynamic ) : Bool
     {
-        if ( callback == null )
+        if ( scope == null )
         {
             var iterator = this._listeners.keys();
             while ( iterator.hasNext() )
@@ -278,7 +278,17 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         {
             if ( this._listeners.exists( scope ) )
             {
-                return true;
+				var m : Map<MessageType, Dynamic> = this._listeners.get( scope );
+				if ( Lambda.count( m ) == 0 )
+				{
+					return true;
+				}
+				else if ( m.exists( messageType ) )
+                {
+                    return true;
+                }
+				
+				return false;
             }
             else
             {

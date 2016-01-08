@@ -13,5 +13,5 @@ interface IDispatcher<ListenerType:{}>
 	function removeAllListeners() : Void;
 	function isEmpty() : Bool;
 	function isRegistered( listener : ListenerType, ?messageType : MessageType ) : Bool;
-	function hasHandler( messageType : MessageType, ?scope : Dynamic, ?callback : Dynamic  ) : Bool;
+	function hasHandler( messageType : MessageType, ?scope : Dynamic ) : Bool;
 }
