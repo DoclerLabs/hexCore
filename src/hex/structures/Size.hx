@@ -31,8 +31,15 @@ class Size
 
 	public function setSizeWH( width : Float, height : Float ) : Void
 	{
-		if ( !Math.isNaN( width ) ) this.width = width;
-		if ( !Math.isNaN( height ) ) this.height = height;
+		if ( !Math.isNaN( width ) ) 
+		{
+			this.width = width;
+		}
+		
+		if ( !Math.isNaN( height ) ) 
+		{
+			this.height = height;
+		}
 	}
 
 	public function clone() : Size
@@ -46,7 +53,10 @@ class Size
 		{
 			return new Size( this.width * factor, this.height * factor );
 		}
-		else return this.clone();
+		else 
+		{
+			return this.clone();
+		}
 	}
 
 	public function substract( size : Size ) : Size
@@ -55,7 +65,10 @@ class Size
 		{
 			return new Size( this.width - size.width, this.height - size.height );
 		}
-		else return this.clone();
+		else 
+		{
+			return this.clone();
+		}
 	}
 
 	public function add( size : Size ) : Size
@@ -64,7 +77,10 @@ class Size
 		{
 			return new Size( this.width + size.width, this.height + size.height );
 		}
-		else return this.clone();
+		else 
+		{
+			return this.clone();
+		}
 	}
 
 	public function toPoint() : Point

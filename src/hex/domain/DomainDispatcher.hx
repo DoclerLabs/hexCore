@@ -1,34 +1,33 @@
 package hex.domain;
 
-import hex.domain.Domain;
-import hex.event.IEvent;
-import hex.event.IEventListener;
-import hex.event.IEventDispatcher;
-import hex.event.EventDispatcher;
+import hex.domain.IDomainDispatcher;
+import hex.event.Dispatcher;
+import hex.event.IDispatcher;
+import hex.event.MessageType;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements IDomainDispatcher<ListenerType, EventType>
+class DomainDispatcher<ListenerType:{}> implements IDomainDispatcher<ListenerType>
 {
-    private var _domains 			: Map<Domain, IEventDispatcher<ListenerType, EventType>>;
+    private var _domains 			: Map<Domain, IDispatcher<ListenerType>>;
     private var _defaultDomain 	    : Domain;
-    private var _dispatcherClass 	: Class<IEventDispatcher<ListenerType, EventType>>;
+    private var _dispatcherClass 	: Class<IDispatcher<ListenerType>>;
 
-    public function new( ?defaultDomain : Domain, ?dispatcherClass : Class<IEventDispatcher<ListenerType, EventType>> )
+    public function new( ?defaultDomain : Domain, ?dispatcherClass : Class<IDispatcher<ListenerType>> )
     {
         this.clear();
         this.setDefaultDomain( defaultDomain );
         this.setDispatcherClass( dispatcherClass );
     }
 
-    public function setDispatcherClass( ?dispatcherClass : Class<IEventDispatcher<ListenerType, EventType>> ) : Void
+    public function setDispatcherClass( ?dispatcherClass : Class<IDispatcher<ListenerType>> ) : Void
 	{
-        this._dispatcherClass = dispatcherClass != null ? dispatcherClass : EventDispatcher;
+        this._dispatcherClass = dispatcherClass != null ? dispatcherClass : Dispatcher;
 	}
 
-    public function getDefaultDispatcher() : IEventDispatcher<ListenerType, EventType>
+    public function getDefaultDispatcher() : IDispatcher<ListenerType>
     {
         return this._domains.get( this._defaultDomain );
     }
@@ -46,7 +45,7 @@ class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements
 
     public function clear() : Void
     {
-        this._domains = new Map<Domain, IEventDispatcher<ListenerType, EventType>>();
+        this._domains = new Map<Domain, IDispatcher<ListenerType>>();
         var domain : Domain = this.getDefaultDomain();
         if ( domain != null )
         {
@@ -54,9 +53,9 @@ class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements
         }
     }
 
-    public function isRegistered( listener : ListenerType, eventType : String, domain : Domain ) : Bool
+    public function isRegistered( listener : ListenerType, messageType : MessageType, domain : Domain ) : Bool
     {
-        return this.hasChannelDispatcher( domain ) ? this.getDomainDispatcher( domain ).isRegistered( listener, eventType ) : false;
+        return this.hasChannelDispatcher( domain ) ? this.getDomainDispatcher( domain ).isRegistered( listener, messageType ) : false;
     }
 
     public function hasChannelDispatcher( ?domain : Domain ) : Bool
@@ -64,7 +63,7 @@ class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements
         return domain == null ? this._domains.exists( this._defaultDomain ) : this._domains.exists( domain );
     }
 
-    public function getDomainDispatcher( ?domain : Domain ) : IEventDispatcher<ListenerType, EventType>
+    public function getDomainDispatcher( ?domain : Domain ) : IDispatcher<ListenerType>
     {
         if ( this.hasChannelDispatcher( domain ) )
         {
@@ -72,7 +71,7 @@ class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements
 
         } else
         {
-            var dispatcher : IEventDispatcher<ListenerType, EventType> = new EventDispatcher<ListenerType, EventType>();
+            var dispatcher : IDispatcher<ListenerType> = new Dispatcher<ListenerType>();
             this._domains.set( domain, dispatcher );
             return dispatcher;
         }
@@ -102,19 +101,19 @@ class DomainDispatcher<ListenerType:IEventListener, EventType:IEvent> implements
         return this.getDomainDispatcher( domain ).removeListener( listener );
     }
 
-    public function addEventListener( eventType : String, callback : EventType->Void, domain : Domain ) : Bool
+    public function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool
     {
-        return this.getDomainDispatcher( domain ).addEventListener( eventType, callback );
+        return this.getDomainDispatcher( domain ).addHandler( messageType, scope, callback );
     }
 
-    public function removeEventListener( eventType : String, callback : EventType->Void, domain : Domain ) : Bool
+    public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool
     {
-        return this.getDomainDispatcher( domain ).removeEventListener( eventType, callback );
+        return this.getDomainDispatcher( domain ).removeHandler( messageType, scope, callback );
     }
 
-    public function dispatchEvent( event : EventType, domain : Domain ) : Void
+    public function dispatch( messageType : MessageType, domain : Domain, data : Array<Dynamic> ) : Void
     {
-        this.getDomainDispatcher( domain ).dispatchEvent( event );
+        this.getDomainDispatcher( domain ).dispatch( messageType, data );
     }
 
     public function removeAllListeners() : Void

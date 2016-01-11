@@ -1,7 +1,5 @@
 package hex.util;
 
-import haxe.ds.HashMap;
-
 /**
  * ...
  * @author duke

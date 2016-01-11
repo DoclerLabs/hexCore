@@ -1,4 +1,5 @@
 package hex.log;
+
 import hex.event.MessageType;
 
 /**

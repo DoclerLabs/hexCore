@@ -1,17 +1,18 @@
 package hex.domain;
 
-import hex.event.IEvent;
-import hex.event.IEventDispatcher;
-import hex.event.IEventListener;
+import hex.domain.Domain;
+import hex.event.IDispatcher;
+import hex.event.MessageType;
 
 /**
  * @author Francis Bourre
  */
-interface IDomainDispatcher<ListenerType:IEventListener, EventType:IEvent>
+interface IDomainDispatcher<ListenerType:{}> 
 {
-	function setDispatcherClass( ?dispatcherClass : Class<IEventDispatcher<ListenerType, EventType>> ) : Void;
+	
+	function setDispatcherClass( ?dispatcherClass : Class<IDispatcher<ListenerType>> ) : Void;
 
-    function getDefaultDispatcher() : IEventDispatcher<ListenerType, EventType>;
+    function getDefaultDispatcher() : IDispatcher<ListenerType>;
 
     function getDefaultDomain() : Domain;
 
@@ -19,11 +20,11 @@ interface IDomainDispatcher<ListenerType:IEventListener, EventType:IEvent>
 
     function clear() : Void;
 
-    function isRegistered( listener : ListenerType, eventType : String, domain : Domain ) : Bool;
+    function isRegistered( listener : ListenerType, messageType : MessageType, domain : Domain ) : Bool;
 
     function hasChannelDispatcher( ?domain : Domain ) : Bool;
 
-    function getDomainDispatcher( ?domain : Domain ) : IEventDispatcher<ListenerType, EventType>;
+    function getDomainDispatcher( ?domain : Domain ) : IDispatcher<ListenerType>;
 
     function releaseDomainDispatcher( domain : Domain ) : Bool;
 
@@ -31,11 +32,12 @@ interface IDomainDispatcher<ListenerType:IEventListener, EventType:IEvent>
 
     function removeListener( listener : ListenerType, ?domain : Domain ) : Bool;
 
-    function addEventListener( eventType : String, callback : EventType-> Void, domain : Domain ) : Bool;
+    function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool;
 
-    function removeEventListener( eventType : String, callback : EventType-> Void, domain : Domain ) : Bool;
+    function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool;
 
-    function dispatchEvent( event : EventType, domain : Domain ) : Void;
+    function dispatch( messageType : MessageType, domain : Domain, data : Array<Dynamic> ) : Void;
 
     function removeAllListeners() : Void;
+	
 }

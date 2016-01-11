@@ -1,7 +1,6 @@
 package hex.log;
 
 import hex.domain.Domain;
-import hex.event.IEventListener;
 
 /**
  * ...

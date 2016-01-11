@@ -7,7 +7,7 @@ import hex.log.Stringifier;
  * ...
  * @author Francis Bourre
  */
-class NewCompositeClosureDispatcher implements IDispatcher<{}>
+class CompositeDispatcher implements IDispatcher<{}>
 {
 	private var _dispatchers 		: Array<IDispatcher<{}>>;
 	private var _isSealed 			: Bool;

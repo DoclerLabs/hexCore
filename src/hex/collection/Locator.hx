@@ -1,14 +1,10 @@
 package hex.collection;
 
-import hex.error.VirtualMethodException;
-import hex.event.Dispatcher;
-import hex.event.IDispatcher;
-import hex.event.IEvent;
-import hex.log.Stringifier;
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
-import hex.event.IEventDispatcher;
-import hex.event.EventDispatcher;
+import hex.event.Dispatcher;
+import hex.event.IDispatcher;
+import hex.log.Stringifier;
 
 /**
  * ...

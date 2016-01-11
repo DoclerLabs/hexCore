@@ -1,7 +1,7 @@
 package hex.log;
 
 import hex.domain.Domain;
-import hex.domain.NewDomainDispatcher;
+import hex.domain.DomainDispatcher;
 
 /**
  * ...
@@ -11,13 +11,13 @@ class Logger
 {
 	private static var _Instance 	: Logger = null;
 	
-    private var _dispatcher 		: NewDomainDispatcher<ILogListener>;
+    private var _dispatcher 		: DomainDispatcher<ILogListener>;
     private var _level 		    	: LogLevel;
 
     public function new()
     {
         this.setLevel( LogLevel.ALL );
-        this._dispatcher = new NewDomainDispatcher<ILogListener>();
+        this._dispatcher = new DomainDispatcher<ILogListener>();
     }
 	
 	public static function getInstance() : Logger
