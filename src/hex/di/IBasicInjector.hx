@@ -17,4 +17,8 @@ interface IBasicInjector
     function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic;
 
     function getOrCreateNewInstance( type : Class<Dynamic> ) : Dynamic;
+	
+	function hasMapping( type : Class<Dynamic>, name : String = '' ) : Bool;
+	
+	function unmap( type : Class<Dynamic>, name : String = '' ) : Void;
 }
