@@ -21,7 +21,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         this._listeners 			= new Map();
     }
 	
-	public function dispatch( messageType : MessageType, data : Array<Dynamic> ) : Void
+	public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void
     {
 		this._seal( true );
 		
@@ -52,7 +52,15 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 					
 					if ( callback != null )
 					{
-						data.unshift( messageType );
+						if ( data != null )
+						{
+							data.unshift( messageType );
+						}
+						else
+						{
+							data = [ messageType ];
+						}
+						
 						Reflect.callMethod ( listener, callback, data );
 						
 					} else

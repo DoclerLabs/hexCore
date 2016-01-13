@@ -5,7 +5,7 @@ package hex.event;
  */
 interface IDispatcher<ListenerType:{}> 
 {
-	function dispatch( messageType : MessageType, data : Array<Dynamic> ) : Void;
+	function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void;
 	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
 	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
 	function addListener( listener : ListenerType ) : Bool;

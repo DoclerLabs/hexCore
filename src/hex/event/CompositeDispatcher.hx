@@ -20,7 +20,7 @@ class CompositeDispatcher implements IDispatcher<{}>
 		this._dispatchers 			= [];
 	}
 	
-	public function dispatch( messageType : MessageType, data : Array<Dynamic> ) : Void 
+	public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void 
 	{
 		this._seal( true );
 		
