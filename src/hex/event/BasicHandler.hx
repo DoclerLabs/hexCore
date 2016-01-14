@@ -4,7 +4,7 @@ package hex.event;
  * ...
  * @author Francis Bourre
  */
-class DynamicHandler
+class BasicHandler
 {
 	public var scope 	: Dynamic;
 	public var callback	: Dynamic;
