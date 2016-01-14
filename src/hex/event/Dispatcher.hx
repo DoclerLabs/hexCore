@@ -12,7 +12,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 {
 	private var _isSealed 			: Bool;
 	private var _cachedMethodCalls 	: Array<Void->Void>;
-    private var _listeners 			: Map<ListenerType, Map<MessageType, Array<DynamicHandler>>>;
+    private var _listeners 			: Map<ListenerType, Map<MessageType, CallbackHandler>>;
 
 	public function new()
     {
@@ -29,20 +29,14 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         while ( iterator.hasNext() )
         {
             var listener : ListenerType 	= iterator.next();
-            var m : Map<MessageType, Dynamic> 	= this._listeners.get( listener );
+            var m : Map<MessageType, CallbackHandler> 	= this._listeners.get( listener );
 			
             if ( Lambda.count( m ) > 0 )
             {
 				if ( m.exists( messageType ) )
 				{
-					var handlers : Array<DynamicHandler> = m.get( messageType );
-					for ( handler in handlers )
-					{
-						if ( handler != null )
-						{
-							handler.call( data );
-						}
-					}
+					var handler : CallbackHandler = m.get( messageType );
+					handler.call( data );
 				}
             }
             else
@@ -100,36 +94,21 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 				}
 				else if ( m.exists( messageType ) )
 				{
-					var handlers : Array<Dynamic> = m.get( messageType );
-					for ( handler in handlers )
-					{
-						if ( handler.callback == callback )
-						{
-							return false;
-						}
-					}
-					
-					handlers.push( new DynamicHandler( scope, callback ) );
-					return true;
+					var handler : CallbackHandler = m.get( messageType );
+					return handler.add( callback );
 				}
 				else
 				{
-					var f = function ( args : Array<Dynamic> ) : Void
-					{
-						Reflect.callMethod( scope, callback, args );
-					}
-					m.set( messageType, f );
+					var handler : CallbackHandler = new CallbackHandler( scope, callback );
+					m.set( messageType, handler );
 					return true;
 				}
 			}
 			else
 			{
-				var m : Map<MessageType, Array<DynamicHandler>> = new Map();
-				var handlers : Array<DynamicHandler> = [];
-				
-				var handler : DynamicHandler = new DynamicHandler( scope, callback );
-				handlers.push( handler );
-				m.set( messageType, handlers );
+				var m : Map<MessageType, CallbackHandler> = new Map();
+				var handler : CallbackHandler = new CallbackHandler( scope, callback );
+				m.set( messageType, handler );
 				this._listeners.set( scope, m );
 				
 				return true;
@@ -148,7 +127,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		{
 			if ( this._listeners.exists( scope ) )
 			{
-				var m : Map<MessageType, Dynamic> = this._listeners.get( scope );
+				var m : Map<MessageType, CallbackHandler> = this._listeners.get( scope );
 
 				if ( Lambda.count( m ) == 0 )
 				{
@@ -159,20 +138,10 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 				}
 				else if ( m.exists( messageType ) )
 				{
-					var b : Bool = false;
-					var handlers : Array<DynamicHandler> = m.get( messageType );
-					var len : UInt = handlers.length;
-					for ( i in 0...len )
-					{
-						if ( handlers[ i ].callback == callback )
-						{
-							handlers.splice( i, 1 );
-							b = true;
-							break;
-						}
-					}
+					var handler : CallbackHandler = m.get( messageType );
+					var b : Bool = handler.remove( callback );
 					
-					if ( handlers.length == 0 )
+					if ( handler.isEmpty() )
 					{
 						m.remove( messageType );
 						if ( Lambda.count( m ) == 0 )
@@ -206,7 +175,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		{
 			if ( this._listeners.exists( listener ) )
 			{
-				var m : Map<MessageType, Dynamic> = this._listeners.get( listener );
+				var m : Map<MessageType, CallbackHandler> = this._listeners.get( listener );
 				if ( Lambda.count( m ) > 0 )
 				{
 					var msg : String = Stringifier.stringify( this ) + ".addListener failed. " +
@@ -227,7 +196,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 			}
 			else
 			{
-				this._listeners.set( listener, new Map<MessageType, Array<DynamicHandler>>() );
+				this._listeners.set( listener, new Map<MessageType, CallbackHandler>() );
 				return true;
 			}
 		}
@@ -286,7 +255,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             }
             else
             {
-			var m : Map<MessageType, Dynamic> = this._listeners.get( listener );
+			var m : Map<MessageType, CallbackHandler> = this._listeners.get( listener );
                 return m.exists( messageType );
             }
         }
@@ -304,7 +273,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             while ( iterator.hasNext() )
             {
                 var listener : ListenerType = iterator.next();
-				var m : Map<MessageType, Dynamic> = this._listeners.get( listener );
+				var m : Map<MessageType, CallbackHandler> = this._listeners.get( listener );
 				if ( Lambda.count( m ) == 0 )
 				{
 					return true;
@@ -321,7 +290,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         {
             if ( this._listeners.exists( scope ) )
             {
-				var m : Map<MessageType, Dynamic> = this._listeners.get( scope );
+				var m : Map<MessageType, CallbackHandler> = this._listeners.get( scope );
 				if ( Lambda.count( m ) == 0 )
 				{
 					return true;
