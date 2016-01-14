@@ -37,12 +37,12 @@ class DispatcherTest
         this._dispatcher.dispatch( messageType, ["something", 7] );
 
         Assert.equals( this._listener.eventReceivedCount, 1, "Message should be received once" );
-        Assert.deepEquals( ["something", 7], this._listener.lastEventReceived, "Message content received should be the same that was dispatched" );
+        Assert.deepEquals( ["something", 7], this._listener.lastDataReceived, "Message content received should be the same that was dispatched" );
 		
         this._dispatcher.dispatch( messageType, ["somethingElse", 13] );
 
         Assert.equals( this._listener.eventReceivedCount, 2, "Message should be received twice" );
-        Assert.deepEquals( ["somethingElse", 13], this._listener.lastEventReceived, "Message content received should be the same that was dispatched" );
+        Assert.deepEquals( ["somethingElse", 13], this._listener.lastDataReceived, "Message content received should be the same that was dispatched" );
     
 		this._dispatcher.removeListener( this._listener );
         this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
@@ -62,7 +62,7 @@ class DispatcherTest
         this._dispatcher.dispatch( messageType, ["something", 7] );
 
         Assert.equals( this._listener.eventReceivedCount, 0, "Message should not been received" );
-        Assert.isNull( this._listener.lastEventReceived, "Message should null" );
+        Assert.isNull( this._listener.lastDataReceived, "Message should null" );
         Assert.isFalse( this._dispatcher.removeListener( this._listener ), "Same 'removeListener' call should return false second time" );
     
 		this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
@@ -70,7 +70,7 @@ class DispatcherTest
         this._dispatcher.dispatch( messageType, ["something", 7] );
 
         Assert.equals( this._listener.eventReceivedCount, 0, "Message should not be received" );
-        Assert.isNull( this._listener.lastEventReceived, "Message received should be null" );
+        Assert.isNull( this._listener.lastDataReceived, "Message received should be null" );
 	}
 
     @test( "Test 'addHandler' behavior" )
@@ -78,20 +78,23 @@ class DispatcherTest
     {
 		var messageType : MessageType = new MessageType();
 		
-		Assert.isTrue( this._dispatcher.addHandler( messageType, this, this._listener.onMessage ), "'addHandler' call should return true" );
-        Assert.isFalse( this._dispatcher.addHandler( messageType, this, this._listener.onMessage ), "Same 'addHandler' calls should return false second time" );
+		Assert.isTrue( this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage ), "'addHandler' call should return true" );
+        Assert.isFalse( this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage ), "Same 'addHandler' calls should return false second time" );
+		Assert.isTrue( this._dispatcher.addHandler( messageType, this._listener, this._listener.onSameMessage ), "'addHandler' call should return true" );
         
 		this._dispatcher.dispatch( messageType, ["something", 7] );
 
-        Assert.equals( this._listener.eventReceivedCount, 1, "Message should be received once" );
-        Assert.deepEquals( ["something", 7], this._listener.lastEventReceived, "Message content received should be the same that was dispatched" );
+        Assert.equals( this._listener.eventReceivedCount, 2, "Message should be received twice" );
+        Assert.deepEquals( ["something", 7], this._listener.lastDataReceived, "Message content received should be the same that was dispatched" );
+		
+		Assert.isTrue( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onSameMessage ), "'removeHandler' call should return true" );
 
         this._dispatcher.dispatch( messageType, ["somethingElse", 13] );
 
-        Assert.equals( this._listener.eventReceivedCount, 2, "Message should be received twice" );
-        Assert.deepEquals( ["somethingElse", 13], this._listener.lastEventReceived, "Message content should be the same that was dispatched" );
+        Assert.equals( this._listener.eventReceivedCount, 3, "Message should be received twice" );
+        Assert.deepEquals( ["somethingElse", 13], this._listener.lastDataReceived, "Message content should be the same that was dispatched" );
 	
-		this._dispatcher.removeHandler( messageType, this._listener, this._listener.onMessage );
+		Assert.isTrue( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onMessage ), "'removeHandler' call should return true" );
         this._dispatcher.addListener( this._listener );
         Assert.methodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addHandler, [messageType, this._listener, this._listener.onMessage ], "'addHandler' should throw IllegalArgumentException when addListener was used previously" );
 	}
@@ -102,13 +105,16 @@ class DispatcherTest
 		var messageType : MessageType = new MessageType();
 		
         this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
+        this._dispatcher.addHandler( messageType, this._listener, this._listener.onSameMessage );
         Assert.isTrue( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onMessage ), "'removeHandler' call should return true" );
+        Assert.isFalse( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onMessage ), "'removeHandler' call should return false second time" );
+        Assert.isTrue( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onSameMessage ), "'removeHandler' call should return true" );
+        Assert.isFalse( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onSameMessage ), "'removeHandler' call should return false second time" );
 
         this._dispatcher.dispatch( messageType, ["something", 7] );
 
         Assert.equals( this._listener.eventReceivedCount, 0, "Message should be received once" );
-        Assert.isNull( this._listener.lastEventReceived, "Message received should be null" );
-        Assert.isFalse( this._dispatcher.removeHandler( messageType, this._listener, this._listener.onMessage ), "Same 'removeHandler' call should return false second time" );
+        Assert.isNull( this._listener.lastDataReceived, "Message received should be null" );
     }
 	
 	@test( "Test 'isEmpty' behavior with 'addHandler'" )
@@ -166,7 +172,7 @@ class DispatcherTest
 
         this._dispatcher.dispatch( messageType, ["something", 7] );
         Assert.equals( this._listener.eventReceivedCount, 0, "Message should not have been received" );
-        Assert.isNull( this._listener.lastEventReceived, "Message received should be null" );
+        Assert.isNull( this._listener.lastDataReceived, "Message received should be null" );
     }
 	
 	@test( "Test 'isRegistered' behavior" )
@@ -286,7 +292,9 @@ class DispatcherTest
 		
         var dispatcher : Dispatcher<MockHandleMessageListener> = new Dispatcher<MockHandleMessageListener>();
         var mockListener : MockHandleMessageListener = new MockHandleMessageListener();
+        var anotherMockListener : MockHandleMessageListener = new MockHandleMessageListener();
         dispatcher.addListener( mockListener );
+        dispatcher.addListener( anotherMockListener );
 
         var message : MessageType = new MessageType( "messageTypeName" );
         dispatcher.dispatch( messageType, ["something", 7] );
@@ -294,12 +302,22 @@ class DispatcherTest
         Assert.equals( mockListener.eventReceivedCount, 1, "Message should be received once" );
         Assert.equals( messageType, mockListener.messageTypeReceived, "MessageType received should be the same" );
         Assert.deepEquals(  ["something", 7], mockListener.lastDataReceived, "Message content should be the same that was dispatched" );
-
+		
+		Assert.equals( anotherMockListener.eventReceivedCount, 1, "Message should be received once" );
+        Assert.equals( messageType, anotherMockListener.messageTypeReceived, "MessageType received should be the same" );
+        Assert.deepEquals(  ["something", 7], anotherMockListener.lastDataReceived, "Message content should be the same that was dispatched" );
+		
+		dispatcher.removeListener( anotherMockListener );
         var anotherMessageType : MessageType = new MessageType( "anotherMessageTypeName" );
         dispatcher.dispatch( anotherMessageType, ["somethingElse", 13] );
 
         Assert.equals( mockListener.eventReceivedCount, 2, "Message should have been received twice" );
+		Assert.equals( anotherMessageType, mockListener.messageTypeReceived, "MessageType received should be the same" );
         Assert.deepEquals( ["somethingElse", 13], mockListener.lastDataReceived, "Message content received should be the same that was dispatched" );
+		
+		Assert.equals( anotherMockListener.eventReceivedCount, 1, "Message should be received once" );
+        Assert.equals( messageType, anotherMockListener.messageTypeReceived, "MessageType received should be the same" );
+        Assert.deepEquals(  ["something", 7], anotherMockListener.lastDataReceived, "Message content should be the same that was dispatched" );
 	}
 }
 
@@ -355,7 +373,7 @@ private class MockEventListener implements IMockListener
 {
 	public var messageTypeReceived 	: MessageType;
     public var eventReceivedCount 	: Int = 0;
-    public var lastEventReceived 	: Array<Dynamic> = null;
+    public var lastDataReceived 	: Array<Dynamic> = null;
 
     public function new()
     {
@@ -365,14 +383,20 @@ private class MockEventListener implements IMockListener
     public function onMessage( s : String, i : Int ) : Void
     {
         this.eventReceivedCount++;
-        this.lastEventReceived = [ s, i ];
+        this.lastDataReceived = [ s, i ];
+    }
+	
+	public function onSameMessage( s : String, i : Int ) : Void
+    {
+        this.eventReceivedCount++;
+        this.lastDataReceived = [ s, i ];
     }
 	
 	public function handleMessage( messageType : MessageType, s : String, i : Int ) : Void
     {
 		this.messageTypeReceived = messageType;
         this.eventReceivedCount++;
-        this.lastEventReceived = [ s, i ];
+        this.lastDataReceived = [ s, i ];
     }
 	
 	public function emptyMethod() : Void
