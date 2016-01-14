@@ -25,6 +25,8 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
     {
 		this._seal( true );
 		
+		var parameters : Array<Dynamic> = null;
+		
         var iterator = this._listeners.keys();
         while ( iterator.hasNext() )
         {
@@ -53,16 +55,16 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 					
 					if ( callback != null )
 					{
-						if ( data != null )
+						if ( parameters == null )
 						{
-							data.unshift( messageType );
-						}
-						else
-						{
-							data = [ messageType ];
-						}
+							parameters = [messageType];
+							if ( data != null )
+							{
+								parameters = parameters.concat( data );
+							}
+							}
 						
-						Reflect.callMethod ( listener, callback, data );
+						Reflect.callMethod ( listener, callback, parameters );
 						
 					} else
 					{
