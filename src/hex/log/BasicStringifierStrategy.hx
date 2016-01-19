@@ -15,7 +15,8 @@ class BasicStringifierStrategy implements IStringifierStrategy
 	 */
     public function stringify( target : Dynamic ) : String
     {
-        return Type.getClassName( Type.getClass( target ) );//+ "#" + HashCodeFactory.getKey( target );
+		var type = Type.getClass( target );
+        return type != null ? Type.getClassName( type ) : "Dynamic";//+ "#" + HashCodeFactory.getKey( target );
     }
 
     /**
