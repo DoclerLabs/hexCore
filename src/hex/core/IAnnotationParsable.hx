@@ -3,7 +3,7 @@ package hex.core;
 /**
  * @author Francis Bourre
  */
-interface IMetadataParsable 
+interface IAnnotationParsable 
 {
 	//Empty interface
 }
