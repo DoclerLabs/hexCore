@@ -11,20 +11,20 @@ class HashMapTest
 {
 	private var _map : HashMap<MockKeyClass, MockValueClass>;
 
-	@setUp
+	@Before
     public function setUp() : Void
     {
         this._map = new HashMap<MockKeyClass, MockValueClass>();
     }
 
-    @tearDown
+    @After
     public function tearDown() : Void
     {
         this._map.clear();
         this._map = null;
     }
 	
-	@test( "Test 'isEmpty' behavior" )
+	@Test( "Test 'isEmpty' behavior" )
     public function testIsEmpty() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -35,7 +35,7 @@ class HashMapTest
         Assert.isFalse( this._map.isEmpty(), "'isEmpty' should return false" );
     }
 	
-	@test( "Test 'clear' behavior" )
+	@Test( "Test 'clear' behavior" )
     public function testClear() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -48,7 +48,7 @@ class HashMapTest
         Assert.isNull( this._map.get( mockKey ), "'get' should return null" );
     }
 	
-	@test( "Test 'put' and 'get' behaviors" )
+	@Test( "Test 'put' and 'get' behaviors" )
     public function testPutAndGet() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -76,7 +76,7 @@ class HashMapTest
         Assert.methodCallThrows( NullPointerException, this._map, this._map.put, [mockKey, null], "'put' should throw NullPointerException" );
     }
 	
-	@test( "Test 'remove' behavior" )
+	@Test( "Test 'remove' behavior" )
     public function testRemove() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -94,7 +94,7 @@ class HashMapTest
         Assert.methodCallThrows( NullPointerException, this._map, this._map.remove, [null], "'remove' should throw NullPointerException" );
     }
 	
-	@test( "Test 'size' behavior" )
+	@Test( "Test 'size' behavior" )
     public function testSize() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -118,7 +118,7 @@ class HashMapTest
         Assert.equals( 0, this._map.size(), "'size' should return 0 when the map is cleared" );
     }
 	
-	@test( "Test 'containsKey' behavior" )
+	@Test( "Test 'containsKey' behavior" )
     public function testContainsKey() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -137,7 +137,7 @@ class HashMapTest
         Assert.methodCallThrows( NullPointerException, this._map, this._map.containsKey, [null], "'containsKey' should throw NullPointerException" );
     }
 	
-	@test( "Test 'containsValue' behavior" )
+	@Test( "Test 'containsValue' behavior" )
     public function testContainsValue() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -156,7 +156,7 @@ class HashMapTest
         Assert.methodCallThrows( NullPointerException, this._map, this._map.containsValue, [null], "'containsValue' should throw NullPointerException" );
     }
 	
-	@test( "Test 'getKeys' and 'getValues' behaviors" )
+	@Test( "Test 'getKeys' and 'getValues' behaviors" )
     public function testGetKeysAndGetValues() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
@@ -194,7 +194,7 @@ class HashMapTest
         Assert.equals( 0, getValuesList.length, "'getValues' should return an empty 'Array' after 'clear' call" );
     }
 	
-	@test( "Test with Class key" )
+	@Test( "Test with Class key" )
     public function testClassKey() : Void
     {
 		var m : HashMap<Dynamic, String> = new HashMap <Dynamic, String > ();

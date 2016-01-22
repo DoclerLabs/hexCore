@@ -12,21 +12,21 @@ class DispatcherTest
 	private var _dispatcher   : Dispatcher<IMockListener>;
     private var _listener     : MockEventListener;
 
-    @setUp
+    @Before
     public function setUp() : Void
     {
         this._dispatcher    = new Dispatcher<IMockListener>();
         this._listener      = new MockEventListener();
     }
 
-    @tearDown
+    @After
     public function tearDown() : Void
     {
         this._dispatcher    = null;
         this._listener      = null;
     }
 	
-	@test( "Test 'addListener' behavior" )
+	@Test( "Test 'addListener' behavior" )
     public function testAddListener() : Void
     {
 		var messageType : MessageType = new MessageType( "onMessage" );
@@ -50,7 +50,7 @@ class DispatcherTest
         Assert.methodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addListener, [ this._listener ], "'addListener' should throw IllegalArgumentException when 'addHandler' was used previously on the same target" );
 	}
 
-    @test( "Test 'removeListener' behavior" )
+    @Test( "Test 'removeListener' behavior" )
     public function testRemoveListener() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -73,7 +73,7 @@ class DispatcherTest
         Assert.isNull( this._listener.lastDataReceived, "Message received should be null" );
 	}
 
-    @test( "Test 'addHandler' behavior" )
+    @Test( "Test 'addHandler' behavior" )
     public function testAddHandler() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -99,7 +99,7 @@ class DispatcherTest
         Assert.methodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.addHandler, [messageType, this._listener, this._listener.onMessage ], "'addHandler' should throw IllegalArgumentException when addListener was used previously" );
 	}
 	
-	@test( "Test 'removeHandler' behavior" )
+	@Test( "Test 'removeHandler' behavior" )
     public function testRemoveHandler() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -117,7 +117,7 @@ class DispatcherTest
         Assert.isNull( this._listener.lastDataReceived, "Message received should be null" );
     }
 	
-	@test( "Test 'isEmpty' behavior with 'addHandler'" )
+	@Test( "Test 'isEmpty' behavior with 'addHandler'" )
     public function testIsEmptyWithAddHandler() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -129,7 +129,7 @@ class DispatcherTest
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
     }
 	
-	@test( "Test 'isEmpty' behavior with 'addListener'" )
+	@Test( "Test 'isEmpty' behavior with 'addListener'" )
     public function testIsEmptyWithAddListener() : Void
     {
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
@@ -139,7 +139,7 @@ class DispatcherTest
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
     }
 	
-	@test( "Test 'dispatch' behavior" )
+	@Test( "Test 'dispatch' behavior" )
     public function testDispatch() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -161,7 +161,7 @@ class DispatcherTest
         Assert.deepEquals( ["somethingElse", 13], mockListener.lastEventReceived, "Message content received should be the same that was dispatched" );
 	}
 	
-	@test( "Test 'removeAllListeners' behavior" )
+	@Test( "Test 'removeAllListeners' behavior" )
     public function testRemoveAllListeners() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -175,7 +175,7 @@ class DispatcherTest
         Assert.isNull( this._listener.lastDataReceived, "Message received should be null" );
     }
 	
-	@test( "Test 'isRegistered' behavior" )
+	@Test( "Test 'isRegistered' behavior" )
     public function testIsRegistered() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -192,7 +192,7 @@ class DispatcherTest
         Assert.isFalse( this._dispatcher.isRegistered( new MockEventListener(), messageType ), "'isRegistered' should return false" );
     }
 	
-	@test( "Test 'hasHandler' behavior" )
+	@Test( "Test 'hasHandler' behavior" )
     public function testHasHandler() : Void
     {
 		var messageType : MessageType = new MessageType();
@@ -212,7 +212,7 @@ class DispatcherTest
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), ( new MockEventListener() ).onMessage ), "'hasHandler' should return false" );
     }
 	
-	@test( "Test seal activation on 'removeListener' during dispatching" )
+	@Test( "Test seal activation on 'removeListener' during dispatching" )
     public function testSealActivationOnRemoveListener() : Void
 	{
 		var messageType : MessageType = new MessageType();
@@ -226,7 +226,7 @@ class DispatcherTest
 		Assert.isTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return true" );
 	}
 	
-	@test( "Test seal activation on 'addListener' during dispatching" )
+	@Test( "Test seal activation on 'addListener' during dispatching" )
     public function testSealActivationOnAddListener() : Void
 	{
 		var messageType : MessageType = new MessageType();
@@ -241,7 +241,7 @@ class DispatcherTest
 		Assert.isFalse( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return false" );
 	}
 	
-	@test( "Test seal activation on 'removeHandler' during dispatching" )
+	@Test( "Test seal activation on 'removeHandler' during dispatching" )
     public function testSealActivationOnRemoveHandler() : Void
 	{
 		var messageType : MessageType = new MessageType();
@@ -256,7 +256,7 @@ class DispatcherTest
 		Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return false" );
 	}
 	
-	@test( "Test seal activation on 'addHandler' during dispatching" )
+	@Test( "Test seal activation on 'addHandler' during dispatching" )
     public function testSealActivationOnAddHandler() : Void
 	{
 		var messageType : MessageType = new MessageType();
@@ -271,7 +271,7 @@ class DispatcherTest
 		Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
 	}
 	
-	@test( "Test seal activation on 'removeAllListeners' during dispatching" )
+	@Test( "Test seal activation on 'removeAllListeners' during dispatching" )
     public function testSealActivationOnRemoveAllListeners() : Void
 	{
 		var messageType : MessageType = new MessageType();
@@ -285,7 +285,7 @@ class DispatcherTest
 		Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return false" );
 	}
 	
-	@test( "Test 'dispatch' behavior with 'handleMessage' callback" )
+	@Test( "Test 'dispatch' behavior with 'handleMessage' callback" )
     public function testDispatchWithHandleMessageCallback() : Void
     {
 		var messageType : MessageType = new MessageType();

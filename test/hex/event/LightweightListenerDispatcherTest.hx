@@ -12,21 +12,21 @@ class LightweightListenerDispatcherTest
 	private var _dispatcher   : LightweightListenerDispatcher<IMockEventListener, BasicEvent>;
     private var _listener     : MockEventListener;
 
-    @setUp
+    @Before
     public function setUp() : Void
     {
         this._dispatcher    = new LightweightListenerDispatcher<IMockEventListener, BasicEvent>();
         this._listener      = new MockEventListener();
     }
 
-    @tearDown
+    @After
     public function tearDown() : Void
     {
         this._dispatcher    = null;
         this._listener      = null;
     }
 	
-	@test( "Test 'addListener' behavior" )
+	@Test( "Test 'addListener' behavior" )
     public function testAddListener() : Void
     {
         Assert.isTrue( this._dispatcher.addListener( this._listener ), "'addListener' call should return true" );
@@ -44,7 +44,7 @@ class LightweightListenerDispatcherTest
         Assert.equals( this._listener.lastEventReceived, anotherEvent, "Event received should be the same that was dispatched" );
     }
 
-    @test( "Test 'removeListener' behavior" )
+    @Test( "Test 'removeListener' behavior" )
     public function testRemoveListener() : Void
     {
         this._dispatcher.addListener( this._listener );
@@ -58,19 +58,19 @@ class LightweightListenerDispatcherTest
         Assert.isFalse( this._dispatcher.removeListener( this._listener ), "Same 'removeListener' call should return false second time" );
     }
 	
-	@test( "Test 'addEventListener' behavior" )
+	@Test( "Test 'addEventListener' behavior" )
     public function testAddEventListener() : Void
     {
         Assert.methodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.addEventListener, [ "onEvent", this._listener.onEvent ], "'addEventListener' should throw UnsupportedOperationException" );
     }
 	
-	@test( "Test 'removeEventListener' behavior" )
+	@Test( "Test 'removeEventListener' behavior" )
     public function testRemoveEventListener() : Void
     {
         Assert.methodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.removeEventListener, [ "onEvent", this._listener.onEvent ], "'removeEventListener' should throw UnsupportedOperationException" );
     }
 	
-	@test( "Test 'isEmpty' behavior with 'addListener'" )
+	@Test( "Test 'isEmpty' behavior with 'addListener'" )
     public function testIsEmptyWithAddListener() : Void
     {
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
@@ -80,7 +80,7 @@ class LightweightListenerDispatcherTest
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
     }
 	
-	@test( "Test 'dispatchEvent' behavior" )
+	@Test( "Test 'dispatchEvent' behavior" )
     public function testDispatchEvent() : Void
     {
         var dispatcher : LightweightListenerDispatcher<IEventListener, BasicEvent> = new LightweightListenerDispatcher<IEventListener, BasicEvent>();
@@ -100,7 +100,7 @@ class LightweightListenerDispatcherTest
         Assert.equals( mockListener.lastEventReceived, anotherEvent, "Event received should be the same that was dispatched" );
 	}
 	
-	@test( "Test 'removeAllListeners' behavior" )
+	@Test( "Test 'removeAllListeners' behavior" )
     public function testRemoveAllListeners() : Void
     {
         this._dispatcher.addListener( this._listener );
@@ -114,7 +114,7 @@ class LightweightListenerDispatcherTest
         Assert.isNull( this._listener.lastEventReceived, "Event received should be the same that was dispatched" );
     }
 	
-	@test( "Test 'isRegistered' behavior" )
+	@Test( "Test 'isRegistered' behavior" )
     public function testIsRegistered() : Void
     {
         Assert.isFalse( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return false" );
@@ -122,13 +122,13 @@ class LightweightListenerDispatcherTest
         Assert.isTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return true" );
     }
 	
-	@test( "Test 'hasEventListener' behavior" )
+	@Test( "Test 'hasEventListener' behavior" )
     public function testHasEventListener() : Void
     {
         Assert.methodCallThrows( UnsupportedOperationException, this._dispatcher, this._dispatcher.hasEventListener, [ "onEvent", this._listener.onEvent ], "'hasEventListener' should throw UnsupportedOperationException" );
 	}
 	
-	@test( "Test seal activation on 'removeListener' during dispatching" )
+	@Test( "Test seal activation on 'removeListener' during dispatching" )
     public function testSealActivationOnRemoveListener() : Void
 	{
 		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveListener( this._listener );
@@ -140,7 +140,7 @@ class LightweightListenerDispatcherTest
 		Assert.isFalse( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return false" );
 	}
 	
-	@test( "Test seal activation on 'addListener' during dispatching" )
+	@Test( "Test seal activation on 'addListener' during dispatching" )
     public function testSealActivationOnAddListener() : Void
 	{
 		var mockEventListener = new MockEventListenerForTestingSealingOnAddListener( this._listener );
@@ -153,7 +153,7 @@ class LightweightListenerDispatcherTest
 		Assert.isTrue( this._dispatcher.isRegistered( this._listener ), "'isRegistered' should return true" );
 	}
 	
-	@test( "Test seal activation on 'removeAllListeners' during dispatching" )
+	@Test( "Test seal activation on 'removeAllListeners' during dispatching" )
     public function testSealActivationOnRemoveAllListeners() : Void
 	{
 		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveAllListeners();

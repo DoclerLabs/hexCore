@@ -6,6 +6,6 @@ package hex.collection;
  */
 class CoreCollectionSuite
 {
-	@suite( "Collection" )
+	@Suite( "Collection" )
     public var list : Array<Class<Dynamic>> = [HashMapTest, LocatorTest];
 }

@@ -11,6 +11,6 @@ import hex.event.CoreEventSuite;
  */
 class HexCoreSuite
 {
-    @suite( "HexCore" )
+    @Suite( "HexCore" )
     public var list : Array<Class<Dynamic>> = [CoreEventSuite, CoreCollectionSuite, CoreCoreSuite, CoreDomainSuite];
 }

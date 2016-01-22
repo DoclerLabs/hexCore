@@ -6,6 +6,6 @@ package hex.core;
  */
 class CoreCoreSuite
 {
-    @suite( "Core" )
+    @Suite( "Core" )
     public var list : Array<Class<Dynamic>> = [HashCodeFactoryTest];
 }

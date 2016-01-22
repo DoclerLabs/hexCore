@@ -8,7 +8,7 @@ import hex.unittest.assertion.Assert;
  */
 class BasicEventTest
 {
-    @test( "Test 'type' parameter passed to constructor" )
+    @Test( "Test 'type' parameter passed to constructor" )
     public function testType() : Void
     {
         var type : String       = "type";
@@ -17,7 +17,7 @@ class BasicEventTest
         Assert.equals( type, e.type, "'type' property should be the same passed to constructor" );
     }
 
-    @test( "Test 'target' parameter passed to constructor" )
+    @Test( "Test 'target' parameter passed to constructor" )
     public function testTarget() : Void
     {
         var target : MockTarget = new MockTarget();
@@ -26,7 +26,7 @@ class BasicEventTest
         Assert.equals( target, e.target, "'target' property should be the same passed to constructor" );
     }
 
-    @test( "Test clone method" )
+    @Test( "Test clone method" )
     public function testClone() : Void
     {
         var type : String               = "type";

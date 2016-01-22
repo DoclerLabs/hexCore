@@ -8,13 +8,13 @@ class CompositeClosureDispatcherTest
 {
 	private var _dispatcher : CompositeDispatcher;
 	
-	@setUp
+	@Before
     public function setUp() : Void
     {
         this._dispatcher    = new CompositeDispatcher();
     }
 
-    @tearDown
+    @After
     public function tearDown() : Void
     {
         this._dispatcher    = null;

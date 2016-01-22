@@ -5,13 +5,13 @@ import hex.unittest.assertion.Assert;
 
 class HashCodeFactoryTest
 {
-    @test( "Test constructor can't be called" )
+    @Test( "Test constructor can't be called" )
     public function testConstructorNullException() : Void
     {
         Assert.constructorCallThrows( PrivateConstructorException, HashCodeFactory, [], "" );
     }
 
-    @test( "Test 'getNextKEY' and 'previewKey' behaviors" )
+    @Test( "Test 'getNextKEY' and 'previewKey' behaviors" )
     public function testGetNextKey() : Void
     {
         var previewKey : Int = HashCodeFactory.previewNextKey();
@@ -22,7 +22,7 @@ class HashCodeFactoryTest
         Assert.equals( previewKey, nextKey, "'HashCodeFactory.getNextKEY' call tearDown 'HashCodeFactory.previewNextKey' call should return the same value" );
     }
 
-    @test( "Test 'getKEY' behavior" )
+    @Test( "Test 'getKEY' behavior" )
     public function testGetKey() : Void
     {
         var o : MockObject = new MockObject();

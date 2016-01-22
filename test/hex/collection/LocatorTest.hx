@@ -11,20 +11,20 @@ class LocatorTest
 {
 	private var _locator : Locator<MockKeyClass, MockValueClass>;
 
-	@setUp
+	@Before
     public function setUp() : Void
     {
         this._locator = new Locator<MockKeyClass, MockValueClass>();
     }
 
-    @tearDown
+    @After
     public function tearDown() : Void
     {
         this._locator.clear();
         this._locator = null;
     }
 	
-	@test( "Test building a locator with String keys" )
+	@Test( "Test building a locator with String keys" )
     public function testRegisterKeyString() : Void
     {
         var locator : Locator<String, String> = new Locator();
@@ -33,7 +33,7 @@ class LocatorTest
         Assert.equals( "world", locator.locate( "hello" ), "'locate' should return registered value" );
     }
 	
-	@test( "Test 'isEmpty' behavior" )
+	@Test( "Test 'isEmpty' behavior" )
     public function testIsEmpty() : Void
     {
         var mockKey     : MockKeyClass 		= new MockKeyClass();
