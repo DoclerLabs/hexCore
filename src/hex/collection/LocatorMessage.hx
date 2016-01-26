@@ -11,7 +11,7 @@ class LocatorMessage
 	static public var REGISTER		: MessageType = new MessageType( "onRegister" );
 	static public var UNREGISTER	: MessageType = new MessageType( "onUnregister" );
 
-	private function new() 
+	function new() 
 	{
 		
 	}

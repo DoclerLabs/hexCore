@@ -10,16 +10,16 @@ import hex.error.NullPointerException;
 class HashMap<K, V> implements IHashMap<K, V>
 {
 
-	private var _keys			: Map<String, V>;
-	private var _values			: Map<String, K>;
-	private var _size			: Int;
+	var _keys			: Map<String, V>;
+	var _values			: Map<String, K>;
+	var _size			: Int;
 	
 	public function new() 
 	{
 		this._init();
 	}
 	
-	private function _init() : Void
+	function _init() : Void
 	{
 		this._keys 		= new Map<String, V>();
 		this._values 	= new Map<String, K>();
@@ -164,7 +164,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 		}
 	}
 	
-	private function _getName( o : Dynamic ) : String
+	function _getName( o : Dynamic ) : String
 	{
 		var s : String;
 		

@@ -9,11 +9,11 @@ import hex.log.Stringifier;
  */
 class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements IEventDispatcher<ListenerType, EventType>
 {
-	private var _isSealed 			: Bool;
-	private var _cachedMethodCalls 	: Array<Void->Void>;
-    private var _listeners 			: Array<ListenerType>;
-    private var _closures 			: Map<String, Array<EventType->Void>>;
-    private var _closureSize 		: UInt;
+	var _isSealed 			: Bool;
+	var _cachedMethodCalls 	: Array<Void->Void>;
+    var _listeners 			: Array<ListenerType>;
+    var _closures 			: Map<String, Array<EventType->Void>>;
+    var _closureSize 		: UInt;
 
     public function new()
     {
@@ -218,7 +218,7 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
         }
     }
 	
-	private function _seal( isSealed : Bool ) : Void
+	function _seal( isSealed : Bool ) : Void
 	{
 		if ( isSealed != this._isSealed )
 		{

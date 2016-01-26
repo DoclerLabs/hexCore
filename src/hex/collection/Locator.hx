@@ -12,8 +12,8 @@ import hex.log.Stringifier;
  */
 class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
 {
-    private var _dispatcher     : IDispatcher<ILocatorListener<KeyType, ValueType>>;
-    private var _map    		: HashMap<KeyType, ValueType>;
+    var _dispatcher     : IDispatcher<ILocatorListener<KeyType, ValueType>>;
+    var _map    		: HashMap<KeyType, ValueType>;
 
     public function new()
     {
@@ -124,12 +124,12 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         return Stringifier.stringify( this );
     }
 
-    private function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
+    function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {
 		
     }
 
-    private function  _dispatchUnregisterEvent( key : KeyType ) : Void
+    function  _dispatchUnregisterEvent( key : KeyType ) : Void
     {
 		
     }

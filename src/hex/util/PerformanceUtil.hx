@@ -6,7 +6,7 @@ package hex.util;
  */
 class PerformanceUtil
 {
-	private static var timers:Map<String,PerformanceVO> = new Map<String,PerformanceVO>();
+	static var timers:Map<String,PerformanceVO> = new Map<String,PerformanceVO>();
 
 	/**
 	 * Start speed test.
@@ -38,7 +38,7 @@ class PerformanceUtil
 		}
 	}
 	
-	private static function getMemory( ):Float
+	static function getMemory( ):Float
 	{
 		#if flash
 			return flash.system.System.totalMemory;

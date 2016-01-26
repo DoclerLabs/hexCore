@@ -10,9 +10,9 @@ import hex.log.Stringifier;
  */
 class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 {
-	private var _isSealed 			: Bool;
-	private var _cachedMethodCalls 	: Array<Void->Void>;
-    private var _listeners 			: Map<ListenerType, Map<MessageType, CallbackHandler>>;
+	var _isSealed 			: Bool;
+	var _cachedMethodCalls 	: Array<Void->Void>;
+    var _listeners 			: Map<ListenerType, Map<MessageType, CallbackHandler>>;
 
 	public function new()
     {
@@ -311,7 +311,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         }
     }
 	
-	private function _seal( isSealed : Bool ) : Void
+	function _seal( isSealed : Bool ) : Void
 	{
 		if ( isSealed != this._isSealed )
 		{

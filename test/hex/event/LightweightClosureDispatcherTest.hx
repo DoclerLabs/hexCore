@@ -10,8 +10,8 @@ import hex.unittest.assertion.Assert;
  */
 class LightweightClosureDispatcherTest
 {
-    private var _dispatcher   : LightweightClosureDispatcher<BasicEvent>;
-    private var _listener     : MockEventListener;
+    var _dispatcher   : LightweightClosureDispatcher<BasicEvent>;
+    var _listener     : MockEventListener;
 
     @Before
     public function setUp() : Void

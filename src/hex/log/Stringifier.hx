@@ -10,7 +10,7 @@ import hex.error.PrivateConstructorException;
 class Stringifier
 {
     /** @private */
-    private function new()
+    function new()
     {
         throw new PrivateConstructorException( "Stringifier class can't be instantiated." );
     }
@@ -19,7 +19,7 @@ class Stringifier
     // Private properties
     //--------------------------------------------------------------------
 
-    private static var _STRATEGY : IStringifierStrategy;
+    static var _STRATEGY : IStringifierStrategy;
 
     //--------------------------------------------------------------------
     // Public API

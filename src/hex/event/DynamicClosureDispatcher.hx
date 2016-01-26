@@ -9,8 +9,8 @@ import hex.log.Stringifier;
  */
 class DynamicClosureDispatcher
 {
-    private var _callbacks      	: Map<String, Array<Dynamic->Void>>;
-    private var _callbackSize   	: UInt;
+    var _callbacks      	: Map<String, Array<Dynamic->Void>>;
+    var _callbackSize   	: UInt;
 
     public function new()
     {

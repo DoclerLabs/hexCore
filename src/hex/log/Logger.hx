@@ -9,10 +9,10 @@ import hex.domain.DomainDispatcher;
  */
 class Logger
 {
-	private static var _Instance 	: Logger = null;
+	static var _Instance 	: Logger = null;
 	
-    private var _dispatcher 		: DomainDispatcher<ILogListener>;
-    private var _level 		    	: LogLevel;
+    var _dispatcher 		: DomainDispatcher<ILogListener>;
+    var _level 		    	: LogLevel;
 
     public function new()
     {

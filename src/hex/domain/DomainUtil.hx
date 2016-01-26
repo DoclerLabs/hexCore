@@ -9,9 +9,9 @@ import hex.util.ClassUtil;
  */
 class DomainUtil
 {
-	private static var _domain : Map<String, Dynamic> = new Map();
+	static var _domain : Map<String, Dynamic> = new Map();
 	
-	private function new() 
+	function new() 
 	{
 		
 	}

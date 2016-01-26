@@ -8,8 +8,8 @@ import hex.error.IllegalArgumentException;
  */
 class MonoTypeClosureDispatcher<EventType:Event>
 {
-    private var _eventType      	: String;
-    private var _callbacks      	: Array<EventType->Void>;
+    var _eventType      	: String;
+    var _callbacks      	: Array<EventType->Void>;
 
     public function new( eventType : String )
     {

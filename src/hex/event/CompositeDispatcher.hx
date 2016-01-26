@@ -9,9 +9,9 @@ import hex.log.Stringifier;
  */
 class CompositeDispatcher implements IDispatcher<{}>
 {
-	private var _dispatchers 		: Array<IDispatcher<{}>>;
-	private var _isSealed 			: Bool;
-	private var _cachedMethodCalls 	: Array<Void->Void>;
+	var _dispatchers 		: Array<IDispatcher<{}>>;
+	var _isSealed 			: Bool;
+	var _cachedMethodCalls 	: Array<Void->Void>;
 	
 	public function new() 
 	{
@@ -165,7 +165,7 @@ class CompositeDispatcher implements IDispatcher<{}>
 		}
 	}
 	
-	private function _seal( isSealed : Bool ) : Void
+	function _seal( isSealed : Bool ) : Void
 	{
 		if ( isSealed != this._isSealed )
 		{

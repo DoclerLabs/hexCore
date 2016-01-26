@@ -10,7 +10,7 @@ import hex.error.PrivateConstructorException;
  */
 class ClassUtil
 {
-    private function new()
+    function new()
     {
         throw new PrivateConstructorException( "'" + Stringifier.stringify( this ) + "' class can't be instantiated." );
     }

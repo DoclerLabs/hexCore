@@ -9,8 +9,8 @@ import hex.unittest.assertion.Assert;
  */
 class LightweightListenerDispatcherTest
 {
-	private var _dispatcher   : LightweightListenerDispatcher<IMockEventListener, BasicEvent>;
-    private var _listener     : MockEventListener;
+	var _dispatcher   : LightweightListenerDispatcher<IMockEventListener, BasicEvent>;
+    var _listener     : MockEventListener;
 
     @Before
     public function setUp() : Void

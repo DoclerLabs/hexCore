@@ -6,7 +6,7 @@ package hex.event;
  */
 class CompositeClosureDispatcherTest
 {
-	private var _dispatcher : CompositeDispatcher;
+	var _dispatcher : CompositeDispatcher;
 	
 	@Before
     public function setUp() : Void

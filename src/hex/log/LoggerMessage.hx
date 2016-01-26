@@ -10,7 +10,7 @@ class LoggerMessage
 {
 	public static var LOG : MessageType = new MessageType( "onLog" );
 	
-	private function new() 
+	function new() 
 	{
 		
 	}

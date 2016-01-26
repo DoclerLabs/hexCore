@@ -11,9 +11,9 @@ import hex.event.MessageType;
  */
 class DomainDispatcher<ListenerType:{}> implements IDomainDispatcher<ListenerType>
 {
-    private var _domains 			: Map<Domain, IDispatcher<ListenerType>>;
-    private var _defaultDomain 	    : Domain;
-    private var _dispatcherClass 	: Class<IDispatcher<ListenerType>>;
+    var _domains 			: Map<Domain, IDispatcher<ListenerType>>;
+    var _defaultDomain 	    : Domain;
+    var _dispatcherClass 	: Class<IDispatcher<ListenerType>>;
 
     public function new( ?defaultDomain : Domain, ?dispatcherClass : Class<IDispatcher<ListenerType>> )
     {

@@ -9,8 +9,8 @@ import hex.unittest.assertion.Assert;
  */
 class DispatcherTest
 {
-	private var _dispatcher   : Dispatcher<IMockListener>;
-    private var _listener     : MockEventListener;
+	var _dispatcher   : Dispatcher<IMockListener>;
+    var _listener     : MockEventListener;
 
     @Before
     public function setUp() : Void

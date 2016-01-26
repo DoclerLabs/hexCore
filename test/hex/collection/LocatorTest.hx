@@ -9,7 +9,7 @@ import hex.unittest.assertion.Assert;
  */
 class LocatorTest
 {
-	private var _locator : Locator<MockKeyClass, MockValueClass>;
+	var _locator : Locator<MockKeyClass, MockValueClass>;
 
 	@Before
     public function setUp() : Void

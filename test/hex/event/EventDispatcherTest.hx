@@ -10,8 +10,8 @@ import hex.unittest.assertion.Assert;
  */
 class EventDispatcherTest
 {
-    private var _dispatcher   : EventDispatcher<IMockEventListener, BasicEvent>;
-    private var _listener     : MockEventListener;
+    var _dispatcher   : EventDispatcher<IMockEventListener, BasicEvent>;
+    var _listener     : MockEventListener;
 
     @Before
     public function setUp() : Void

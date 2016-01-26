@@ -10,8 +10,8 @@ import hex.error.IllegalArgumentException;
  */
 class Domain
 {
-    private var _domainName : String;
-    private static var _domainNames : Map<String, Domain> = new Map<String, Domain>();
+    var _domainName : String;
+    static var _domainNames : Map<String, Domain> = new Map<String, Domain>();
 
     public function new( domainName : String )
     {

@@ -10,13 +10,13 @@ import hex.error.PrivateConstructorException;
 class HashCodeFactory
 {
     /** @private */
-    private function new()
+    function new()
     {
         throw new PrivateConstructorException( "'HashCodeFactory' class can't be instantiated." );
     }
 
-    private static var _nKEY    : Int               = 0;
-    private static var _M       : Map<{}, Int> = new Map<{}, Int>();
+    static var _nKEY    : Int               = 0;
+    static var _M       : Map<{}, Int> = new Map<{}, Int>();
 
     public static function getNextKEY() : Int
     {
