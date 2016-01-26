@@ -18,7 +18,7 @@ class MainCoreTest
 {
 	static public function main() : Void
 	{
-		var emu : ExMachinaUnitCore = new ExMachinaUnitCore();
+		var emu = new ExMachinaUnitCore();
         
 		#if flash
 		TestRunner.RENDER_DELAY = 0;

@@ -8,7 +8,7 @@ import hex.event.MessageType;
  */
 class LoggerMessage
 {
-	public static var LOG : MessageType = new MessageType( "onLog" );
+	public static var LOG = new MessageType( "onLog" );
 	
 	function new() 
 	{

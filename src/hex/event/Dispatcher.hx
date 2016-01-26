@@ -101,15 +101,15 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 				}
 				else
 				{
-					var handler : CallbackHandler = new CallbackHandler( scope, callback );
+					var handler = new CallbackHandler( scope, callback );
 					m.set( messageType, handler );
 					return true;
 				}
 			}
 			else
 			{
-				var m : Map<MessageType, CallbackHandler> = new Map();
-				var handler : CallbackHandler = new CallbackHandler( scope, callback );
+				var m = new Map();
+				var handler = new CallbackHandler( scope, callback );
 				m.set( messageType, handler );
 				this._listeners.set( scope, m );
 				

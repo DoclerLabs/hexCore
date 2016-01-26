@@ -44,13 +44,13 @@ class LightweightClosureDispatcherTest
     {
         Assert.isTrue( this._dispatcher.addEventListener( "onEvent", this._listener.onEvent ), "'addEventListener' call should return true" );
         Assert.isFalse( this._dispatcher.addEventListener( "onEvent", this._listener.onEvent ), "Same 'addEventListener' calls should return false second time" );
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( this._listener.eventReceivedCount, 1, "Event should be received once" );
         Assert.equals( this._listener.lastEventReceived, event, "Event received should be the same that was dispatched" );
 
-        var anotherEvent : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var anotherEvent = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( anotherEvent );
 
         Assert.equals( this._listener.eventReceivedCount, 2, "Event should be received twice" );
@@ -63,7 +63,7 @@ class LightweightClosureDispatcherTest
         this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
         Assert.isTrue( this._dispatcher.removeEventListener( "onEvent", this._listener.onEvent ), "'removeEventListener' call should return true" );
 
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( this._listener.eventReceivedCount, 0, "Event should be received once" );
@@ -86,13 +86,13 @@ class LightweightClosureDispatcherTest
     {
 		this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
 
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( 1, this._listener.eventReceivedCount, "Event should be received once" );
         Assert.equals( this._listener.lastEventReceived, event, "Event received should be the same that was dispatched" );
 
-        var anotherEvent : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var anotherEvent = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( anotherEvent );
 
         Assert.equals( this._listener.eventReceivedCount, 2, "Event should be received twice" );
@@ -103,7 +103,7 @@ class LightweightClosureDispatcherTest
     public function testRemoveAllListeners() : Void
     {
         this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
 
         this._dispatcher.removeAllListeners();
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
@@ -146,7 +146,7 @@ class LightweightClosureDispatcherTest
 	{
 		var mockEventListener = new MockEventListenerForTestingSealingOnAddEventListener( this._listener );
 		this._dispatcher.addEventListener( "onEvent", mockEventListener.onEvent );
-		var mockListener : MockEventListener = new MockEventListener();
+		var mockListener = new MockEventListener();
 		this._dispatcher.addEventListener( "onEvent", mockListener.onEvent );
 		
 		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );

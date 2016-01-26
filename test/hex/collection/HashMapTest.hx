@@ -27,8 +27,8 @@ class HashMapTest
 	@Test( "Test 'isEmpty' behavior" )
     public function testIsEmpty() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         Assert.isTrue( this._map.isEmpty(), "'isEmpty' should return true" );
         this._map.put( mockKey, mockValue );
@@ -38,8 +38,8 @@ class HashMapTest
 	@Test( "Test 'clear' behavior" )
     public function testClear() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         this._map.put( mockKey, mockValue );
         this._map.clear();
@@ -51,14 +51,14 @@ class HashMapTest
 	@Test( "Test 'put' and 'get' behaviors" )
     public function testPutAndGet() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         var value : MockValueClass = this._map.put( mockKey, mockValue );
         Assert.isNull( value, "'put' should return null when key was never registered" );
         Assert.equals( mockValue, this._map.get( mockKey ), "'get' should return value argument" );
 
-        var anotherMockValue : MockValueClass = new MockValueClass();
+        var anotherMockValue = new MockValueClass();
         value = this._map.put( mockKey, anotherMockValue );
         Assert.equals( mockValue, value, "'put' should return previous value registered with key argument" );
         Assert.equals( anotherMockValue, this._map.get( mockKey ), "'get' should return new value argument" );
@@ -79,8 +79,8 @@ class HashMapTest
 	@Test( "Test 'remove' behavior" )
     public function testRemove() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         this._map.put( mockKey, mockValue );
         var value : MockValueClass = this._map.remove( mockKey );
@@ -97,8 +97,8 @@ class HashMapTest
 	@Test( "Test 'size' behavior" )
     public function testSize() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         Assert.equals( 0, this._map.size(), "'size' should return 0 when the map is empty" );
 
@@ -121,8 +121,8 @@ class HashMapTest
 	@Test( "Test 'containsKey' behavior" )
     public function testContainsKey() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         Assert.isFalse( this._map.containsKey( mockKey ), "'containsKey' should return false when the key was never added" );
 
@@ -140,8 +140,8 @@ class HashMapTest
 	@Test( "Test 'containsValue' behavior" )
     public function testContainsValue() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         Assert.isFalse( this._map.containsValue( mockValue ), "'containsValue' should return false when the value was never added" );
 
@@ -159,8 +159,8 @@ class HashMapTest
 	@Test( "Test 'getKeys' and 'getValues' behaviors" )
     public function testGetKeysAndGetValues() : Void
     {
-        var mockKey     : MockKeyClass 		= new MockKeyClass();
-        var mockValue   : MockValueClass 	= new MockValueClass();
+        var mockKey     = new MockKeyClass();
+        var mockValue   = new MockValueClass();
 
         var keyList : Array<MockKeyClass> = [ mockKey, new MockKeyClass(), new MockKeyClass() ];
         var valueList : Array<MockValueClass> = [ mockValue, new MockValueClass(), new MockValueClass() ];
@@ -197,7 +197,7 @@ class HashMapTest
 	@Test( "Test with Class key" )
     public function testClassKey() : Void
     {
-		var m : HashMap<Dynamic, String> = new HashMap <Dynamic, String > ();
+		var m = new HashMap <Dynamic, String > ();
 		
 		m.put( String, "String" );
 		Assert.equals( "String", m.get( String ), "'get' should return expected value with 'String' class key" );

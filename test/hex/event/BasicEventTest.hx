@@ -12,7 +12,7 @@ class BasicEventTest
     public function testType() : Void
     {
         var type : String       = "type";
-        var e : BasicEvent      = new BasicEvent( type, {} );
+        var e = new BasicEvent( type, {} );
 
         Assert.equals( type, e.type, "'type' property should be the same passed to constructor" );
     }
@@ -20,8 +20,8 @@ class BasicEventTest
     @Test( "Test 'target' parameter passed to constructor" )
     public function testTarget() : Void
     {
-        var target : MockTarget = new MockTarget();
-        var e : BasicEvent      = new BasicEvent( "", target );
+        var target = new MockTarget();
+        var e = new BasicEvent( "", target );
 
         Assert.equals( target, e.target, "'target' property should be the same passed to constructor" );
     }
@@ -30,8 +30,8 @@ class BasicEventTest
     public function testClone() : Void
     {
         var type : String               = "type";
-        var target : MockTarget         = new MockTarget();
-        var e : BasicEvent              = new BasicEvent( type, target );
+        var target = new MockTarget();
+        var e = new BasicEvent( type, target );
         var clonedEvent : BasicEvent    = e.clone();
 
         Assert.equals( type, clonedEvent.type, "'clone' method should return cloned event with same 'type' property" );

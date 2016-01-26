@@ -16,7 +16,7 @@ class HashCodeFactory
     }
 
     static var _nKEY    : Int               = 0;
-    static var _M       : Map<{}, Int> = new Map<{}, Int>();
+    static var _M       = new Map<{}, Int>();
 
     public static function getNextKEY() : Int
     {

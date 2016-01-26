@@ -14,7 +14,7 @@ class DomainTest
     @Test( "Test 'name' property passed to constructor" )
     public function testConstructor() : Void
     {
-        var domain : Domain = new Domain( "testConstructor" );
+        var domain = new Domain( "testConstructor" );
         Assert.equals( "testConstructor", domain.getName(), "'name' property should be the same passed to constructor" );
     }
 
@@ -27,7 +27,7 @@ class DomainTest
     @Test( "Test using twice the same 'name' value" )
     public function testConstructorWithNameValues() : Void
     {
-        var domain : Domain = new Domain( "testConstructorWithNameValues" );
+        var domain = new Domain( "testConstructorWithNameValues" );
         Assert.constructorCallThrows( IllegalArgumentException, Domain, ["testConstructorWithNameValues"], "" );
     }
 }

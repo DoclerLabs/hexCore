@@ -250,7 +250,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 */
 	public function getKeys() : Array<K>
 	{
-		var a : Array<K> = new Array<K>();
+		var a = new Array<K>();
 		var it = this._values.iterator();
 		while ( it.hasNext() )
 		{
@@ -264,7 +264,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 */
 	public function getValues() : Array<V>
 	{
-		var a : Array<V> = new Array<V>();
+		var a = new Array<V>();
 		var it = this._keys.iterator();
 		while ( it.hasNext() )
 		{

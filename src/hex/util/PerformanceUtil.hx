@@ -6,7 +6,7 @@ package hex.util;
  */
 class PerformanceUtil
 {
-	static var timers:Map<String,PerformanceVO> = new Map<String,PerformanceVO>();
+	static var timers= new Map<String,PerformanceVO>();
 
 	/**
 	 * Start speed test.

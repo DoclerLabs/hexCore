@@ -71,7 +71,7 @@ class DomainDispatcher<ListenerType:{}> implements IDomainDispatcher<ListenerTyp
 
         } else
         {
-            var dispatcher : IDispatcher<ListenerType> = new Dispatcher<ListenerType>();
+            var dispatcher = new Dispatcher<ListenerType>();
             this._domains.set( domain, dispatcher );
             return dispatcher;
         }

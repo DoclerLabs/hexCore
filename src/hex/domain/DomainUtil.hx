@@ -9,7 +9,7 @@ import hex.util.ClassUtil;
  */
 class DomainUtil
 {
-	static var _domain : Map<String, Dynamic> = new Map();
+	static var _domain = new Map();
 	
 	function new() 
 	{

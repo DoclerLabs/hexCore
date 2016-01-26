@@ -32,13 +32,13 @@ class EventDispatcherTest
     {
         Assert.isTrue( this._dispatcher.addListener( this._listener ), "'addListener' call should return true" );
         Assert.isFalse( this._dispatcher.addListener( this._listener ), "Same 'addListener' calls should return false second time" );
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( this._listener.eventReceivedCount, 1, "Event should be received once" );
         Assert.equals( this._listener.lastEventReceived, event, "Event received should be the same that was dispatched" );
 
-        var anotherEvent : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var anotherEvent = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( anotherEvent );
 
         Assert.equals( this._listener.eventReceivedCount, 2, "Event should be received twice" );
@@ -51,7 +51,7 @@ class EventDispatcherTest
         this._dispatcher.addListener( this._listener );
         Assert.isTrue( this._dispatcher.removeListener( this._listener ), "'removeListener' call should return true" );
 
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( this._listener.eventReceivedCount, 0, "Event should not been received" );
@@ -64,13 +64,13 @@ class EventDispatcherTest
     {
         Assert.isTrue( this._dispatcher.addEventListener( "onEvent", this._listener.onEvent ), "'addEventListener' call should return true" );
         Assert.isFalse( this._dispatcher.addEventListener( "onEvent", this._listener.onEvent ), "Same 'addEventListener' calls should return false second time" );
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( this._listener.eventReceivedCount, 1, "Event should be received once" );
         Assert.equals( this._listener.lastEventReceived, event, "Event received should be the same that was dispatched" );
 
-        var anotherEvent : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var anotherEvent = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( anotherEvent );
 
         Assert.equals( this._listener.eventReceivedCount, 2, "Event should be received twice" );
@@ -83,7 +83,7 @@ class EventDispatcherTest
         this._dispatcher.addEventListener( "onEvent", this._listener.onEvent );
         Assert.isTrue( this._dispatcher.removeEventListener( "onEvent", this._listener.onEvent ), "'removeEventListener' call should return true" );
 
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
         this._dispatcher.dispatchEvent( event );
 
         Assert.equals( this._listener.eventReceivedCount, 0, "Event should be received once" );
@@ -114,17 +114,17 @@ class EventDispatcherTest
     @Test( "Test 'dispatchEvent' behavior" )
     public function testDispatchEvent() : Void
     {
-        var dispatcher : EventDispatcher<IEventListener, BasicEvent> = new EventDispatcher<IEventListener, BasicEvent>();
-        var mockListener : MockListener = new MockListener();
+        var dispatcher = new EventDispatcher<IEventListener, BasicEvent>();
+        var mockListener = new MockListener();
         dispatcher.addListener( mockListener );
 
-        var event : BasicEvent = new BasicEvent( "onEvent", dispatcher );
+        var event = new BasicEvent( "onEvent", dispatcher );
         dispatcher.dispatchEvent( event );
 
         Assert.equals( mockListener.eventReceivedCount, 1, "Event should be received once" );
         Assert.equals( mockListener.lastEventReceived, event, "Event received should be the same that was dispatched" );
 
-        var anotherEvent : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var anotherEvent = new BasicEvent( "onEvent", this._dispatcher );
         dispatcher.dispatchEvent( anotherEvent );
 
         Assert.equals( mockListener.eventReceivedCount, 2, "Event should be received twice" );
@@ -135,7 +135,7 @@ class EventDispatcherTest
     public function testRemoveAllListeners() : Void
     {
         this._dispatcher.addListener( this._listener );
-        var event : BasicEvent = new BasicEvent( "onEvent", this._dispatcher );
+        var event = new BasicEvent( "onEvent", this._dispatcher );
 
         this._dispatcher.removeAllListeners();
         Assert.isTrue( this._dispatcher.isEmpty(), "'isEmpty' should return true" );
@@ -193,7 +193,7 @@ class EventDispatcherTest
 	{
 		var mockEventListener = new MockEventListenerForTestingSealingOnAddListener( this._listener );
 		this._dispatcher.addListener( mockEventListener );
-		var mockListener : MockEventListener = new MockEventListener();
+		var mockListener = new MockEventListener();
 		this._dispatcher.addListener( mockListener );
 		
 		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
@@ -218,7 +218,7 @@ class EventDispatcherTest
 	{
 		var mockEventListener = new MockEventListenerForTestingSealingOnAddEventListener( this._listener );
 		this._dispatcher.addEventListener( "onEvent", mockEventListener.onEvent );
-		var mockListener : MockEventListener = new MockEventListener();
+		var mockListener = new MockEventListener();
 		this._dispatcher.addEventListener( "onEvent", mockListener.onEvent );
 		
 		this._dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );

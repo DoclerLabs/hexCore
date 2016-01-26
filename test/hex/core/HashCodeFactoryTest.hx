@@ -25,7 +25,7 @@ class HashCodeFactoryTest
     @Test( "Test 'getKEY' behavior" )
     public function testGetKey() : Void
     {
-        var o : MockObject = new MockObject();
+        var o = new MockObject();
         var previewKey : Int = HashCodeFactory.previewNextKey();
         var key : Int = HashCodeFactory.getKey( o );
         Assert.isInstanceOf( key, Int, "'HashCodeFactory.getKEY' should return number" );
