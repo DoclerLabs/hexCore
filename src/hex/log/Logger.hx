@@ -39,6 +39,11 @@ class Logger
     {
         return this._level;
     }
+	
+	public function clear( ?domain : Domain) : Void
+    {
+        this._dispatcher.dispatch( LoggerMessage.CLEAR, domain, [ domain ] );
+    }
 
     public function log( o : Dynamic, level : LogLevel, ?domain : Domain) : Void
     {
