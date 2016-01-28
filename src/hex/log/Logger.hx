@@ -47,17 +47,22 @@ class Logger
 
     public function log( o : Dynamic, level : LogLevel, ?domain : Domain) : Void
     {
-        this._dispatcher.dispatch( LoggerMessage.LOG, domain, [ o, level, domain ] );
+        if ( this._level.value <= level.value )
+		{
+			this._dispatcher.dispatch( LoggerMessage.LOG, domain, [ o, level, domain ] );
+		}
     }
 
     public function addLogListener( listener : ILogListener, ?domain : Domain ) : Bool
     {
-        return this._dispatcher.addHandler( LoggerMessage.LOG, listener, listener.onLog, domain );
+        this._dispatcher.addHandler( LoggerMessage.LOG, listener, listener.onLog, domain );
+        return this._dispatcher.addHandler( LoggerMessage.CLEAR, listener, listener.onClear, domain );
     }
 
     public function removeLogListener( listener : ILogListener, ?domain : Domain ) : Bool
     {
-        return this._dispatcher.removeHandler( LoggerMessage.LOG, listener, listener.onLog, domain );
+        this._dispatcher.removeHandler( LoggerMessage.LOG, listener, listener.onLog, domain );
+        return this._dispatcher.removeHandler( LoggerMessage.CLEAR, listener, listener.onClear, domain );
     }
 
     public function isRegistered( listener : ILogListener, ?domain : Domain ) : Bool
@@ -98,5 +103,10 @@ class Logger
 	public static function FATAL( o : Dynamic, ?domain : Domain, ?target : Dynamic ) : Void
 	{
 		Logger.getInstance().log( o, LogLevel.FATAL, domain );
+	}
+	
+	public static function CLEAR( ?domain : Domain )  : Void
+	{
+		Logger.getInstance().clear( domain );
 	}
 }

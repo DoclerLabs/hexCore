@@ -14,8 +14,13 @@ class TraceLayout implements ILogListener
 		
 	}
 
-	public function onLog( message : Dynamic, level : LogLevel, domain : Domain ) : Void 
+	public function onLog( message : Dynamic, level : LogLevel, ?domain : Domain ) : Void 
 	{
 		trace( ">>> " + level + ":" + message );
+	}
+	
+	public function onClear( ?domain : Domain ) : Void 
+	{
+		trace( "Clear..." );
 	}
 }
