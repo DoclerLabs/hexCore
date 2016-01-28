@@ -58,10 +58,9 @@ class SimpleBrowserLayout implements ILogListener
 	function _setConsole( targetId : String ) : Void
 	{
 		this._console = Browser.document.getElementById( targetId );
-		
+
 		this._console.style.whiteSpace 			= "pre";
 		this._console.style.fontFamily 			= "Lucida Console";
-		//this._console.style.position 			= "relative";
 		this._console.style.fontSize 			= "11px";
 	}
 
