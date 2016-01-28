@@ -1,5 +1,6 @@
 package hex.error;
 
+import hex.log.Logger;
 import hex.log.Stringifier;
 import haxe.PosInfos;
 
@@ -18,6 +19,10 @@ class Exception
         this.message    = message;
         this.posInfos   = posInfos;
         this.name       = Stringifier.stringify( this );
+		
+		#if debug
+			Logger.ERROR( this.toString() );
+		#end
     }
 
     public function toString() : String
