@@ -111,9 +111,13 @@ class DomainDispatcher<ListenerType:{}> implements IDomainDispatcher<ListenerTyp
         return this.getDomainDispatcher( domain ).removeHandler( messageType, scope, callback );
     }
 
-    public function dispatch( messageType : MessageType, domain : Domain, data : Array<Dynamic> ) : Void
+    public function dispatch( messageType : MessageType, ?domain : Domain, ?data : Array<Dynamic> ) : Void
     {
         this.getDomainDispatcher( domain ).dispatch( messageType, data );
+		if ( domain != this._defaultDomain && domain != null )
+		{
+			this.getDefaultDispatcher().dispatch( messageType, data );
+		}
     }
 
     public function removeAllListeners() : Void

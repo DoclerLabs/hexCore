@@ -2,6 +2,7 @@ package hex.log.layout;
 
 import hex.domain.Domain;
 import hex.log.LogLevel;
+import hex.log.LoggerMessage;
 import js.Browser;
 import js.html.Element;
 import js.html.SpanElement;
@@ -64,8 +65,12 @@ class SimpleBrowserLayout implements ILogListener
 		this._console.style.fontSize 			= "11px";
 	}
 
-	public function onLog( message : Dynamic, level : LogLevel, ?domain : Domain ) : Void 
+	public function onLog( loggerMessage : LoggerMessage ) : Void 
 	{
+		var message : Dynamic = loggerMessage.message;
+		var level : LogLevel = loggerMessage.level;
+		var domain : Domain = loggerMessage.domain;
+		
 		var leftBracket = this._createElement( "[", this._getStyle( level ) );
 		var rightBracket = this._createElement( "]", this._getStyle( level ) );
 		var time = this._createElement( this._getTime(), this._getStyle( level ) );
@@ -77,7 +82,7 @@ class SimpleBrowserLayout implements ILogListener
 		this._log( this._getEncapsulateElements( [ leftBracket, levelName, domain, rightBracket, message ] ) );
 	}
 	
-	public function onClear( ?domain : Domain ) : Void 
+	public function onClear() : Void 
 	{
 		 this._console.innerHTML = "";
 	}

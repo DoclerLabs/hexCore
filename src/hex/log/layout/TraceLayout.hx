@@ -1,7 +1,7 @@
 package hex.log.layout;
 
-import hex.domain.Domain;
 import hex.log.ILogListener;
+import hex.log.LoggerMessage;
 
 /**
  * ...
@@ -14,12 +14,12 @@ class TraceLayout implements ILogListener
 		
 	}
 
-	public function onLog( message : Dynamic, level : LogLevel, ?domain : Domain ) : Void 
+	public function onLog( message : LoggerMessage ) : Void 
 	{
-		trace( ">>> " + level + ":" + message );
+		trace( ">>> " + message.level + ":" + message );
 	}
 	
-	public function onClear( ?domain : Domain ) : Void 
+	public function onClear() : Void 
 	{
 		trace( "Clear..." );
 	}

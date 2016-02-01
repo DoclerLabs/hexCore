@@ -36,7 +36,7 @@ interface IDomainDispatcher<ListenerType:{}>
 
     function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool;
 
-    function dispatch( messageType : MessageType, domain : Domain, data : Array<Dynamic> ) : Void;
+    function dispatch( messageType : MessageType, ?domain : Domain, ?data : Array<Dynamic> ) : Void;
 
     function removeAllListeners() : Void;
 	
