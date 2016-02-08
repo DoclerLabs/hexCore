@@ -25,6 +25,12 @@ class ClassUtil
         return inherintanceChain;
     }
 	
+	static public function getInheritanceChainFrom( instance : Dynamic ) : Array<Class<Dynamic>>
+	{
+		var type : Class<Dynamic> = Type.getClass( instance );
+		return type != null ? ClassUtil.getInheritanceChain( type ) : [];
+	}
+	
 	static public function classExtendsOrImplements( classOrClassName : Dynamic, superClass : Class<Dynamic> ) : Bool
 	{
 		var actualClass : Class<Dynamic> = null;
