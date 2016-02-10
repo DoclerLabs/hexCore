@@ -26,18 +26,39 @@ dispatcher.addListener( new MockListener() );
 dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
 ```
 
-## simple logger example
+## Simple logger example
 ```haxe
 Logger.getInstance().setLevel( LogLevel.DEBUG );
 Logger.getInstance().addListener( new TraceLayout() );
 Logger.DEBUG( "hola mundo " );
 ```
 
-## logger example with proxy layout
+## Logger example with proxy layout
 ```haxe
 var proxy = new LogProxyLayout();
 proxy.addListener( new SimpleBrowserLayout() );
 
 Logger.INFO( "hola mundo ", MyDomain.DOMAIN );
 proxy.filter( LogLevel.INFO, MyDomain.DOMAIN );
+```
+
+## Locator example
+```haxe
+class MyLocator extends Locator<String, ISomething>
+{
+	public function new( builderFactory : BuilderFactory )
+	{
+		super();
+	}
+	
+	override function _dispatchRegisterEvent( key : String, element : ISomething ) : Void 
+	{
+		this._dispatcher.dispatch( LocatorMessage.REGISTER, [ key, element ] );
+	}
+	
+	override function _dispatchUnregisterEvent( key : String ) : Void 
+	{
+		this._dispatcher.dispatch( LocatorMessage.UNREGISTER, [ key ] );
+	}
+}
 ```
