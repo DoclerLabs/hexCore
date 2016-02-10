@@ -1,6 +1,7 @@
 package hex.log.layout;
 
 import hex.domain.Domain;
+import hex.error.NullPointerException;
 import hex.log.LogLevel;
 import hex.log.LoggerMessage;
 import js.Browser;
@@ -59,6 +60,11 @@ class SimpleBrowserLayout implements ILogListener
 	function _setConsole( targetId : String ) : Void
 	{
 		this._console = Browser.document.getElementById( targetId );
+		
+		if ( this._console == null )
+		{
+			throw new NullPointerException( "Div named '" + targetId + "' was not found" );
+		}
 
 		this._console.style.whiteSpace 			= "pre";
 		this._console.style.fontFamily 			= "Lucida Console";
