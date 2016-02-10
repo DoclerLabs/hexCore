@@ -2,8 +2,10 @@
 [![TravisCI Build Status](https://travis-ci.org/DoclerLabs/hexCore.svg?branch=master)](https://travis-ci.org/DoclerLabs/hexCore)
 Independent core elements for building OOP projects and frameworks 
 
-## event system example
+## Dispatcher example
 ```haxe
+//This event system is the easiest one to use
+
 var messageType = new MessageType( "onInit" );
 var dispatcher = new Dispatcher<IMockListener>();
 
@@ -12,8 +14,16 @@ dispatcher.addListener( mockListener );
 
 var anotherListener = new MockListener();
 dispatcher.addHandler( messageType, anotherListener, anotherListener.onMessage )
-
 dispatcher.dispatch( messageType, ["something", 7] );
+```
+
+## EventDispatcher example
+```haxe
+//This event system is the stricter than the previous one
+
+var dispatcher = new EventDispatcher<IEventListener, BasicEvent>();
+dispatcher.addListener( new MockListener() );
+dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
 ```
 
 ## simple logger example
