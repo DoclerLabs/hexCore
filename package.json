@@ -1,0 +1,28 @@
+{
+  "name": "hexcore",
+  "version": "1.0.0",
+  "description": "Independent core elements for building OOP projects and frameworks",
+  
+  "directories": {
+    "src": "src",
+	"test": "test" 
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DoclerLabs/hexCore.git"
+  },
+  "keywords": [
+    "haxe",
+    "core",
+    "hexmachina"
+  ],
+  "author": "DoclerLabs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DoclerLabs/hexCore/issues"
+  },
+  "homepage": "https://github.com/DoclerLabs/hexCore#readme"
+}
