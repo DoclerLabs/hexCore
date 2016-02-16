@@ -21,11 +21,11 @@ class SimpleBrowserLayout implements ILogListener
 	var _domainDisplay	: Bool = true;
 	var _timeDisplay	: Bool = true;
 	
-	public function new( targetID : String = "debug", leveldisplay : Bool = true, domainDisplay : Bool = true, timeDisplay : Bool = true ) 
+	public function new( targetID : String = "console", leveldisplay : Bool = true, domainDisplay : Bool = true, timeDisplay : Bool = true ) 
 	{
 		this._setConsole( targetID );
-		this.setLevelDisplay( leveldisplay );
 		this.setDomainDisplay( domainDisplay );
+		this.setLevelDisplay( leveldisplay );
 		this.setDisplayTime( timeDisplay );
 		
 		this._createLevelStyle();
@@ -59,11 +59,11 @@ class SimpleBrowserLayout implements ILogListener
 	
 	function _setConsole( targetId : String ) : Void
 	{
-		this._console = Browser.document.getElementById( targetId );
+		this._console = Browser.document.querySelector( targetId );
 		
 		if ( this._console == null )
 		{
-			throw new NullPointerException( "Div named '" + targetId + "' was not found" );
+			throw new NullPointerException( "Div named '" + targetId + "' was not found in '" + Stringifier.stringify( this ) + "'" );
 		}
 
 		this._console.style.whiteSpace 			= "pre";
@@ -114,7 +114,7 @@ class SimpleBrowserLayout implements ILogListener
 	function _createElement( message : String, ?color : String ) : Element
     {
 		var span : SpanElement = Browser.document.createSpanElement();
-		span.textContent = message;
+		span.innerHTML = message;
 		if ( color != null ) this._setAttributes( span, color );
         return span;
     }
