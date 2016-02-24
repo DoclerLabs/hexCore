@@ -13,6 +13,12 @@ class LogLevel
     static var _ERROR 	= new LogLevel( 40000 );
     static var _FATAL 	= new LogLevel( 50000 );
     static var _OFF 	= new LogLevel( 60000 );
+	
+	@:isVar public static var LEVELS( get, null ) : Array<LogLevel>;
+	static function get_LEVELS() : Array<LogLevel>
+    {
+        return [ LogLevel._ALL, LogLevel._DEBUG, LogLevel._INFO, LogLevel._WARN, LogLevel._ERROR, LogLevel._FATAL, LogLevel._OFF ];
+    }
 
     @:isVar public static var ALL( get, null ) : LogLevel;
     inline static function get_ALL() : LogLevel
