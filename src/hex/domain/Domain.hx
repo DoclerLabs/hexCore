@@ -32,8 +32,20 @@ class Domain
 
     public function getName() : String
     {
-    return this._domainName;
+		return this._domainName;
     }
+	
+	public static function getDomain( domainName : String ) : Domain
+	{
+		if ( !Domain._domainNames.exists( domainName ) )
+        {
+            return null;
+        }
+		else
+		{
+			return Domain._domainNames.get( domainName );
+		}
+	}
 
     public function toString() : String
     {
