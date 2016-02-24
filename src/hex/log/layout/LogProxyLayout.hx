@@ -13,10 +13,15 @@ import hex.model.ModelDispatcher;
  */
 class LogProxyLayout implements ILogListener
 {
-	var _dispatcher 		: LogProxyLayoutDispatcher;
-	var _messages 			: Array<LoggerMessage>;
-	var _filteredLevel		: LogLevel;
-	var _filteredDomain		: Domain;
+	private var _leftSearchSeparator	: String;
+	private var _rightSearchSeparator	: String;
+	
+	var _dispatcher 			: LogProxyLayoutDispatcher;
+	var _messages 				: Array<LoggerMessage>;
+	var _filteredLevel			: LogLevel;
+	var _filteredDomain			: Domain;
+	
+	var _searchedWord			: String = "";
 	
 	public function new() 
 	{
@@ -61,15 +66,33 @@ class LogProxyLayout implements ILogListener
 	{
 		this._filteredLevel 	= level == null ? LogLevel.ALL : level;
 		this._filteredDomain 	= domain == null ? AllDomain.DOMAIN : domain;
-		
 		this._dispatcher.onClear();
-		
+		this._render();
+	}
+	
+	public function searchFor( word : String = "", leftSearchSeparator : String, rightSearchSeparator : String ) : Void
+	{
+		this._searchedWord 			= word;
+		this._leftSearchSeparator 	= leftSearchSeparator;
+		this._rightSearchSeparator 	= rightSearchSeparator;
+		this._dispatcher.onClear();
+		this._render();
+	}
+	
+	function _render() : Void
+	{
 		for ( message in this._messages )
 		{
 			if ( ( this._filteredDomain == AllDomain.DOMAIN || this._filteredDomain == message.domain) &&
 				( this._filteredLevel == LogLevel.ALL || this._filteredLevel == message.level ) )
 			{
-				this._dispatcher.onLog( message );
+				var messageContent : String = message.message;
+				if ( this._searchedWord.length > 0 && messageContent.indexOf( this._searchedWord ) != -1 )
+				{
+					messageContent = ( messageContent.split( this._searchedWord ) )
+					.join( this._leftSearchSeparator+ this._searchedWord + this._rightSearchSeparator );
+				}
+				this._dispatcher.onLog( new LoggerMessage( messageContent, message.level, message.domain ) );
 			}
 		}
 	}
