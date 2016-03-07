@@ -1,10 +1,10 @@
 {
-  "name": "hexmachina",
+  "name": "hexcore",
   "license": "MIT",
   "classPath": "src",
   "tags": ["hexmachina", "mvc", "oop"],
   "description": "Independent core elements for building OOP projects and frameworks",
-  "contributors": ["FrancisBourre","grosmar","DoclerLabs"],
+  "contributors": ["DoclerLabs"],
   "releasenote": "First release. Still alpha testing",
   "version": "0.1.0",
   "url": "https://github.com/DoclerLabs/hexCore",
