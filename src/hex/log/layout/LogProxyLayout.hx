@@ -70,17 +70,20 @@ class LogProxyLayout implements ILogListener
 		this._render();
 	}
 	
-	public function searchFor( word : String = "", leftSearchSeparator : String, rightSearchSeparator : String ) : Void
+	public function searchFor( word : String = "", leftSearchSeparator : String, rightSearchSeparator : String ) : Int
 	{
 		this._searchedWord 			= word;
 		this._leftSearchSeparator 	= leftSearchSeparator;
 		this._rightSearchSeparator 	= rightSearchSeparator;
 		this._dispatcher.onClear();
-		this._render();
+		
+		return this._render();
 	}
 	
-	function _render() : Void
+	function _render() : Int
 	{
+		var searchLength : Int = 0;
+		
 		for ( message in this._messages )
 		{
 			if ( ( this._filteredDomain == AllDomain.DOMAIN || this._filteredDomain == message.domain) &&
@@ -90,11 +93,19 @@ class LogProxyLayout implements ILogListener
 				if ( this._searchedWord.length > 0 && messageContent.indexOf( this._searchedWord ) != -1 )
 				{
 					messageContent = ( messageContent.split( this._searchedWord ) )
-					.join( this._leftSearchSeparator+ this._searchedWord + this._rightSearchSeparator );
+					.join( this._getLeftSeparator( searchLength, this._leftSearchSeparator ) + this._searchedWord + this._rightSearchSeparator );
+					searchLength++;
 				}
 				this._dispatcher.onLog( new LoggerMessage( messageContent, message.level, message.domain ) );
 			}
 		}
+		
+		return searchLength;
+	}
+	
+	function _getLeftSeparator( index : Int, separator : String ) : String
+	{
+		return separator.split( ">" ).join( " id='searchedWord" + index ) + "'>";
 	}
 }
 
