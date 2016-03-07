@@ -90,7 +90,7 @@ class SimpleBrowserLayout implements ILogListener
 	
 	public function onClear() : Void 
 	{
-		 this._console.innerHTML = "";
+		this._console.innerHTML = "";
 	}
 	
 	function _getTime() : String
