@@ -15,13 +15,6 @@ addons:
   # http://docs.travis-ci.com/user/apt/#Adding-APT-Packages
   apt:
     packages:
-      # Python
-      - python3
-      # PHP
-      - php5-cli
-      # C#
-      - mono-devel
-      - mono-mcs
       # Flash
       - libgd2-xpm
       - ia32-libs
@@ -42,9 +35,6 @@ install:
   # Download and setup a standalone flash player debugger
   - haxe flash/install.hxml
   # Install haxelibs
-  - haxelib install hxcpp
-  - haxelib install hxjava
-  - haxelib install hxcs
   - haxelib list
 
 script:
