@@ -28,10 +28,10 @@ addons:
 
 install:
   - git clone --recursive https://github.com/DoclerLabs/hexUnit.git ~/hexunit
-	  
-      export DISPLAY=:99.0;
-      export AUDIODEV=null;
-	  
+
+  - export DISPLAY=:99.0;
+  - export AUDIODEV=null;
+
   # Download and setup a standalone flash player debugger
   - haxe flash/install.hxml
 
