@@ -1,4 +1,4 @@
 -main MainCoreTest
 -cp src
 -cp test
--cp ./hexunit/src
+-cp /home/travis/hexunit/src
