@@ -1,19 +1,10 @@
 language: haxe
 
-# TravisCI by default run on linux.
-# Let's enable both linux and mac builds because why not?
-os:
-  - linux
-
-# Test with Haxe 3.2.1 and Haxe development.
 haxe:
+  - "3.2.1"
   - development
 
 addons:
-  # This is the preferred way to install apt packages.
-  # However, it only allow some but not all packages.
-  # Alternatively, we can use `sudo apt-get install ...` in the `install:` section.
-  # http://docs.travis-ci.com/user/apt/#Adding-APT-Packages
   apt:
     packages:
       # Flash
@@ -28,11 +19,8 @@ addons:
 
 install:
   - git clone --recursive https://github.com/DoclerLabs/hexUnit.git ~/hexunit
-
   - export DISPLAY=:99.0;
   - export AUDIODEV=null;
-
-  # Download and setup a standalone flash player debugger
   - haxe flash/install.hxml
 
 script:
