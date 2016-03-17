@@ -289,8 +289,7 @@ class ConsoleStyle
 	public static var template = '<div id="console" width="100%" style="background:#fff; height:100vh; overflow-y:scroll; padding: 15px;"></div>
 <button class="debug-console-toggle">Console</button>
 <div class="debug-console hidden">
-	<div class="debug-console-list-wrapper">
-	</div>
+	<div class="debug-console-list-wrapper"></div>
 	<div class="debug-console-control">
 		<div class="debug-console-control-item debug-console-control-item--search">
 			<button class="debug-console-control-caret debug-console-control-caret--left"><</button>
