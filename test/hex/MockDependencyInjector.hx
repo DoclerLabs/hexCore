@@ -76,11 +76,11 @@ class MockDependencyInjector implements IDependencyInjector
 
 	public function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
 	{
-		return null;
+		return false;
 	}
 
 	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
 	{
-		return null;
+		return false;
 	}
 }
