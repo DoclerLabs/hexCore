@@ -3,7 +3,6 @@ package hex.di;
 /**
  * @author Francis Bourre
  */
-@:keepSub
 interface IDependencyInjector extends IBasicInjector
 {
     function hasDirectMapping( type : Class<Dynamic>, name:String = '' ) : Bool;
@@ -13,4 +12,8 @@ interface IDependencyInjector extends IBasicInjector
     function injectInto( target : Dynamic ) : Void;
 
     function destroyInstance( instance : Dynamic ) : Void;
+
+    function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
+
+    function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
 }

@@ -1,5 +1,6 @@
 package hex;
 
+import hex.di.InjectionEvent;
 import hex.di.IDependencyInjector;
 
 /**
@@ -71,5 +72,15 @@ class MockDependencyInjector implements IDependencyInjector
 	public function unmap( type : Class<Dynamic>, name : String = '' ) : Void 
 	{
 		
+	}
+
+	public function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	{
+		return null;
+	}
+
+	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	{
+		return null;
 	}
 }

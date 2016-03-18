@@ -3,7 +3,6 @@ package hex.di;
 /**
  * @author Francis Bourre
  */
-@:keepSub
 interface IBasicInjector
 {
     function mapToValue( clazz : Class<Dynamic>, value : Dynamic, ?name : String = '' ) : Void;
