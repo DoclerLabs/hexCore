@@ -1,5 +1,6 @@
 package hex.log;
 
+import haxe.PosInfos;
 import hex.domain.Domain;
 import hex.domain.DomainDispatcher;
 import hex.domain.NoDomain;
@@ -46,11 +47,11 @@ class Logger
         this._dispatcher.dispatch( LoggerMessage.CLEAR  );
     }
 
-    public function log( o : Dynamic, level : LogLevel, ?domain : Domain) : Void
+    public function log( o : Dynamic, level : LogLevel, ?domain : Domain, ?posInfos : PosInfos ) : Void
     {
         if ( this._level.value <= level.value )
 		{
-			this._dispatcher.dispatch( LoggerMessage.LOG, domain, [ new LoggerMessage( o, level, domain == null ? NoDomain.DOMAIN : domain ) ] );
+			this._dispatcher.dispatch( LoggerMessage.LOG, domain, [ new LoggerMessage( o, level, domain == null ? NoDomain.DOMAIN : domain, posInfos ) ] );
 		}
     }
 
@@ -81,29 +82,29 @@ class Logger
         return Stringifier.stringify( this );
     }
 	
-	public static function DEBUG( o : Dynamic, ?domain : Domain ) : Void
+	public static function DEBUG( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
-		Logger.getInstance().log( o, LogLevel.DEBUG, domain );
+		Logger.getInstance().log( o, LogLevel.DEBUG, domain, posInfos );
 	}
 	
-	public static function INFO( o : Dynamic, ?domain : Domain ) : Void
+	public static function INFO( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
-		Logger.getInstance().log( o, LogLevel.INFO, domain );
+		Logger.getInstance().log( o, LogLevel.INFO, domain, posInfos );
 	}
 	
-	public static function WARN( o : Dynamic, ?domain : Domain ) : Void
+	public static function WARN( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
-		Logger.getInstance().log( o, LogLevel.WARN, domain );
+		Logger.getInstance().log( o, LogLevel.WARN, domain, posInfos );
 	}
 	
-	public static function ERROR( o : Dynamic, ?domain : Domain ) : Void
+	public static function ERROR( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
-		Logger.getInstance().log( o, LogLevel.ERROR, domain );
+		Logger.getInstance().log( o, LogLevel.ERROR, domain, posInfos );
 	}
 	
-	public static function FATAL( o : Dynamic, ?domain : Domain ) : Void
+	public static function FATAL( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
-		Logger.getInstance().log( o, LogLevel.FATAL, domain );
+		Logger.getInstance().log( o, LogLevel.FATAL, domain, posInfos );
 	}
 	
 	public static function CLEAR( ?domain : Domain )  : Void
