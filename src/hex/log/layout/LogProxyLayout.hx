@@ -89,14 +89,14 @@ class LogProxyLayout implements ILogListener
 			if ( ( this._filteredDomain == AllDomain.DOMAIN || this._filteredDomain == message.domain) &&
 				( this._filteredLevel == LogLevel.ALL || this._filteredLevel == message.level ) )
 			{
-				var messageContent : String = message.message;
+				var messageContent : String = "" + message.message;
 				if ( this._searchedWord.length > 0 && messageContent.indexOf( this._searchedWord ) != -1 )
 				{
 					messageContent = ( messageContent.split( this._searchedWord ) )
 					.join( this._getLeftSeparator( searchLength, this._leftSearchSeparator ) + this._searchedWord + this._rightSearchSeparator );
 					searchLength++;
 				}
-				this._dispatcher.onLog( new LoggerMessage( messageContent, message.level, message.domain ) );
+				this._dispatcher.onLog( new LoggerMessage( messageContent, message.level, message.domain, message.posInfos ) );
 			}
 		}
 		

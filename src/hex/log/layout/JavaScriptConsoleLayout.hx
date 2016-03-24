@@ -44,11 +44,11 @@ class JavaScriptConsoleLayout implements ILogListener
 			m = Browser.console.log;
 		}
 		
-		m( message.message, "[" + message.domain.getName() + "]", info );
+		m( message.message, "[" + message.domain.getName() + "]" + info );
 	}
 	
 	public function onClear() : Void 
 	{
-		Browser.console.clear( );
+		Browser.console.clear();
 	}
 }

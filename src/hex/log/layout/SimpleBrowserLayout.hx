@@ -1,5 +1,6 @@
 package hex.log.layout;
 
+import haxe.PosInfos;
 import hex.domain.Domain;
 import hex.error.NullPointerException;
 import hex.log.LogLevel;
@@ -76,6 +77,7 @@ class SimpleBrowserLayout implements ILogListener
 		var message : Dynamic = loggerMessage.message;
 		var level : LogLevel = loggerMessage.level;
 		var domain : Domain = loggerMessage.domain;
+		var posInfos : PosInfos = loggerMessage.posInfos;
 		
 		var leftBracket = this._createElement( "[", this._getStyle( level ) );
 		var rightBracket = this._createElement( "]", this._getStyle( level ) );
@@ -84,8 +86,9 @@ class SimpleBrowserLayout implements ILogListener
 		var domainName : String = ( domain != null && domain.getName() != null ) ?  "@" + domain.getName() : "";
 		var domain = this._createElement( domainName, this._getStyle( level ) );
 		var message = this._createElement( "\t\t" + message, this._getStyle( level ) );
+		var info = this._createElement( posInfos != null ? " at " + posInfos.className + "::" + posInfos.methodName + " line " + posInfos.lineNumber + " in file " + posInfos.fileName : "", this._getStyle( level ) );
 		
-		this._log( this._getEncapsulateElements( [ leftBracket, levelName, domain, rightBracket, message ] ) );
+		this._log( this._getEncapsulateElements( [ leftBracket, levelName, domain, rightBracket, message, info] ) );
 	}
 	
 	public function onClear() : Void 
