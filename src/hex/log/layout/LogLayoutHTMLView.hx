@@ -72,6 +72,7 @@ class LogLayoutHTMLView
 		var container:Element = document.querySelector(this._debugWrapperSelector);
 		
 		var debugWrapper = document.createDivElement();
+		debugWrapper.style.position = "fixed";
 		debugWrapper.innerHTML = ConsoleStyle.template;
 		container.appendChild(debugWrapper);
 		
