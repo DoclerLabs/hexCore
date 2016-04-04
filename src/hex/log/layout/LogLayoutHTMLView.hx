@@ -1,17 +1,15 @@
 package hex.log.layout;
 
 import hex.domain.Domain;
-import hex.inject.mapping.MappingEvent;
 import hex.log.layout.LogProxyLayout;
 import js.html.DOMRect;
 import js.html.Element;
 import js.html.Event;
 import js.html.HTMLDocument;
 import js.html.InputElement;
-import js.html.SelectElement;
-import js.html.OptionElement;
-import js.html.TouchEvent;
 import js.html.KeyboardEvent;
+import js.html.SelectElement;
+import js.html.TouchEvent;
 
 /**
  * ...
