@@ -285,7 +285,7 @@ class SwipeHorizontalVO
 
 class ConsoleStyle 
 {
-	public static var template = '<div id="console" width="100%" style="background:#fff; height:100vh; overflow-y:scroll; padding: 15px;"></div>
+	public static var template = '<div id="console" width="100%" style="background:#fff; height:100vh; overflow-y:scroll; padding: 15px; display:none"></div>
 <button class="debug-console-toggle">Console</button>
 <div class="debug-console hidden">
 	<div class="debug-console-list-wrapper"></div>
