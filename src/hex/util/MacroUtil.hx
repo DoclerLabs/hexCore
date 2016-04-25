@@ -9,12 +9,12 @@ import haxe.macro.Expr.TypePath;
  */
 class MacroUtil
 {
-
 	function new() 
 	{
 		
 	}
 	
+	#if macro
 	static public function getTypePath( className : String ) : TypePath
 	{
 		Context.getType( className );
@@ -29,4 +29,5 @@ class MacroUtil
 		Context.getType( className );
 		return className.split( "." );
 	}
+	#end
 }
