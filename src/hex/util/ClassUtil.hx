@@ -59,4 +59,32 @@ class ClassUtil
 		var classInstance = Type.createEmptyInstance( actualClass );
 		return Std.is( classInstance, superClass );
 	}
+	
+	static public function getStaticReference( qualifiedClassName : String ) : Dynamic
+	{
+		var a : Array<String> = qualifiedClassName.split( "." );
+		var type : String = a[ a.length - 1 ];
+		a.splice( a.length - 1, 1 );
+		var classReference : Class<Dynamic>  = ClassUtil.getClassReference( a.join( "." ) );
+		var staticRef : Dynamic = Reflect.field( classReference, type );
+		
+		if ( staticRef == null )
+		{
+			throw new IllegalArgumentException( "ClassUtil.getStaticReference fails with '" + qualifiedClassName + "'" );
+		}
+		
+		return staticRef;
+	}
+	
+	static public function getClassReference( qualifiedClassName : String ) : Class<Dynamic>
+	{
+		var classReference : Class<Dynamic> = Type.resolveClass( qualifiedClassName );
+		
+		if ( classReference == null )
+		{
+			throw new IllegalArgumentException( "ClassUtil.getClassReference fails with class named '" + qualifiedClassName + "'" );
+		}
+		
+		return classReference;
+	}
 }
