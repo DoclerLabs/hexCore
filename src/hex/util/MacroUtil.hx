@@ -1,6 +1,8 @@
 package hex.util;
 
 import haxe.macro.Context;
+import haxe.macro.Expr.ComplexType;
+import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypePath;
 
 /**
@@ -21,6 +23,8 @@ class MacroUtil
 		var pack = className.split( "." );
 		var className = pack[ pack.length -1 ];
 		pack.splice( pack.length - 1, 1 );
+		
+		
 		return { pack: pack, name: className };
 	}
 	

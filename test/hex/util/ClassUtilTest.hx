@@ -18,11 +18,22 @@ class ClassUtilTest
 		Assert.methodCallThrows( IllegalArgumentException, ClassUtil, ClassUtil.getClassReference, ["dummy.unavailable.Class"], "'getClassReference' should throw IllegalArgumentException" );
 	}
 	
-	@Test( "Test getStaticReference" )
-    public function testGetStaticReference() : Void
+	@Test( "Test getStaticVariableReference" )
+    public function testGetStaticVariableReference() : Void
     {
-		Assert.equals( "static_ref", ClassUtil.getStaticReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticReference' should return the right static property" );
-		Assert.methodCallThrows( IllegalArgumentException, ClassUtil, ClassUtil.getStaticReference, ["hex.util.ClassUtilTest.UnavailableStaticRef"], "'getStaticReference' should throw IllegalArgumentException" );
+		Assert.equals( "static_ref", ClassUtil.getStaticVariableReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticReference' should return the right static property" );
+		Assert.methodCallThrows( IllegalArgumentException, ClassUtil, ClassUtil.getStaticVariableReference, ["hex.util.ClassUtilTest.UnavailableStaticRef"], "'getStaticReference' should throw IllegalArgumentException" );
+	}
+
+	@Test( "Test getClassNameFromStaticReference" )
+    public function testGetClassNameFromStaticReference() : Void
+    {
+		Assert.equals( "hex.util.ClassUtilTest", ClassUtil.getClassNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getClassNameFromStaticReference' should return the right static property" );
 	}
 	
+	@Test( "Test getStaticVariableNameFromStaticReference" )
+    public function testGetStaticVariableNameFromStaticReference() : Void
+    {
+		Assert.equals( "STATIC_REF", ClassUtil.getStaticVariableNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticVariableNameFromStaticReference' should return the right static property" );
+	}
 }

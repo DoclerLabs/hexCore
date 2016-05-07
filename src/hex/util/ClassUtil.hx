@@ -1,8 +1,8 @@
 package hex.util;
 
 import hex.error.IllegalArgumentException;
-import hex.log.Stringifier;
 import hex.error.PrivateConstructorException;
+import hex.log.Stringifier;
 
 /**
  * ...
@@ -60,7 +60,7 @@ class ClassUtil
 		return Std.is( classInstance, superClass );
 	}
 	
-	static public function getStaticReference( qualifiedClassName : String ) : Dynamic
+	static public function getStaticVariableReference( qualifiedClassName : String ) : Dynamic
 	{
 		var a : Array<String> = qualifiedClassName.split( "." );
 		var type : String = a[ a.length - 1 ];
@@ -74,6 +74,20 @@ class ClassUtil
 		}
 		
 		return staticRef;
+	}
+	
+	static public function getClassNameFromStaticReference( qualifiedClassName : String ) : String
+	{
+		var a : Array<String> = qualifiedClassName.split( "." );
+		var type : String = a[ a.length - 1 ];
+		a.splice( a.length - 1, 1 );
+		return  a.join( "." );
+	}
+	
+	static public function getStaticVariableNameFromStaticReference( qualifiedClassName : String ) : String
+	{
+		var a : Array<String> = qualifiedClassName.split( "." );
+		return a[ a.length - 1 ];
 	}
 	
 	static public function getClassReference( qualifiedClassName : String ) : Class<Dynamic>
