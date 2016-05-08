@@ -33,5 +33,21 @@ class MacroUtil
 		Context.getType( className );
 		return className.split( "." );
 	}
+	
+	static public function getClassFullQualifiedName( p : TypePath ) : String
+	{
+		var t : haxe.macro.Type = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
+		switch ( t )
+		{
+			case TInst( t, p ):
+				var ct = t.get();
+				return ct.pack.concat( [ct.name] ).join( '.' );
+			case TAbstract( t, params ):
+				return t.toString();
+			case TDynamic( t ):
+				return "Dynamic";
+			default: return null;
+		}
+	}
 	#end
 }
