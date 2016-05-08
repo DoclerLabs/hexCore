@@ -34,7 +34,7 @@ class MockDependencyInjector implements IDependencyInjector
 		
 	}
 	
-	public function getInstance( type : Class<Dynamic>, name : String = '', targetType : Class<Dynamic> = null ) : Dynamic 
+	public function getInstance<T>( type : Class<T>, name : String = '' ) : T 
 	{
 		return null;
 	}
