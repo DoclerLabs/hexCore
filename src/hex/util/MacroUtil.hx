@@ -17,7 +17,7 @@ class MacroUtil
 	}
 	
 	#if macro
-	static public function getTypePath( className : String ) : TypePath
+	static public function getTypePath( className : String, ?params:Array<TypeParam> ) : TypePath
 	{
 		Context.getType( className );
 		var pack = className.split( "." );
@@ -25,7 +25,7 @@ class MacroUtil
 		pack.splice( pack.length - 1, 1 );
 		
 		
-		return { pack: pack, name: className };
+		return { pack: pack, name: className, params:params };
 	}
 	
 	static public function getPack( className : String ) : Array<String>
