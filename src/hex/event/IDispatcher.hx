@@ -3,11 +3,9 @@ package hex.event;
 /**
  * @author Francis Bourre
  */
-interface IDispatcher<ListenerType:{}> 
+interface IDispatcher<ListenerType:{}> extends IObservable
 {
 	function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void;
-	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
-	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
 	function addListener( listener : ListenerType ) : Bool;
 	function removeListener( listener : ListenerType ) : Bool;
 	function removeAllListeners() : Void;
