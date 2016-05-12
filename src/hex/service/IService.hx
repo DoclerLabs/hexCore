@@ -10,10 +10,6 @@ interface IService<ServiceConfigurationType:ServiceConfiguration> extends IObser
 {
 	function createConfiguration() : Void;
 	
-	//function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Void;
-
-	//function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Void;
-	
 	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
 
 	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
