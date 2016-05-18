@@ -9,19 +9,25 @@ import hex.error.IllegalArgumentException;
 class MonoTypeClosureDispatcher<EventType:Event>
 {
     var _eventType      	: String;
+    var _target      		: Dynamic;
     var _callbacks      	: Array<EventType->Void>;
 
-    public function new( eventType : String )
+    public function new( eventType : String, ?target : Dynamic )
     {
 		this._eventType 			= eventType;
+		this._target 				= target;
         this._callbacks         	= [];
     }
 
-    public function dispatchEvent( e : EventType ) : Void
+    public function dispatchEvent( ?e : EventType ) : Void
     {
-		if ( e.type != this._eventType )
+		if ( e == null )
 		{
-				throw new IllegalArgumentException( this + ".dispatchEvent failed. '" + e.type +"' should be '" + this._eventType + "'" );
+			e = new BasicEvent( this._eventType, this._target );
+		}
+		else if ( e.type != this._eventType )
+		{
+			throw new IllegalArgumentException( this + ".dispatchEvent failed. '" + e.type +"' should be '" + this._eventType + "'" );
 		}
 		
 		for ( f in this._callbacks )
