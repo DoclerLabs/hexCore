@@ -3,7 +3,7 @@ package hex.data;
 /**
  * @author Francis Bourre
  */
-interface IParser 
+interface IParser<ResultType>
 {
-	function parse( serializedContent : Dynamic, target : Dynamic = null ) : Dynamic;
+	function parse( serializedContent : Dynamic, target : Dynamic = null ) : ResultType;
 }
