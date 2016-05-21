@@ -5,4 +5,4 @@ import hex.service.IService;
 /**
  * @author Francis Bourre
  */
-typedef Service = IService<Dynamic>;
+typedef Service = IService;

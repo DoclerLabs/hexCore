@@ -6,7 +6,7 @@ import hex.event.MessageType;
 /**
  * @author Francis Bourre
  */
-interface IService<ServiceConfigurationType:ServiceConfiguration> extends IObservable
+interface IService extends IObservable
 {
 	function createConfiguration() : Void;
 	
@@ -14,9 +14,9 @@ interface IService<ServiceConfigurationType:ServiceConfiguration> extends IObser
 
 	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
 		
-	function getConfiguration() : ServiceConfigurationType;
+	function getConfiguration() : ServiceConfiguration;
 
-	function setConfiguration( configuration : ServiceConfigurationType ) : Void;
+	function setConfiguration( configuration : ServiceConfiguration ) : Void;
 	
 	function removeAllListeners() : Void;
 }
