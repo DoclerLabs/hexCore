@@ -1,9 +1,11 @@
 package hex.util;
 
 import haxe.macro.Context;
+import haxe.macro.Expr;
 import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypePath;
+import haxe.macro.Type.ClassType;
 
 /**
  * ...
@@ -26,6 +28,73 @@ class MacroUtil
 		
 		
 		return { pack: pack, name: className, params:params };
+	}
+	
+	static public function getStaticVariable( staticReference : String ) : Expr
+	{
+		var className = ClassUtil.getClassNameFromStaticReference( staticReference );
+		var staticVarName = ClassUtil.getStaticVariableNameFromStaticReference( staticReference );
+		var tp = MacroUtil.getPack( className );
+		return macro { $p { tp }.$staticVarName; };
+	}
+	
+	static public function getClassType( qualifiedClassName : String ) : ClassType
+	{
+		var type = Context.getType( qualifiedClassName );
+		
+		switch type 
+		{
+			case TInst(t, _):
+				var classType = t.get();
+				return classType;
+			default:
+				return null;
+		}
+	}
+		
+	public static function isSubClassOf( subClass : ClassType, baseClass : ClassType ) : Bool 
+	{
+		var cls = subClass;
+		while ( cls.superClass != null )
+		{
+			cls = cls.superClass.t.get();
+			if ( isSameClass( baseClass, cls ) ) 
+			{ 
+				return true; 
+			}
+		}
+		
+		return false;
+	}
+	
+	public static function implementsInterface( cls : ClassType, interfaceToMatch : ClassType ) : Bool 
+	{
+		while ( cls != null ) 
+		{
+			for ( i in cls.interfaces ) 
+			{
+				if ( isSameClass( i.t.get(), interfaceToMatch ) ) 
+				{
+					return true;
+				}
+			}
+			
+			if ( cls.superClass != null ) 
+			{
+				cls = cls.superClass.t.get();
+			}
+			else 
+			{
+				cls = null;
+			}
+		}
+		
+		return false;
+	}
+
+	static function isSameClass( a : ClassType, b : ClassType ) : Bool 
+	{
+		return ( a.pack.join( "." ) == b.pack.join( "." ) && a.name == b.name );
 	}
 	
 	static public function getPack( className : String ) : Array<String>
