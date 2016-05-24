@@ -73,6 +73,15 @@ class MacroUtil
 		{
 			for ( i in cls.interfaces ) 
 			{
+				//check super interfaces
+				for ( ie in i.t.get().interfaces )
+				{
+					if ( isSameClass( ie.t.get(), interfaceToMatch ) )
+					{
+						return true;
+					}
+				}
+
 				if ( isSameClass( i.t.get(), interfaceToMatch ) ) 
 				{
 					return true;
