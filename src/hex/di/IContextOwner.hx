@@ -6,5 +6,5 @@ package hex.di;
  */
 interface IContextOwner
 {
-	function getBasicInjector() : IBasicInjector;
+	function getInjector() : IDependencyInjector;
 }
