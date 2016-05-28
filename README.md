@@ -2,6 +2,8 @@
 [![TravisCI Build Status](https://travis-ci.org/DoclerLabs/hexCore.svg?branch=master)](https://travis-ci.org/DoclerLabs/hexCore)
 Independent core elements for building OOP projects and frameworks 
 
+*Find more information about hexMachina on [hexmachina.org](http://hexmachina.org/)*
+
 ## Dispatcher example
 ```haxe
 //This event system is the easiest one to use
