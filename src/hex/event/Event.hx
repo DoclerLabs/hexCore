@@ -7,6 +7,6 @@ typedef Event =
 {
 	public var type     : String;
     public var target   : Dynamic;
-	function clone()	: Void;	
+	function clone()	: Event;	
 	function toString()	: String;	
 }

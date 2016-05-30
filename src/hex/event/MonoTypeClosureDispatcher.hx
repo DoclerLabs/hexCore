@@ -21,11 +21,12 @@ class MonoTypeClosureDispatcher<EventType:Event>
 
     public function dispatchEvent( ?e : EventType ) : Void
     {
-		if ( e == null )
+		//TODO: check, i've removed temporary - duke
+		/*if ( e == null )
 		{
 			e = new BasicEvent( this._eventType, this._target );
-		}
-		else if ( e.type != this._eventType )
+		}*/
+		if ( e != null && e.type != this._eventType )
 		{
 			throw new IllegalArgumentException( this + ".dispatchEvent failed. '" + e.type +"' should be '" + this._eventType + "'" );
 		}
