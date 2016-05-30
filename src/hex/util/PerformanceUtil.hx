@@ -43,7 +43,15 @@ class PerformanceUtil
 		#if flash
 			return flash.system.System.totalMemory;
 		#elseif js
-			return js.Browser.window.performance && js.Browser.window.performance.memory ? js.Browser.window.performance.memory.totalJSHeapSize; //usedJSHeapSize
+			if ( Reflect.hasField(js.Browser.window, "performance" ) )
+			{
+				var perf:Dynamic = Reflect.field(js.Browser.window, "performance" );
+				return  Reflect.hasField(perf, "memory") ? Reflect.field(Reflect.field( perf, "memory"), "totalJSHeapSize") : null; //usedJSHeapSize
+			}
+			else
+			{
+				return null;
+			}
 		#else
 			return null;
 		#end
