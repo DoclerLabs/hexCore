@@ -62,7 +62,7 @@ class MonoTypeClosureDispatcherTest
     public function testDispatchMethodWithoutArguments() : Void
     {
 		#if ( haxe_ver >= "3.3" )
-		this._dispatcher.dispatchEvent();
+		this._dispatcher.dispatchEvent( null );
 		
 		Assert.equals( this._target, this._lastReceivedEvent.target, "targets should be the same" );
 		Assert.equals( "event", this._lastReceivedEvent.type, "types should be the same" );
