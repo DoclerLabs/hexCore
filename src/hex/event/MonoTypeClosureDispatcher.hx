@@ -1,12 +1,14 @@
 package hex.event;
 
+import haxe.Constraints.Constructible;
 import hex.error.IllegalArgumentException;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class MonoTypeClosureDispatcher<EventType:Event>
+@:generic
+class MonoTypeClosureDispatcher<EventType:Constructible<String->Dynamic->Void>>
 {
     var _eventType      	: String;
     var _target      		: Dynamic;
@@ -21,15 +23,17 @@ class MonoTypeClosureDispatcher<EventType:Event>
 
     public function dispatchEvent( ?e : EventType ) : Void
     {
-		//TODO: check, i've removed temporary - duke
-		/*if ( e == null )
+		#if ( haxe_ver >= "3.3" )
+		if ( e == null )
 		{
-			e = new BasicEvent( this._eventType, this._target );
-		}*/
+			e = new EventType( this._eventType, this._target );
+		}
+		#else
 		if ( e != null && e.type != this._eventType )
 		{
 			throw new IllegalArgumentException( this + ".dispatchEvent failed. '" + e.type +"' should be '" + this._eventType + "'" );
 		}
+		#end
 		
 		for ( f in this._callbacks )
 		{
