@@ -69,7 +69,7 @@ class MonoTypeClosureDispatcherTest
 		Assert.isInstanceOf( this._lastReceivedEvent, BasicEvent, "event received should be an instance of 'BasicEvent'" );
 		#else
 		
-		Assert.methodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.dispatchEvent, [], "'dispatchEvent' without argument should trigger 'IllegalArgumentException'" );
+		Assert.methodCallThrows( IllegalArgumentException, this._dispatcher, this._dispatcher.dispatchEvent, [ null ], "'dispatchEvent' without argument should trigger 'IllegalArgumentException'" );
 		
 		#end
 		
