@@ -101,7 +101,7 @@ class MacroUtil
 		return false;
 	}
 
-	static function isSameClass( a : ClassType, b : ClassType ) : Bool 
+	static public function isSameClass( a : ClassType, b : ClassType ) : Bool 
 	{
 		return ( a.pack.join( "." ) == b.pack.join( "." ) && a.name == b.name );
 	}
