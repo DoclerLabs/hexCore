@@ -30,12 +30,20 @@ class MacroUtil
 		return { pack: pack, name: className, params:params };
 	}
 	
-	static public function getStaticVariable( staticReference : String ) : Expr
+	static public function getStaticVariable( staticReference : String, position : Position = null ) : Expr
 	{
 		var className = ClassUtil.getClassNameFromStaticReference( staticReference );
 		var staticVarName = ClassUtil.getStaticVariableNameFromStaticReference( staticReference );
 		var tp = MacroUtil.getPack( className );
-		return macro { $p { tp }.$staticVarName; };
+
+		if ( position != null )
+		{
+			return macro @:pos( position) { $p { tp } .$staticVarName; };
+		}
+		else
+		{
+			return macro { $p { tp } .$staticVarName; };
+		}
 	}
 	
 	static public function getClassType( qualifiedClassName : String ) : ClassType
