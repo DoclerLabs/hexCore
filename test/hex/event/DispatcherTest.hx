@@ -209,7 +209,8 @@ class DispatcherTest
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
         Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return false" );
-        Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), ( new MockEventListener() ).onMessage ), "'hasHandler' should return false" );
+        var mockEventListener = new MockEventListener();
+        Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), mockEventListener.onMessage ), "'hasHandler' should return false" );
     }
 	
 	@Test( "Test seal activation on 'removeListener' during dispatching" )
