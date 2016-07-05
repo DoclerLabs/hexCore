@@ -107,7 +107,7 @@ class Logger
 		Logger.getInstance().log( o, LogLevel.FATAL, domain, posInfos );
 	}
 	
-	public static function CLEAR( ?domain : Domain )  : Void
+	public static function CLEAR_ALL( ?domain : Domain )  : Void
 	{
 		Logger.getInstance().clear();
 	}
