@@ -18,11 +18,13 @@ class DomainTest
         Assert.equals( "testConstructor", domain.getName(), "'name' property should be the same passed to constructor" );
     }
 
+	#if !php
     @Test( "Test null 'name' value passed to constructor" )
     public function testConstructorNullException() : Void
     {
         Assert.constructorCallThrows( NullPointerException, Domain, [], "" );
     }
+    #end
 
     @Test( "Test using twice the same 'name' value" )
     public function testConstructorWithNameValues() : Void
