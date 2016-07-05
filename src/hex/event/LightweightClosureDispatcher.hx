@@ -12,7 +12,7 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
     var _callbacks      	: Map<String, Array<EventType->Void>>;
     var _callbackSize   	: UInt;
 
-    public function new<ListenerType>()
+    public function new()
     {
         this._callbacks         	= new Map();
         this._callbackSize      	= 0;

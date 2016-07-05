@@ -11,7 +11,7 @@ class LightweightListenerDispatcher<ListenerType:IEventListener, EventType:Event
 {
     var _listeners : Array<ListenerType>;
 
-    public function new<ListenerType>()
+    public function new()
     {
         this._listeners = [];
     }
