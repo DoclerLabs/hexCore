@@ -378,7 +378,9 @@ private class MockEventListener implements IMockListener
 
     public function new()
     {
-
+		#if php
+		untyped __php__("$fixme");
+		#end
     }
 
     public function onMessage( s : String, i : Int ) : Void
