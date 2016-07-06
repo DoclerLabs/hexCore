@@ -9,8 +9,10 @@ import hex.unittest.assertion.Assert;
  */
 class DispatcherTest
 {
-	var _dispatcher   : Dispatcher<IMockListener>;
-    var _listener     : MockEventListener;
+	var _dispatcher   		: Dispatcher<IMockListener>;
+    var _listener     		: MockEventListener;
+    var _anotherListener    : MockEventListener;
+    var _mockEventListener  : MockEventListenerForTestingSealingOnRemoveAllListeners;
 
     @Before
     public function setUp() : Void
@@ -209,8 +211,8 @@ class DispatcherTest
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
         Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return false" );
-        var mockEventListener = new MockEventListener();
-        Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), mockEventListener.onMessage ), "'hasHandler' should return false" );
+        this._anotherListener = new MockEventListener();
+        Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), this._anotherListener.onMessage ), "'hasHandler' should return false" );
     }
 	
 	@Test( "Test seal activation on 'removeListener' during dispatching" )
@@ -277,8 +279,8 @@ class DispatcherTest
 	{
 		var messageType = new MessageType();
 		
-		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveAllListeners( this._dispatcher, this._listener );
-		this._dispatcher.addHandler( messageType, mockEventListener, mockEventListener.onMessage );
+		this._mockEventListener = new MockEventListenerForTestingSealingOnRemoveAllListeners( this._dispatcher, this._listener );
+		this._dispatcher.addHandler( messageType, this._mockEventListener, this._mockEventListener.onMessage );
 		this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
 		
 		this._dispatcher.dispatch( messageType, ["something", 7] );
@@ -378,9 +380,7 @@ private class MockEventListener implements IMockListener
 
     public function new()
     {
-		#if php
-		untyped __php__("$fixme");
-		#end
+		
     }
 
     public function onMessage( s : String, i : Int ) : Void
