@@ -210,9 +210,11 @@ class DispatcherTest
 
         this._dispatcher.removeAllListeners();
         this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
+        trace( "this._listener.onMessage", this._listener.onMessage );
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
         Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return false" );
+        trace( "this._anotherListener.onMessage", this._anotherListener.onMessage );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), this._anotherListener.onMessage ), "'hasHandler' should return false" );
     }
 	
