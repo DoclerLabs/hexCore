@@ -8,5 +8,4 @@ class CoreDomainSuite
 {
     @Suite( "Domain" )
     public var list : Array<Class<Dynamic>> = [DomainTest];
-	
 }

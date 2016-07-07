@@ -73,7 +73,7 @@ class Size
 
 	public function add( size : Size ) : Size
 	{
-		if(size != null)
+		if( size != null )
 		{
 			return new Size( this.width + size.width, this.height + size.height );
 		}
