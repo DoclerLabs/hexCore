@@ -36,5 +36,4 @@ class GUID
 				GUID.createRandomIdentifier(3, 15) + '' + 
 				GUID.createRandomIdentifier(12, 15);
 	} 
-
 }
