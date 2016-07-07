@@ -11,15 +11,12 @@ class DispatcherTest
 {
 	var _dispatcher   		: Dispatcher<IMockListener>;
     var _listener     		: MockEventListener;
-    var _anotherListener    : MockEventListener;
-    var _mockEventListener  : MockEventListenerForTestingSealingOnRemoveAllListeners;
 
     @Before
     public function setUp() : Void
     {
         this._dispatcher    	= new Dispatcher<IMockListener>();
         this._listener      	= new MockEventListener();
-		this._anotherListener 	= new MockEventListener();
     }
 
     @After
@@ -27,7 +24,6 @@ class DispatcherTest
     {
         this._dispatcher    	= null;
         this._listener      	= null;
-        this._anotherListener   = null;
     }
 	
 	@Test( "Test 'addListener' behavior" )
@@ -210,12 +206,10 @@ class DispatcherTest
 
         this._dispatcher.removeAllListeners();
         this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
-        trace( "this._listener.onMessage", this._listener.onMessage );
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
         Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return false" );
-        trace( "this._anotherListener.onMessage", this._anotherListener.onMessage );
-        Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), this._anotherListener ), "'hasHandler' should return false" );
+        Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), new MockEventListener() ), "'hasHandler' should return false" );
     }
 	
 	@Test( "Test seal activation on 'removeListener' during dispatching" )
@@ -281,14 +275,13 @@ class DispatcherTest
     public function testSealActivationOnRemoveAllListeners() : Void
 	{
 		var messageType = new MessageType();
-		
-		this._mockEventListener = new MockEventListenerForTestingSealingOnRemoveAllListeners( this._dispatcher, this._listener );
-		this._dispatcher.addHandler( messageType, this._mockEventListener, this._mockEventListener.onMessage );
+		var mockEventListener = new MockEventListenerForTestingSealingOnRemoveAllListeners( this._dispatcher, this._listener );
+		this._dispatcher.addHandler( messageType, mockEventListener, mockEventListener.onMessage );
 		this._dispatcher.addHandler( messageType, this._listener, this._listener.onMessage );
 		
 		this._dispatcher.dispatch( messageType, ["something", 7] );
 		Assert.equals( 1, this._listener.eventReceivedCount, "Message should have been received once" );
-		Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener.onMessage ), "'hasHandler' should return false" );
+		Assert.isFalse( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return false" );
 	}
 	
 	@Test( "Test 'dispatch' behavior with 'handleMessage' callback" )
