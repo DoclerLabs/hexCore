@@ -17,15 +17,17 @@ class DispatcherTest
     @Before
     public function setUp() : Void
     {
-        this._dispatcher    = new Dispatcher<IMockListener>();
-        this._listener      = new MockEventListener();
+        this._dispatcher    	= new Dispatcher<IMockListener>();
+        this._listener      	= new MockEventListener();
+		this._anotherListener 	= new MockEventListener();
     }
 
     @After
     public function tearDown() : Void
     {
-        this._dispatcher    = null;
-        this._listener      = null;
+        this._dispatcher    	= null;
+        this._listener      	= null;
+        this._anotherListener   = null;
     }
 	
 	@Test( "Test 'addListener' behavior" )
@@ -211,7 +213,6 @@ class DispatcherTest
         Assert.isTrue( this._dispatcher.hasHandler( messageType ), "'hasHandler' should return true" );
         Assert.isTrue( this._dispatcher.hasHandler( messageType, this._listener ), "'hasHandler' should return true" );
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType() ), "'hasHandler' should return false" );
-        this._anotherListener = new MockEventListener();
         Assert.isFalse( this._dispatcher.hasHandler( new MessageType(), this._anotherListener.onMessage ), "'hasHandler' should return false" );
     }
 	
