@@ -85,6 +85,6 @@ class Size
 
 	public function toPoint() : Point
 	{
-		return new Point( this.width, this.height );
+		return new Point( Std.int( this.width ), Std.int( this.height ) );
 	}
 }

@@ -4,7 +4,7 @@ package hex.structures;
  * ...
  * @author Francis Bourre
  */
-abstract Position( IPoint )
+abstract PointF( IPoint )
 {
 	public var x( get, set ) : Float;
     public var y( get, set ) : Float;
@@ -29,19 +29,19 @@ abstract Position( IPoint )
 		return this.y = v;
 	}
 	
-	public inline function new( x : Float, y : Float ) 
+	public inline function new( x : Float = 0.0, y : Float = 0.0 ) 
 	{
 		this = { x: x, y: y };
 	}
 	
-	@:from public static inline function fromIPoint( p : IPoint ) : Position 
+	@:from public static inline function fromIPoint( p : IPoint ) : PointF 
 	{
 		return cast p;
 	}
 	
-	@:from public static inline function fromISize( s : ISize ) : Position 
+	@:from public static inline function fromISize( s : ISize ) : PointF 
 	{
-		return new Position( s.width, s.height );
+		return new PointF( s.width, s.height );
 	}
 	
 	@:to public inline function toSize() : Size
@@ -54,61 +54,61 @@ abstract Position( IPoint )
 		return [ this.x, this.y ];
 	}
 	
-	@:op( A + B ) public static inline function plus( p1 : Position, p2 : Position ) : Position
+	@:op( A + B ) public static inline function plus( p1 : PointF, p2 : PointF ) : PointF
 	{
 		return { x: p1.x + p2.x, y: p1.y + p2.y };
 	}
 	
-	@:op( A += B ) public static inline function plusEquals( p1 : Position, p2 : Position ) : Void
+	@:op( A += B ) public static inline function plusEquals( p1 : PointF, p2 : PointF ) : Void
 	{
 		p1.x += p2.x;
 		p1.y += p2.y;
 	}
 	
-	@:op( A - B ) public static inline function minus( p1 : Position, p2 : Position ) : Position
+	@:op( A - B ) public static inline function minus( p1 : PointF, p2 : PointF ) : PointF
 	{
 		return { x: p1.x - p2.x, y: p1.y - p2.y };
 	}
 	
-	@:op( A -= B ) public static inline function minusEquals( p1 : Position, p2 : Position ) : Void
+	@:op( A -= B ) public static inline function minusEquals( p1 : PointF, p2 : PointF ) : Void
 	{
 		p1.x -= p2.x;
 		p1.y -= p2.y;
 	}
 	
-	@:op( A * B ) public static inline function multiply( p1 : Position, p2 : Position ) : Position
+	@:op( A * B ) public static inline function multiply( p1 : PointF, p2 : PointF ) : PointF
 	{
 		return { x: p1.x * p2.x, y: p1.y * p2.y };
 	}
 	
-	@:op( A *= B ) public static inline function multiplyEquals( p1 : Position, p2 : Position ) : Void
+	@:op( A *= B ) public static inline function multiplyEquals( p1 : PointF, p2 : PointF ) : Void
 	{
 		p1.x *= p2.x;
 		p1.y *= p2.y;
 	}
 	
-	@:op( A / B ) public static inline function divide( p1 : Position, p2 : Position ) : Position
+	@:op( A / B ) public static inline function divide( p1 : PointF, p2 : PointF ) : PointF
 	{
 		return { x: p1.x / p2.x, y: p1.y / p2.y };
 	}
 	
-	@:op( A /= B ) public static inline function divideEquals( p1 : Position, p2 : Position ) : Void
+	@:op( A /= B ) public static inline function divideEquals( p1 : PointF, p2 : PointF ) : Void
 	{
 		p1.x /= p2.x;
 		p1.y /= p2.y;
 	}
 	
-	@:op( A == B ) public static inline function equals( p1 : Position, p2 : Position ) : Bool
+	@:op( A == B ) public static inline function equals( p1 : PointF, p2 : PointF ) : Bool
 	{
 		return ( p1.x == p2.x ) &&  ( p1.y == p2.y );
 	}
 	
-	@:op( A != B ) public static inline function unequals( p1 : Position, p2 : Position ) : Bool
+	@:op( A != B ) public static inline function unequals( p1 : PointF, p2 : PointF ) : Bool
 	{
 		return ( p1.x != p2.x ) ||  ( p1.y != p2.y );
 	}
 	
-	@:op( A = B ) public static inline function assigns( p1 : Position, p2 : Position ) : Void
+	@:op( A = B ) public static inline function assigns( p1 : PointF, p2 : PointF ) : Void
 	{
 		p1.x = p2.x;
 		p1.y = p2.y;
