@@ -11,7 +11,7 @@ class PointFactory
 		
 	}
 	
-	inline static public function build( x : Int, y : Int ) : Point
+	inline static public function build( x : Int = 0, y : Int = 0 ) : Point
 	{
 		return new Point( x, y );
 	}
