@@ -64,3 +64,14 @@ class MyLocator extends Locator<String, ISomething>
 	}
 }
 ```
+## Run tests
+
+Add hexUnit dependency as a git submodule:
+
+```git submodule add https://github.com/DoclerLabs/hexUnit.git hexunit```
+
+Run commands:
+- Run all tests: ```npm test```
+- Run Flash tests: ```npm run test-js```
+- Run JS tests: ```npm run test-flash```
+- Run PHP tests: ```npm run test-php```
