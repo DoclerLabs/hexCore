@@ -7,5 +7,5 @@ package hex.event;
 class CoreEventSuite
 {
     @Suite("Event")
-    public var list : Array<Class<Dynamic>> = [DynamicDispatcherTest, BasicEventTest, CompositeClosureDispatcherTest, DispatcherTest, EventDispatcherTest, LightweightListenerDispatcherTest, LightweightClosureDispatcherTest, MonoTypeClosureDispatcherTest];
+    public var list : Array<Class<Dynamic>> = [BasicEventTest, CompositeClosureDispatcherTest, DispatcherTest, EventDispatcherTest, LightweightListenerDispatcherTest, LightweightClosureDispatcherTest, MonoTypeClosureDispatcherTest];
 }
