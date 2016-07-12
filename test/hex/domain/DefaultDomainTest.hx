@@ -12,6 +12,6 @@ class DefaultDomainTest
     public function testDefaultDomain() : Void
     {
         var defaultDomain = DefaultDomain.DOMAIN;
-        Assert.equals( defaultDomain.getName(), "DefaultDomain", "DefaultDomain static variable name should be 'DefaultDomain'" );
+        Assert.equals( "DefaultDomain", defaultDomain.getName(), "DefaultDomain static variable name should be 'DefaultDomain'" );
     }
 }

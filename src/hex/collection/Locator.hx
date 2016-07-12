@@ -40,7 +40,7 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 	
 	public function isEmpty() : Bool
 	{
-		return this._map.size() == 0;
+		return this._map == null || this._map.size() == 0;
 	}
 
     public function keys() : Array<KeyType>

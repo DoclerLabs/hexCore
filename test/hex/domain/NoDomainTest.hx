@@ -12,6 +12,6 @@ class NoDomainTest
     public function testNoDomain() : Void
     {
         var noDomain = NoDomain.DOMAIN;
-        Assert.equals( noDomain.getName(), "NoDomain", "NoDomain static variable name should be 'NoDomain'" );
+        Assert.equals( "NoDomain", noDomain.getName(), "NoDomain static variable name should be 'NoDomain'" );
     }
 }

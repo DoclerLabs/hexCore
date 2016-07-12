@@ -37,7 +37,7 @@ class DomainTest
 	public function testGetName() : Void
 	{
     	var domain = new Domain( "testGetName" );
-        Assert.equals( domain.getName(), "testGetName", "getName method should return with correct domain name" );
+        Assert.equals( "testGetName", domain.getName(), "getName method should return with correct domain name" );
 	}
 
     @Test( "Test getDomain function" )
@@ -45,10 +45,10 @@ class DomainTest
 	{
     	var newDomain = new Domain( "testGetDomain" );
         var domain = Domain.getDomain( "testGetDomain" );
-        Assert.equals( domain, newDomain, "getDomain method should return the correct domain object by name" );
+        Assert.equals( newDomain, domain, "getDomain method should return the correct domain object by name" );
 
         domain = Domain.getDomain( "nonExistDomain" );
-        Assert.equals( domain, null, "getDomain method should return null if domain not exists" );
+        Assert.equals( null, domain, "getDomain method should return null if domain not exists" );
 	}
 
     @Test( "Test toString function" )
@@ -56,6 +56,6 @@ class DomainTest
 	{
         var domain = new Domain( "testToString" );
         var expectedString = "hex.domain.Domain with name 'testToString'";
-        Assert.equals( domain.toString(), expectedString, "toString method should return with expected string" );
+        Assert.equals( expectedString, domain.toString(), "toString method should return with expected string" );
 	}
 }
