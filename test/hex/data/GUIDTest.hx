@@ -42,7 +42,7 @@ class GUIDTest
     {
         var uuid = GUID.uuid();
         Assert.equals( 32, uuid.length, "uuid length should be always 32" );
-        Assert.equals( 4, uuid.charAt( 12 ), "uuid version should be 4" );
+        Assert.equals( 4, Std.parseInt( uuid.charAt( 12 ) ), "uuid version should be 4" );
 
         var variants = ['8', '9', 'A', 'B'];
         Assert.isTrue( variants.indexOf( uuid.charAt( 16 ) ) != -1, "uuid variant should be 8, 9, A or B" );

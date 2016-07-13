@@ -12,11 +12,10 @@ class DomainUtilTest
     public function testGetDomain() : Void
     {
         var domain = DomainUtil.getDomain( "testDomainUtil", DefaultDomain );
-        var expectedString = "hex.domain.DefaultDomain with name 'testDomainUtil'";
-        Assert.equals( expectedString, domain, "getDomain function should create a domain if it not exists with specified name" );
+        var expectedDomain = Domain.getDomain( "testDomainUtil" );
+        Assert.equals( expectedDomain, domain, "getDomain function should create a domain if it not exists with specified name" );
 
-        var domain = DomainUtil.getDomain( "testDomainUtil", null );
-        var expectedString = "hex.domain.DefaultDomain with name 'testDomainUtil'";
-        Assert.equals( expectedString, domain, "getDomain function should return the existing domain with specified name" );
+        var domain : Domain = DomainUtil.getDomain( "testDomainUtil", DefaultDomain );
+        Assert.equals( expectedDomain, domain, "getDomain function should return the existing domain with specified name" );
     }
 }
