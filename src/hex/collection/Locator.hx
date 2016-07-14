@@ -17,7 +17,7 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 
     public function new()
     {
-        this._map   = new HashMap<KeyType, ValueType>();
+        this._map   		= new HashMap();
         this._dispatcher    = new Dispatcher<ILocatorListener<KeyType, ValueType>>();
     }
 	
@@ -29,18 +29,12 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 	public function release() : Void
 	{
 		this.clear();
-		this._map = null;
-
-		if ( this._dispatcher != null )
-		{
-			this._dispatcher.removeAllListeners();
-			this._dispatcher = null;
-		}
+		this._dispatcher.removeAllListeners();
 	}
 	
 	public function isEmpty() : Bool
 	{
-		return this._map == null || this._map.size() == 0;
+		return this._map.size() == 0;
 	}
 
     public function keys() : Array<KeyType>
