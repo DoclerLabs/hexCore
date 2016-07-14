@@ -8,10 +8,15 @@ import hex.unittest.assertion.Assert;
  */
 class DefaultDomainTest
 {
-    @Test( "Test if DefaultDomain static variable exist" )
-    public function testDefaultDomain() : Void
+    @Test( "Test if DefaultDomain static variable exists" )
+    public function testDefaultDomainStaticVariableExists() : Void
     {
-        var defaultDomain = DefaultDomain.DOMAIN;
-        Assert.equals( "DefaultDomain", defaultDomain.getName(), "DefaultDomain static variable name should be 'DefaultDomain'" );
+        Assert.equals( "DefaultDomain", DefaultDomain.DOMAIN.getName(), "DefaultDomain static variable name should be 'DefaultDomain'" );
+    }
+	
+	@Test( "Test if DefaultDomain.DOMAIN is an instance of DefaultDomain" )
+    public function testDefaultDomainStaticVariableType() : Void
+    {
+        Assert.isInstanceOf( DefaultDomain.DOMAIN, DefaultDomain, "domain should be an instance of 'DefaultDomain'" );
     }
 }

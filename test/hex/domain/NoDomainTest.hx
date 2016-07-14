@@ -8,10 +8,15 @@ import hex.unittest.assertion.Assert;
  */
 class NoDomainTest
 {
-    @Test( "Test if NoDomain static variable exist" )
-    public function testNoDomain() : Void
+	@Test( "Test if NoDomain static variable exists" )
+    public function testDefaultDomainStaticVariableExists() : Void
     {
-        var noDomain = NoDomain.DOMAIN;
-        Assert.equals( "NoDomain", noDomain.getName(), "NoDomain static variable name should be 'NoDomain'" );
+        Assert.equals( "NoDomain", NoDomain.DOMAIN.getName(), "NoDomain static variable name should be 'NoDomain'" );
+    }
+	
+	@Test( "Test if NoDomain.DOMAIN is an instance of NoDomain" )
+    public function testDefaultDomainStaticVariableType() : Void
+    {
+        Assert.isInstanceOf( NoDomain.DOMAIN, NoDomain, "domain should be an instance of 'NoDomain'" );
     }
 }
