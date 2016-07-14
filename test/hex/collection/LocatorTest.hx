@@ -13,32 +13,31 @@ import hex.unittest.assertion.Assert;
  */
 class LocatorTest
 {
-	var _locator : Locator<MockKeyClass, MockValueClass>;
+	var _locator : MockLocator;
 
 	@Before
     public function setUp() : Void
     {
-        this._locator = new Locator<MockKeyClass, MockValueClass>();
+        this._locator = new MockLocator();
     }
 
     @After
     public function tearDown() : Void
     {
-        this._locator.clear();
+        this._locator.release();
         this._locator = null;
     }
 
     @Test( "Test 'release' behavior" )
     public function testRelease() : Void
     {
-        var locator = new Locator();
         var mockKey = new MockKeyClass();
         var mockValue = new MockValueClass();
 
-        locator.register( mockKey, mockValue );
-        locator.release();
+        this._locator.register( mockKey, mockValue );
+        this._locator.release();
 		
-        Assert.isTrue( locator.isEmpty(), "'isEmpty' should return true" );
+        Assert.isTrue( this._locator.isEmpty(), "'isEmpty' should return true" );
     }
 
     @Test( "Test 'clear' behavior" )
@@ -155,12 +154,29 @@ class LocatorTest
     @Test( "Test 'register' behavior" )
     public function testRegister() : Void
     {
+		MockLocator.dispatchRegisterEventCallcount = 0;
+		MockLocator.lastRegisteredKeyDispatched = null;
+		MockLocator.lastRegisteredValueDispatched = null;
+		
+		MockLocator.dispatchUnegisterEventCallcount = 0;
+		MockLocator.lastUnregisteredKeyDispatched = null;
+		
         var mockKey = new MockKeyClass();
         var mockValue = new MockValueClass();
 
 		Assert.isTrue( this._locator.register( mockKey, mockValue ), "'register' call should return true" );
+		
+		Assert.equals( 1, MockLocator.dispatchRegisterEventCallcount, "'register' event should be dispatched" );
+		Assert.equals( 0, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should not be dispatched" );
+		
+		Assert.equals( mockKey, MockLocator.lastRegisteredKeyDispatched, "key should be passed as an argument during 'register' event dispatch" );
+		Assert.equals( mockValue, MockLocator.lastRegisteredValueDispatched, "value should be passed as an argument during 'register' event dispatch" );
+		
         Assert.equals( mockValue, this._locator.locate( mockKey ), "'locate' should return registered value" );
         Assert.methodCallThrows( IllegalArgumentException, this._locator, this._locator.register, [ mockKey, mockValue ], "'register' should throw IllegalArgumentException when key is already registered" );
+		
+		Assert.equals( 1, MockLocator.dispatchRegisterEventCallcount, "'register' event should not be dispatched this time" );
+		Assert.equals( 0, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should not be dispatched" );
     }
 
     @Test( "Test 'unregister' behavior" )
@@ -170,15 +186,38 @@ class LocatorTest
         var mockValue = new MockValueClass();
 
         this._locator.register( mockKey, mockValue );
+		
+		MockLocator.dispatchRegisterEventCallcount = 0;
+		MockLocator.lastRegisteredKeyDispatched = null;
+		MockLocator.lastRegisteredValueDispatched = null;
+		
+		MockLocator.dispatchUnegisterEventCallcount = 0;
+		MockLocator.lastUnregisteredKeyDispatched = null;
+		
         var value : Bool = this._locator.unregister( mockKey );
+		
         Assert.equals( true, value, "'unregister' should return true" );
         Assert.isTrue( this._locator.isEmpty(), "'isEmpty' should return true" );
+		
+		Assert.equals( 0, MockLocator.dispatchRegisterEventCallcount, "'register' event should not be dispatched" );
+		Assert.equals( 1, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should be dispatched" );
+		Assert.equals( mockKey, MockLocator.lastUnregisteredKeyDispatched, "key should be passed as an argument during 'unregister' event dispatch" );
 
         Assert.isFalse( this._locator.unregister( mockKey ), "'unregister' should return false when the key is not associtaed to nay value" );
+		
+		Assert.equals( 0, MockLocator.dispatchRegisterEventCallcount, "'register' event should not be dispatched" );
+		Assert.equals( 1, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should not be dispatched anymore" );
 
         var emptyKey : MockKeyClass = null;
         Assert.methodCallThrows( NullPointerException, this._locator, this._locator.unregister, [emptyKey], "'unregister' should throw NullPointerException" );
+		
+		Assert.equals( 0, MockLocator.dispatchRegisterEventCallcount, "'register' event should not be dispatched" );
+		Assert.equals( 1, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should not be dispatched anymore" );
+		
         Assert.methodCallThrows( NullPointerException, this._locator, this._locator.unregister, [null], "'unregister' should throw NullPointerException" );
+		
+		Assert.equals( 0, MockLocator.dispatchRegisterEventCallcount, "'register' event should not be dispatched" );
+		Assert.equals( 1, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should not be dispatched anymore" );
     }
 }
 
@@ -199,5 +238,33 @@ private class MockValueClass
 	public function new()
 	{
 		
+	}
+}
+
+private class MockLocator extends Locator<MockKeyClass, MockValueClass>
+{
+	static public var dispatchRegisterEventCallcount 	: UInt = 0;
+	static public var dispatchUnegisterEventCallcount 	: UInt = 0;
+	
+	static public var lastRegisteredKeyDispatched		: MockKeyClass;
+	static public var lastRegisteredValueDispatched		: MockValueClass;
+	static public var lastUnregisteredKeyDispatched		: MockKeyClass;
+	
+	public function new()
+	{
+		super();
+	}
+	
+	override function _dispatchRegisterEvent( key : MockKeyClass, value : MockValueClass ) : Void 
+	{
+		MockLocator.dispatchRegisterEventCallcount++;
+		MockLocator.lastRegisteredKeyDispatched = key;
+		MockLocator.lastRegisteredValueDispatched = value;
+	}
+	
+	override function _dispatchUnregisterEvent( key : MockKeyClass ) : Void 
+	{
+		MockLocator.dispatchUnegisterEventCallcount++;
+		MockLocator.lastUnregisteredKeyDispatched = key;
 	}
 }
