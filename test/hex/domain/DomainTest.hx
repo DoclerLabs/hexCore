@@ -32,4 +32,30 @@ class DomainTest
         var domain = new Domain( "testConstructorWithNameValues" );
         Assert.constructorCallThrows( IllegalArgumentException, Domain, ["testConstructorWithNameValues"], "" );
     }
+
+    @Test( "Test getName function" )
+	public function testGetName() : Void
+	{
+    	var domain = new Domain( "testGetName" );
+        Assert.equals( "testGetName", domain.getName(), "getName method should return with correct domain name" );
+	}
+
+    @Test( "Test getDomain function" )
+	public function testGetDomain() : Void
+	{
+    	var newDomain = new Domain( "testGetDomain" );
+        var domain = Domain.getDomain( "testGetDomain" );
+        Assert.equals( newDomain, domain, "getDomain method should return the correct domain object by name" );
+
+        domain = Domain.getDomain( "nonExistDomain" );
+        Assert.equals( null, domain, "getDomain method should return null if domain not exists" );
+	}
+
+    @Test( "Test toString function" )
+	public function testToString() : Void
+	{
+        var domain = new Domain( "testToString" );
+        var expectedString = "hex.domain.Domain with name 'testToString'";
+        Assert.equals( expectedString, domain.toString(), "toString method should return with expected string" );
+	}
 }
