@@ -58,6 +58,7 @@ class MonoTypeClosureDispatcher<EventType:Event>
 
     public function addEventListener( callback : EventType->Void ) : Bool
     {
+		#if !neko
         var index : Int = this._callbacks.indexOf( callback );
         if ( index == -1 )
         {
@@ -68,10 +69,23 @@ class MonoTypeClosureDispatcher<EventType:Event>
         {
             return false;
         }
+		#else
+		for ( method in this._callbacks )
+		{
+			if ( Reflect.compareMethods( method, callback ) )
+			{
+				return false;
+			}
+		}
+		
+		this._callbacks.push( callback );
+		return true;
+		#end
     }
 
     public function removeEventListener( callback : EventType->Void ) : Bool
     {
+		#if !neko
         var index : Int = this._callbacks.indexOf( callback );
         if ( index == -1 )
         {
@@ -82,6 +96,20 @@ class MonoTypeClosureDispatcher<EventType:Event>
             this._callbacks.splice( index, 1 );
             return true;
         }
+		#else
+		var length = this._callbacks.length;
+		for ( index in 0...length )
+		{
+			var method = this._callbacks[ index ];
+			if ( Reflect.compareMethods( method, callback ) )
+			{
+				this._callbacks.splice( index, 1 );
+				return true;
+			}
+		}
+		
+		return false;
+		#end
     }
 
     public function removeAllListeners() : Void

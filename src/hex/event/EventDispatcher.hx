@@ -78,6 +78,8 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 			}
 
 			var callbacks : Array<EventType->Void> = this._closures.get( eventType );
+			
+			#if !neko
 			var index : Int = callbacks.indexOf( callback );
 			if ( index == -1 )
 			{
@@ -89,6 +91,19 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 			{
 				return false;
 			}
+			#else
+			for ( c in callbacks )
+			{
+				if ( Reflect.compareMethods( c, callback ) )
+				{
+					return false;
+				}
+			}
+			
+			callbacks.push( callback );
+			this._closureSize++;
+			return true;
+			#end
 
 		}
 		else
@@ -108,6 +123,7 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 			}
 
 			var callbacks : Array<EventType->Void> = this._closures.get( eventType );
+			#if !neko
 			var index : Int = callbacks.indexOf( callback );
 			if ( index == -1 )
 			{
@@ -125,6 +141,27 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
 
 				return true;
 			}
+			#else
+			var length = callbacks.length;
+			for ( index in 0...length )
+			{
+				var method = callbacks[ index ];
+				if ( Reflect.compareMethods( method, callback ) )
+				{
+					callbacks.splice( index, 1 );
+					this._closureSize--;
+
+					if ( callbacks.length == 0 )
+					{
+						this._closures.remove( eventType );
+					}
+
+					return true;
+				}
+			}
+		
+			return false;
+			#end
 		}
 		else
 		{
@@ -214,7 +251,20 @@ class EventDispatcher<ListenerType:IEventListener, EventType:IEvent> implements 
         }
         else
         {
+			#if !neko
             return this._closures.get( eventType ).indexOf( callback ) != -1;
+			#else
+			var closures = this._closures.get( eventType );
+			for ( closure in closures )
+			{
+				if ( Reflect.compareMethods( closure, callback ) )
+				{
+					return true;
+				}
+			}
+			
+			return false;
+			#end
         }
     }
 	

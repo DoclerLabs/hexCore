@@ -39,7 +39,9 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
         }
 
         var callbacks : Array<EventType->Void> = this._callbacks.get( eventType );
-        var index : Int = callbacks.indexOf( callback );
+
+		#if !neko
+		var index : Int = callbacks.indexOf( callback );
         if ( index == -1 )
         {
             callbacks.push( callback );
@@ -50,6 +52,19 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
         {
             return false;
         }
+		#else
+		for ( c in callbacks )
+		{
+			if ( Reflect.compareMethods( c, callback ) )
+			{
+				return false;
+			}
+		}
+		
+		callbacks.push( callback );
+		this._callbackSize++;
+		return true;
+		#end
     }
 
     public function removeEventListener( eventType : String, callback : EventType->Void ) : Bool
@@ -59,8 +74,10 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
             return false;
         }
 
-        var callbacks : Array<EventType->Void> = this._callbacks.get( eventType );
-        var index : Int = callbacks.indexOf( callback );
+		var callbacks : Array<EventType->Void> = this._callbacks.get( eventType );
+		
+		#if !neko
+		var index : Int = callbacks.indexOf( callback );
         if ( index == -1 )
         {
             return false;
@@ -77,6 +94,27 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
 
             return true;
         }
+		#else
+		var length = callbacks.length;
+		for ( index in 0...length )
+		{
+			var method = callbacks[ index ];
+			if ( Reflect.compareMethods( method, callback ) )
+			{
+				callbacks.splice( index, 1 );
+				this._callbackSize--;
+
+				if ( callbacks.length == 0 )
+				{
+					this._callbacks.remove( eventType );
+				}
+
+				return true;
+			}
+		}
+	
+		return false;
+		#end
     }
 
     public function addListener( listener : {} ) : Bool
@@ -118,7 +156,20 @@ class LightweightClosureDispatcher<EventType:IEvent> implements IEventDispatcher
         }
         else
         {
+            #if !neko
             return this._callbacks.get( eventType ).indexOf( callback ) != -1;
+			#else
+			var closures = this._callbacks.get( eventType );
+			for ( closure in closures )
+			{
+				if ( Reflect.compareMethods( closure, callback ) )
+				{
+					return true;
+				}
+			}
+			
+			return false;
+			#end
         }
     }
 }

@@ -25,6 +25,7 @@ class CallbackHandler
 	
 	public function add( callback : Dynamic ) : Bool
 	{
+		#if !neko
 		if ( this.callbacks.indexOf( callback ) == -1 )
 		{
 			this.callbacks.push( callback );
@@ -34,10 +35,23 @@ class CallbackHandler
 		{
 			return false;
 		}
+		#else
+		for ( method in callbacks )
+		{
+			if ( Reflect.compareMethods( method, callback ) )
+			{
+				return false;
+			}
+		}
+		
+		this.callbacks.push( callback );
+		return true;
+		#end
 	}
 	
 	public function remove( callback : Dynamic ) : Bool
 	{
+		#if !neko
 		var index : Int = this.callbacks.indexOf( callback );
 		if (  index != -1 )
 		{
@@ -48,6 +62,20 @@ class CallbackHandler
 		{
 			return false;
 		}
+		#else
+		var length = this.callbacks.length;
+		for ( index in 0...length )
+		{
+			var method = this.callbacks[ index ];
+			if ( Reflect.compareMethods( method, callback ) )
+			{
+				this.callbacks.splice( index, 1 );
+				return true;
+			}
+		}
+		
+		return false;
+		#end
 	}
 	
 	public function isEmpty() : Bool
