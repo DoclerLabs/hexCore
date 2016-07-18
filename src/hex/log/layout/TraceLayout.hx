@@ -26,6 +26,8 @@ class TraceLayout implements ILogListener
 	
 	public function onClear() : Void 
 	{
+		#if (flash || js)
 		Log.clear();
+		#end
 	}
 }
