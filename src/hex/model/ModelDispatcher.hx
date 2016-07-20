@@ -4,7 +4,9 @@ package hex.model;
  * ...
  * @author Francis Bourre
  */
+#if !macro
 @:autoBuild( hex.model.ModelDispatcherAutoBuildMacro.build() )
+#end
 class ModelDispatcher<ListenerType>
 {
 	var _listeners : Array<ListenerType>;

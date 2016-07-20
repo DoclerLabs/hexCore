@@ -2,7 +2,6 @@ package hex.util;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import haxe.macro.Expr.ComplexType;
 import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypePath;
 import haxe.macro.Type.ClassType;
