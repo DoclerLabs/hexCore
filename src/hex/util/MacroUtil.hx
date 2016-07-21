@@ -16,8 +16,38 @@ class MacroUtil
 	{
 		
 	}
+
+	macro public static function classImplementsInterface( className : haxe.macro.Expr.ExprOf<String>, interfaceName : haxe.macro.Expr.ExprOf<String> ) : Expr
+	{
+		var classType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( className.expr ) );
+		var interfaceType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( interfaceName.expr ) );
+		var b = MacroUtil.implementsInterface( classType, interfaceType );
+		return macro { $v{ b } };
+	}
+
+	macro public static function classIsSubClassOf( className : haxe.macro.Expr.ExprOf<String>, subClass : haxe.macro.Expr.ExprOf<String> ) : Expr
+	{
+		var classType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( className.expr ) );
+		var subClassType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( subClass.expr ) );
+		var b = MacroUtil.isSubClassOf( classType, subClassType );
+		return macro { $v{ b } };
+	}
 	
 	#if macro
+	static public function getStringFromExpr( e : ExprDef ) : String
+	{
+		switch( e )
+		{
+			case EConst( CString( s ) ):
+				return s;
+
+			default:
+				throw "type should be string const";
+		}
+
+		return null;
+	}
+
 	static public function getTypePath( className : String, ?params:Array<TypeParam> ) : TypePath
 	{
 		Context.getType( className );
