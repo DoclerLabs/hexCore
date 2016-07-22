@@ -17,18 +17,20 @@ class MacroUtil
 		
 	}
 
-	macro public static function classImplementsInterface( className : haxe.macro.Expr.ExprOf<String>, interfaceName : haxe.macro.Expr.ExprOf<String> ) : Expr
+	macro public static function classImplementsInterface( classRef : haxe.macro.Expr.ExprOf<String>, interfaceRef : haxe.macro.Expr.ExprOf<String> ) : Expr
 	{
-		var classType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( className.expr ) );
-		var interfaceType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( interfaceName.expr ) );
+		var classType = MacroUtil.getClassType( haxe.macro.ExprTools.toString( classRef ) );
+		var interfaceType = MacroUtil.getClassType( haxe.macro.ExprTools.toString( interfaceRef ) );
+
 		var b = MacroUtil.implementsInterface( classType, interfaceType );
 		return macro { $v{ b } };
 	}
 
-	macro public static function classIsSubClassOf( className : haxe.macro.Expr.ExprOf<String>, subClass : haxe.macro.Expr.ExprOf<String> ) : Expr
+	macro public static function classIsSubClassOf( classRef : haxe.macro.Expr.ExprOf<String>, subClassRef : haxe.macro.Expr.ExprOf<String> ) : Expr
 	{
-		var classType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( className.expr ) );
-		var subClassType = MacroUtil.getClassType( MacroUtil.getStringFromExpr( subClass.expr ) );
+		var classType = MacroUtil.getClassType( haxe.macro.ExprTools.toString( classRef ) );
+		var subClassType = MacroUtil.getClassType( haxe.macro.ExprTools.toString( subClassRef ) );
+
 		var b = MacroUtil.isSubClassOf( classType, subClassType );
 		return macro { $v{ b } };
 	}
@@ -46,6 +48,30 @@ class MacroUtil
 		}
 
 		return null;
+	}
+
+	static public function getClassNameFromExpr( e : Expr ) : String
+	{
+		var s = haxe.macro.ExprTools.toString( e );
+
+        try
+        {
+            var t = Context.getType( s );
+            switch( t )
+            {
+                case TInst( t, params ):
+                    trace( t.toString() );
+
+                default:
+                    throw "'" + '$s' + "' class is not available";
+            }
+        }
+        catch( e : Dynamic )
+        {
+            throw "'" + '$s' + "' class is not available";
+        }
+
+		return s;
 	}
 
 	static public function getTypePath( className : String, ?params:Array<TypeParam> ) : TypePath
