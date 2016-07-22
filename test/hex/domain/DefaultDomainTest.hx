@@ -9,9 +9,9 @@ import hex.unittest.assertion.Assert;
 class DefaultDomainTest
 {
     @Test( "Test if DefaultDomain static variable exists" )
-    public function testDefaultDomainStaticVariableExists() : Void
+    public function testIfDefaultDomainStaticVariableExists() : Void
     {
-        Assert.equals( "DefaultDomain", DefaultDomain.DOMAIN.getName(), "DefaultDomain static variable name should be 'DefaultDomain'" );
+        Assert.equals( "DefaultDomain", DefaultDomain.DOMAIN.getName(), "'DefaultDomain.DOMAIN' static variable name should be 'DefaultDomain'" );
     }
 	
 	@Test( "Test if DefaultDomain.DOMAIN is an instance of DefaultDomain" )

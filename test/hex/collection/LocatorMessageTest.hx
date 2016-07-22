@@ -9,24 +9,19 @@ import hex.unittest.assertion.Assert;
  */
 class LocatorMessageTest
 {
-	function new() 
-	{
-		
-	}
-	
-	@Test( "test register property" ) 
+	@Test( "test 'REGISTER' property" ) 
 	public function testRegisterProperty() : Void
 	{
-		var register = LocatorMessage.REGISTER;
-		Assert.isInstanceOf( register, MessageType, "'LocatorMessage.REGISTER' should be an instance of 'MessageType'" );
-		Assert.equals( "onRegister", register.name, "'name' property should be the same" );
+		var message = LocatorMessage.REGISTER;
+		Assert.isInstanceOf( message, MessageType, "'LocatorMessage.REGISTER' should be an instance of 'MessageType'" );
+		Assert.equals( "onRegister", message.name, "'name' property should be the same" );
 	}
 	
-	@Test( "test unregister property" ) 
+	@Test( "test 'UNREGISTER' property" ) 
 	public function testUnregisterProperty() : Void
 	{
-		var unregister = LocatorMessage.UNREGISTER;
-		Assert.isInstanceOf( unregister, MessageType, "'LocatorMessage.UNREGISTER' should be an instance of 'MessageType'" );
-		Assert.equals( "onUnregister", unregister.name, "'name' property should be the same" );
+		var message = LocatorMessage.UNREGISTER;
+		Assert.isInstanceOf( message, MessageType, "'LocatorMessage.UNREGISTER' should be an instance of 'MessageType'" );
+		Assert.equals( "onUnregister", message.name, "'name' property should be the same" );
 	}
 }
