@@ -60,7 +60,7 @@ class MacroUtil
             switch( t )
             {
                 case TInst( t, params ):
-                    trace( t.toString() );
+                    s = t.toString();
 
                 default:
                     throw "'" + '$s' + "' class is not available";
