@@ -1,6 +1,7 @@
 package hex;
 
 import hex.collection.CoreCollectionSuite;
+import hex.control.CoreControlSuite;
 import hex.core.CoreCoreSuite;
 import hex.data.CoreDataSuite;
 import hex.di.CoreDiSuite;
@@ -18,5 +19,5 @@ import hex.util.CoreUtilSuite;
 class HexCoreSuite
 {
     @Suite( "HexCore" )
-    public var list : Array<Class<Dynamic>> = [ CoreCollectionSuite, CoreCoreSuite, CoreDataSuite, CoreDiSuite, CoreDomainSuite, CoreEventSuite, CoreModelSuite, CoreServiceSuite, CoreStructuresSuite, CoreUtilSuite ];
+    public var list : Array<Class<Dynamic>> = [ CoreCollectionSuite, CoreControlSuite, CoreCoreSuite, CoreDataSuite, CoreDiSuite, CoreDomainSuite, CoreEventSuite, CoreModelSuite, CoreServiceSuite, CoreStructuresSuite, CoreUtilSuite ];
 }
