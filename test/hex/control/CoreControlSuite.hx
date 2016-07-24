@@ -1,5 +1,6 @@
 package hex.control;
 
+import hex.control.guard.CoreGuardSuite;
 import hex.control.payload.CorePayloadSuite;
 
 /**
@@ -9,5 +10,5 @@ import hex.control.payload.CorePayloadSuite;
 class CoreControlSuite
 {
 	@Suite( "Control" )
-    public var list : Array<Class<Dynamic>> = [ CorePayloadSuite ];
+    public var list : Array<Class<Dynamic>> = [ CoreGuardSuite, CorePayloadSuite ];
 }
