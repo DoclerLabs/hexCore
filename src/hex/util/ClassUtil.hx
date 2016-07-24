@@ -76,6 +76,12 @@ class ClassUtil
 		return staticRef;
 	}
 	
+	static public function getClassNameFromFullyQualifiedName( qualifiedClassName : String ) : String
+	{
+		var a : Array<String> = qualifiedClassName.split( "." );
+		return  a[ a.length - 1 ];
+	}
+	
 	static public function getClassNameFromStaticReference( qualifiedClassName : String ) : String
 	{
 		var a : Array<String> = qualifiedClassName.split( "." );

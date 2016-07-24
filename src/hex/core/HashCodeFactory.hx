@@ -12,7 +12,7 @@ class HashCodeFactory
     /** @private */
     function new()
     {
-        throw new PrivateConstructorException( "'HashCodeFactory' class can't be instantiated." );
+        throw new PrivateConstructorException( "This class can't be instantiated." );
     }
 
     static var _nKEY    : Int               = 0;
