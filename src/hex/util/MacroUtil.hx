@@ -74,9 +74,17 @@ class MacroUtil
 		return s;
 	}
 
-	static public function getTypePath( className : String, ?params:Array<TypeParam> ) : TypePath
+	static public function getTypePath( className : String, ?params:Array<TypeParam>, position : Position = null ) : TypePath
 	{
-		Context.getType( className );
+		try
+		{
+			Context.getType( className );
+		}
+		catch( e : Dynamic )
+		{
+			Context.error( "'" + className + "' type not found", position == null ? Context.currentPos() : position );
+		}
+		
 		var pack = className.split( "." );
 		var className = pack[ pack.length -1 ];
 		pack.splice( pack.length - 1, 1 );
