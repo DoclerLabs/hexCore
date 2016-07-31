@@ -190,12 +190,15 @@ class MacroUtil
 		{
 			case TInst( t, p ):
 				var ct = t.get();
-				return ct.pack.concat( [ct.name] ).join( '.' );
+				return ct.pack.concat( [ ct.name ] ).join( '.' );
+				
 			case TAbstract( t, params ):
 				return t.toString();
+				
 			case TDynamic( t ):
 				return "Dynamic";
-			default: return null;
+				
+			case _: return null;
 		}
 	}
 	#end
