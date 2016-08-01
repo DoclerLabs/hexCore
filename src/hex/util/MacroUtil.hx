@@ -82,7 +82,7 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.error( "'" + className + "' type not found", position == null ? Context.currentPos() : position );
+			Context.error( "Failed to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		var pack = className.split( "." );
@@ -177,9 +177,17 @@ class MacroUtil
 		return ( a.pack.join( "." ) == b.pack.join( "." ) && a.name == b.name );
 	}
 	
-	static public function getPack( className : String ) : Array<String>
+	static public function getPack( className : String, position : Position = null ) : Array<String>
 	{
-		Context.getType( className );
+		try
+		{
+			Context.getType( className );
+		}
+		catch ( e : Dynamic )
+		{
+			Context.error( "Failed to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+		}
+		
 		return className.split( "." );
 	}
 	
