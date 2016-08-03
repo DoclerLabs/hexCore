@@ -107,4 +107,10 @@ class ClassUtil
 		
 		return classReference;
 	}
+	
+	static public function getClassName<T>( target : T ) : String
+	{
+		var type = Type.getClassName( Type.getClass( target ) );
+		return type != null ? type : "Dynamic";
+	}
 }

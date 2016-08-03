@@ -36,4 +36,10 @@ class ClassUtilTest
     {
 		Assert.equals( "STATIC_REF", ClassUtil.getStaticVariableNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticVariableNameFromStaticReference' should return the right static property" );
 	}
+	
+	@Test( "Test getClassName" )
+    public function testGetClassName() : Void
+    {
+		Assert.equals( "hex.util.ClassUtilTest", ClassUtil.getClassName( this ), "'getClassName' should return the right class name" );
+	}
 }
