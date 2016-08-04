@@ -74,7 +74,7 @@ class MacroUtil
 		return s;
 	}
 
-	static public function getTypePath( className : String, ?params:Array<TypeParam>, position : Position = null ) : TypePath
+	static public function getTypePath( className : String, ?params : Array<TypeParam>, position : Position = null ) : TypePath
 	{
 		try
 		{
@@ -82,13 +82,12 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.error( "Failed to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.fatalError( "Failed to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		var pack = className.split( "." );
 		var className = pack[ pack.length -1 ];
 		pack.splice( pack.length - 1, 1 );
-		
 		
 		return { pack: pack, name: className, params:params };
 	}
@@ -118,6 +117,7 @@ class MacroUtil
 			case TInst(t, _):
 				var classType = t.get();
 				return classType;
+				
 			default:
 				return null;
 		}
@@ -185,7 +185,7 @@ class MacroUtil
 		}
 		catch ( e : Dynamic )
 		{
-			Context.error( "Failed to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.fatalError( "Failed to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		return className.split( "." );
