@@ -82,7 +82,7 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.fatalError( "Failed to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.fatalError( "Fails to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		var pack = className.split( "." );
@@ -108,13 +108,22 @@ class MacroUtil
 		}
 	}
 	
-	static public function getClassType( qualifiedClassName : String ) : ClassType
+	static public function getClassType( qualifiedClassName : String, position : Position = null ) : ClassType
 	{
-		var type = Context.getType( qualifiedClassName );
+		var type = null;
+		
+		try
+		{
+			type = Context.getType( qualifiedClassName );
+		}
+		catch( e : Dynamic )
+		{
+			Context.fatalError( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+		}
 		
 		switch type 
 		{
-			case TInst(t, _):
+			case TInst( t, _ ):
 				var classType = t.get();
 				return classType;
 				
@@ -185,7 +194,7 @@ class MacroUtil
 		}
 		catch ( e : Dynamic )
 		{
-			Context.fatalError( "Failed to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.fatalError( "Fails to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		return className.split( "." );
