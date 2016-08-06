@@ -218,5 +218,10 @@ class MacroUtil
 			case _: return null;
 		}
 	}
+	
+	static public inline function instantiate( t : TypePath, ?args ) : ExprDef
+	{
+		return ENew( t, args == null ? [] : args );
+	}
 	#end
 }
