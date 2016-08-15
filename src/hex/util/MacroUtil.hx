@@ -82,7 +82,7 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.fatalError( "Fails to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.error( "Fails to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		var pack = className.split( "." );
@@ -118,7 +118,7 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.fatalError( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.error( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		switch type 
@@ -194,7 +194,7 @@ class MacroUtil
 		}
 		catch ( e : Dynamic )
 		{
-			Context.fatalError( "Fails to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.error( "Fails to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		return className.split( "." );
