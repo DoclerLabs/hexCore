@@ -115,7 +115,7 @@ class ArrayUtil
 		return names;
 	}
 	
-	macro public static function countWhen<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : Expr
+	macro public static function count<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : Expr
 	{
 		var ad 		= arrowDecompose( f );
 		var lName 	= leftName( ad.left );
