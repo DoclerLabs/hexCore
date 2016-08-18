@@ -1,5 +1,7 @@
 package hex.util;
 
+import haxe.ds.StringMap;
+import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.error.PrivateConstructorException;
 
@@ -14,55 +16,6 @@ class ArrayUtil
     {
         throw new PrivateConstructorException( "This class can't be instantiated." );
     }
-	
-	public static function findIndex<T>( a : Array<T>, f : T -> Bool ) : Int 
-	{
-		for ( i in 0...a.length ) if ( f( a[ i ] ) ) return i;
-		return -1;
-	}
-	
-	public static function findElement<T>( a : Array<T>, f : T -> Bool ) : T
-	{
-		for ( i in 0...a.length )
-		{
-			var e = a[ i ];
-			if ( f( e ) ) return e;
-		}
-		return null;
-	}
-	
-	public static function doWhen<T>( a : Array<T>, f : T -> Bool, ff : T -> Int -> Void ) : Void
-	{
-		var i = a.length;
-		while ( i-- > 0 )
-		{
-			var e = a[ i ];
-			if ( f( e ) ) ff ( e, i );
-		}
-	}
-	
-	public static function doOnFirstWhen<T>( a : Array<T>, f : T -> Bool, ff : T -> Int -> Void ) : Void
-	{
-		for ( i in 0...a.length )
-		{
-			var e = a[ i ];
-			if ( f( e ) ) 
-			{
-				ff ( e, i );
-				break;
-			}
-		}
-	}
-	
-	public static function doOnAll<T>( a : Array<T>, f : T -> Int -> Void ) : Void
-	{
-		var i = a.length;
-		while ( i-- > 0 )
-		{
-			var e = a[ i ];
-			f ( e, i );
-		}
-	}
 	
 	static function arrowDecompose( f: Expr ) : { left: Expr, right: Expr }
 	{
@@ -83,12 +36,12 @@ class ArrayUtil
 		return { left: l, right: r };
 	}
 	
-	static function leftName( e : Expr )
+	static function _getLeftName( e : Expr )
 	{
-		return leftNames( e )[ 0 ];
+		return ArrayUtil._getLeftNames( e )[ 0 ];
 	}
 	
-	static function leftNames( L : Expr, min : Int = 1 )
+	static function _getLeftNames( L : Expr, min : Int = 1 )
 	{
 		var names : Array<String> =
 			if ( L != null )
@@ -115,20 +68,99 @@ class ArrayUtil
 		return names;
 	}
 	
-	macro public static function count<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : Expr
+	static function _getUniqueLocalVarNames( count, locals ) : Array<String>
 	{
-		var ad 		= arrowDecompose( f );
-		var lName 	= leftName( ad.left );
-		var rVal 	= ad.right;
+		var r = new Array<String>();
+		var tmap = new StringMap<Int>();
+		
+		while ( r.length < count )
+		{
+			var t = '__tmp_' + Std.random( 0xffffff );
+			if ( !locals.exists( t ) && !tmap.exists( t ) )
+			{
+				r.push( t );
+				tmap.set( t, 1 );
+			}
+		}
+		return r;
+	}
+	
+	macro public static function count<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : ExprOf<Int>
+	{
+		var ad 			= ArrayUtil.arrowDecompose( f );
+		var leftName 	= ArrayUtil._getLeftName( ad.left );
+		var fExp 		= ad.right;
+		var locals 		= ArrayUtil._getUniqueLocalVarNames( 1, Context.getLocalTVars() );
+		var count 		= locals.pop();
 
 		return macro
 		{
-			var c = 0;
-			for ( $i{lName} in $a )
+			var $count = 0;
+			for( $i{leftName} in $a )
 			{
-				if ($rVal) c += 1;
+				if( $fExp ) $i{count} += 1;
 			}
-			c;
+			$i{count};
+		}
+	}
+	
+	macro public static function find<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : ExprOf<T>
+	{
+		var ad 			= ArrayUtil.arrowDecompose( f );
+		var leftName 	= ArrayUtil._getLeftName( ad.left );
+		var fExp 		= ad.right;
+		var locals 		= ArrayUtil._getUniqueLocalVarNames( 1, Context.getLocalTVars() );
+		var result 		= locals.pop();
+
+		return macro
+		{
+			var $result = null;
+			for( $i{leftName} in $a )
+			{
+				if( $fExp ) 
+				{
+					$i {result} = $i {leftName};
+					break;
+				}
+			}
+			$i{result};
+		}
+	}
+	
+	macro public static function forEach<T, F>( a : ExprOf<Array<T>>, f ) : ExprOf<Void>
+	{
+		var ad 			= ArrayUtil.arrowDecompose( f );
+		var leftName 	= ArrayUtil._getLeftName( ad.left );
+		var fExp 		= ad.right;
+
+		return macro
+		{
+			for( $i{leftName} in $a )
+			{
+				$fExp( $i{leftName} );
+			}
+		}
+	}
+	
+	macro public static function findAll<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : ExprOf<Array<T>>
+	{
+		var ad 			= ArrayUtil.arrowDecompose( f );
+		var leftName 	= ArrayUtil._getLeftName( ad.left );
+		var fExp 		= ad.right;
+		var locals 		= ArrayUtil._getUniqueLocalVarNames( 1, Context.getLocalTVars() );
+		var result 		= locals.pop();
+
+		return macro
+		{
+			var $result = [];
+			for ( $i{leftName} in $a )
+			{
+				if ( $fExp ) 
+				{
+					$i{result}.push( $i {leftName} );
+				}
+			}
+			$i{result};
 		}
 	}
 }
