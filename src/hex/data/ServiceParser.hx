@@ -5,5 +5,5 @@ package hex.data;
  */
 typedef ServiceParser = 
 {
-	function parse( serializedContent : Dynamic ) : Dynamic;
+	function parse( serializedContent : Dynamic, ?target : Dynamic ) : Dynamic;
 }
