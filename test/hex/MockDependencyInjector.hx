@@ -2,6 +2,7 @@ package hex;
 
 import hex.di.InjectionEvent;
 import hex.di.IDependencyInjector;
+import hex.di.provider.IDependencyProvider;
 
 /**
  * ...
@@ -82,5 +83,10 @@ class MockDependencyInjector implements IDependencyInjector
 	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
 	{
 		return false;
+	}
+	
+	public function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider
+	{
+		return null;
 	}
 }
