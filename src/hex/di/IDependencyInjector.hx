@@ -1,5 +1,7 @@
 package hex.di;
 
+import hex.di.provider.IDependencyProvider;
+
 /**
  * @author Francis Bourre
  */
@@ -16,4 +18,6 @@ interface IDependencyInjector extends IBasicInjector
     function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
 
     function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
+	
+	function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider;
 }

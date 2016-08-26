@@ -4,6 +4,7 @@ import hex.di.InjectionEvent;
 import hex.control.payload.ExecutionPayload;
 import hex.control.payload.PayloadUtil;
 import hex.di.IDependencyInjector;
+import hex.di.provider.IDependencyProvider;
 import hex.unittest.assertion.Assert;
 
 /**
@@ -169,5 +170,10 @@ private class MockDependencyInjector implements IDependencyInjector
 	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
 	{
 		return false;
+	}
+	
+	public function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider
+	{
+		return null;
 	}
 }
