@@ -7,9 +7,9 @@ import hex.log.Stringifier;
  * ...
  * @author Francis Bourre
  */
-class CompositeDispatcher implements IDispatcher<{}>
+class CompositeDispatcher
 {
-	var _dispatchers 		: Array<IDispatcher<{}>>;
+	var _dispatchers 		: Array<DispatcherDef>;
 	var _isSealed 			: Bool;
 	var _cachedMethodCalls 	: Array<Void->Void>;
 	
@@ -32,40 +32,40 @@ class CompositeDispatcher implements IDispatcher<{}>
 		this._seal( false );
 	}
 	
-	public function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
+	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
 	{
 		if ( !this._isSealed )
 		{
 			var b : Bool = false;
 			for ( dispatcher in this._dispatchers )
 			{
-				b = dispatcher.addHandler( messageType, scope, callback ) || b;
+				//b = dispatcher.addHandler( messageType, callback ) || b;
 			}
 
 			return b;
 		}
 		else
 		{
-			this._cachedMethodCalls.push( this.addHandler.bind( messageType, scope, callback ) );
+			this._cachedMethodCalls.push( this.addHandler.bind( messageType, callback ) );
 			return false;
 		}
 	}
 	
-	public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
+	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
 	{
 		if ( !this._isSealed )
 		{
 			var b : Bool = false;
 			for ( dispatcher in this._dispatchers )
 			{
-				b = dispatcher.removeHandler( messageType, scope, callback ) || b;
+				//b = dispatcher.removeHandler( messageType, callback ) || b;
 			}
 			
 			return b;
 		}
 		else
 		{
-			this._cachedMethodCalls.push( this.removeHandler.bind( messageType, scope, callback ) );
+			this._cachedMethodCalls.push( this.removeHandler.bind( messageType, callback ) );
 			return false;
 		}
 	}
@@ -122,7 +122,7 @@ class CompositeDispatcher implements IDispatcher<{}>
 		return b;
 	}
 	
-	public function add( dispatcher : IDispatcher<{}> ) : Bool
+	public function add( dispatcher : DispatcherDef ) : Bool
 	{
 		if ( !this._isSealed )
 		{
@@ -143,7 +143,7 @@ class CompositeDispatcher implements IDispatcher<{}>
 		}
 	}
 	
-	public function remove( dispatcher : IDispatcher<{}> ) : Bool
+	public function remove( dispatcher : DispatcherDef ) : Bool
 	{
 		if ( !this._isSealed )
 		{
