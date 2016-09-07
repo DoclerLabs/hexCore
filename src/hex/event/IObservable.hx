@@ -5,6 +5,6 @@ package hex.event;
  */
 interface IObservable 
 {
-  	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
-	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
+  	function addHandler( messageType : MessageType, callback : Dynamic ) : Bool;
+	function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool;
 }

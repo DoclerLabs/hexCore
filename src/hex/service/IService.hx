@@ -10,9 +10,9 @@ interface IService extends IObservable
 {
 	function createConfiguration() : Void;
 	
-	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
+	function addHandler( messageType : MessageType, callback : Dynamic ) : Bool;
 
-	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
+	function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool;
 		
 	function getConfiguration() : ServiceConfiguration;
 
