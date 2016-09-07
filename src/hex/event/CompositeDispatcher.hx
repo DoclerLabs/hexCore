@@ -32,14 +32,14 @@ class CompositeDispatcher
 		this._seal( false );
 	}
 	
-	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
+	/*public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
 	{
 		if ( !this._isSealed )
 		{
 			var b : Bool = false;
 			for ( dispatcher in this._dispatchers )
 			{
-				//b = dispatcher.addHandler( messageType, callback ) || b;
+				b = dispatcher.addHandler( messageType, callback ) || b;
 			}
 
 			return b;
@@ -51,14 +51,14 @@ class CompositeDispatcher
 		}
 	}
 	
-	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
+	/*public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
 	{
 		if ( !this._isSealed )
 		{
 			var b : Bool = false;
 			for ( dispatcher in this._dispatchers )
 			{
-				//b = dispatcher.removeHandler( messageType, callback ) || b;
+				b = dispatcher.removeHandler( messageType, callback ) || b;
 			}
 			
 			return b;
@@ -68,7 +68,7 @@ class CompositeDispatcher
 			this._cachedMethodCalls.push( this.removeHandler.bind( messageType, callback ) );
 			return false;
 		}
-	}
+	}*/
 	
 	public function addListener( listener : {} ) : Bool 
 	{
