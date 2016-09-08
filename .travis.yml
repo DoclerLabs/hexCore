@@ -24,7 +24,7 @@ addons:
       - libnss3:i386
       - libgtk2.0-0:i386
   code_climate:
-    repo_token: cb0298958050378f2ba6e3b1c63e18cc0749829c5a9e633f5351054788073fde
+    repo_token: 965ee8e9015e381b2ed65de89ad1a09d092e978aaebf4e8e29e120b64d028d71
     
 install:
   - git clone --recursive https://github.com/DoclerLabs/hexUnit.git ./hexunit
