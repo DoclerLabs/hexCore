@@ -6,7 +6,7 @@ import hex.event.IObservable;
  * ...
  * @author Francis Bourre
  */
-interface ILocator<KeyType, ValueType> /*extends IObservable*/
+interface ILocator<KeyType, ValueType> extends IObservable
 {
     function keys() : Array<KeyType>;
 
