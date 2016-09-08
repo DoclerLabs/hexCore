@@ -2,8 +2,8 @@ package hex.collection;
 
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
-import hex.event.Dispatcher;
-import hex.event.IDispatcher;
+import hex.event.ClosureDispatcher;
+import hex.event.MessageType;
 import hex.log.Stringifier;
 
 /**
@@ -12,13 +12,13 @@ import hex.log.Stringifier;
  */
 class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
 {
-    var _dispatcher     : IDispatcher<ILocatorListener<KeyType, ValueType>>;
+    var _dispatcher     : ClosureDispatcher;
     var _map    		: HashMap<KeyType, ValueType>;
 
     public function new()
     {
         this._map   		= new HashMap();
-        this._dispatcher    = new Dispatcher<ILocatorListener<KeyType, ValueType>>();
+        this._dispatcher    = new ClosureDispatcher();
     }
 	
 	public function clear() : Void
@@ -102,15 +102,27 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
             return false;
         }
     }
+	
+	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
+	{
+		return this._dispatcher.addHandler( messageType, callback );
+	}
+	
+	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
+	{
+		return this._dispatcher.removeHandler( messageType, callback );
+	}
 
     public function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
-        return this._dispatcher.addListener( listener );
+		var b = this._dispatcher.addHandler( LocatorMessage.REGISTER, listener.onRegister );
+		return this._dispatcher.addHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
     }
 
     public function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
-        return this._dispatcher.removeListener( listener );
+		var b = this._dispatcher.removeHandler( LocatorMessage.REGISTER, listener.onRegister );
+		return this._dispatcher.removeHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
     }
 
     public function toString() : String
