@@ -1,7 +1,10 @@
 engines:
   fixme:
     enabled: true
+  haxe-checkstyle:
+    enabled: true
 ratings:
-  paths: []
+  paths:
+    - "**.hx"
 exclude_paths:
  test/
