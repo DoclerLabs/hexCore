@@ -9,13 +9,10 @@ Independent core elements for building OOP projects and frameworks
 //This event system is the easiest one to use
 
 var messageType = new MessageType( "onInit" );
-var dispatcher = new Dispatcher<IMockListener>();
+var dispatcher = new ClosureDispatcher();
 
-var mockListener = new MockListener();
-dispatcher.addListener( mockListener );
-
-var anotherListener = new MockListener();
-dispatcher.addHandler( messageType, anotherListener, anotherListener.onMessage )
+var listener = new MockListener();
+dispatcher.addHandler( messageType, listener.onMessage )
 dispatcher.dispatch( messageType, ["something", 7] );
 ```
 
