@@ -23,7 +23,9 @@ addons:
       - libxcursor1:i386
       - libnss3:i386
       - libgtk2.0-0:i386
-
+  code_climate:
+    repo_token: cb0298958050378f2ba6e3b1c63e18cc0749829c5a9e633f5351054788073fde
+    
 install:
   - git clone --recursive https://github.com/DoclerLabs/hexUnit.git ./hexunit
   - export DISPLAY=:99.0;
