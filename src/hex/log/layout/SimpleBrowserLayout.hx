@@ -1,5 +1,6 @@
 package hex.log.layout;
 
+#if js
 import haxe.PosInfos;
 import hex.domain.Domain;
 import hex.error.NullPointerException;
@@ -167,3 +168,4 @@ class SimpleBrowserLayout implements ILogListener
         }
     }
 }
+#end

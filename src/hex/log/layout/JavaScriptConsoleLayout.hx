@@ -1,5 +1,6 @@
 package hex.log.layout;
 
+#if js
 import haxe.PosInfos;
 import hex.log.ILogListener;
 import hex.log.LoggerMessage;
@@ -52,3 +53,4 @@ class JavaScriptConsoleLayout implements ILogListener
 		Browser.console.clear();
 	}
 }
+#end

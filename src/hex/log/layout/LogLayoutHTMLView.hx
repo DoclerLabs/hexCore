@@ -1,5 +1,6 @@
 package hex.log.layout;
 
+#if js
 import hex.domain.Domain;
 import hex.log.layout.LogProxyLayout;
 import js.html.DOMRect;
@@ -427,3 +428,4 @@ body,
 .selected { background-color:#999900 }
 ';
 }
+#end
