@@ -32,8 +32,8 @@ class GuardUtil
                 }
                 else if ( Std.is( guard, Class ) )
                 {
-                    guard = injector != null ? injector.instantiateUnmapped( guard ) : Type.createInstance( guard, [] );
-					guard = guard.approve;
+                    var scope = injector != null ? injector.instantiateUnmapped( guard ) : Type.createInstance( guard, [] );
+					return Reflect.callMethod( scope, Reflect.field( scope, "approve" ), [] );
                 }
 
                 if ( Reflect.isFunction( guard ) )
