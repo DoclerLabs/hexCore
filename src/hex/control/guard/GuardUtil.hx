@@ -26,14 +26,15 @@ class GuardUtil
         {
             for ( guard in guards )
             {
-                if ( Reflect.hasField( guard, "approve" ) )
-				{
-                    guard = Reflect.field( guard, "approve" );
-                }
-                else if ( Std.is( guard, Class ) )
+                
+                if ( Std.is( guard, Class ) )
                 {
                     var scope = injector != null ? injector.instantiateUnmapped( guard ) : Type.createInstance( guard, [] );
 					return Reflect.callMethod( scope, Reflect.field( scope, "approve" ), [] );
+                }
+				else if ( Reflect.hasField( guard, "approve" ) )
+				{
+                    guard = Reflect.field( guard, "approve" );
                 }
 
                 if ( Reflect.isFunction( guard ) )
