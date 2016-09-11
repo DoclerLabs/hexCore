@@ -1,16 +1,17 @@
 package hex.control;
+
 import hex.unittest.assertion.Assert;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class ASyncResponderTest
+class AsyncResponderTest
 {
 	@Test( "test complete" )
 	public function testComplete() 
 	{
-		var responder = new MockStringResponder();
+		var responder = new AsyncResponder<String>();
 		var result : String = "";
 		var error : String = "";
 		
@@ -24,41 +25,15 @@ class ASyncResponderTest
 	@Test( "test fail" )
 	public function testFail() 
 	{
-		var responder = new MockFailureResponder();
+		var responder = new AsyncResponder<String>();
 		var result : String = "";
 		var error : String = "";
 		
 		responder.onComplete( function( s : String) { result = s; } ).onFail( function( e : String) { error = e; } );
-		responder.complete( "hello" );
+		responder.fail( "error" );
 		
 		Assert.equals( "", result, "result should not be setted" );
 		Assert.equals( "error", error, "error should be passed" );
 	}
 	
-}
-
-private class MockStringResponder extends ASyncResponder<String>
-{
-	public function new()
-	{
-		super();
-	}
-	
-	public function complete( s : String )
-	{
-		this._complete( "hello" );
-	}
-}
-
-private class MockFailureResponder extends ASyncResponder<String>
-{
-	public function new()
-	{
-		super();
-	}
-	
-	public function complete( s : String )
-	{
-		this._fail( "error" );
-	}
 }
