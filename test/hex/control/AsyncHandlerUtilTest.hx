@@ -3,6 +3,7 @@ import haxe.Timer;
 import hex.unittest.assertion.Assert;
 import hex.unittest.runner.MethodRunner;
 
+using hex.util.ArrayUtil;
 using hex.control.AsyncHandlerUtil;
 
 /**
@@ -46,13 +47,36 @@ class AsyncHandlerUtilTest
 
 			
 		handler.complete( 4 );
-
-		
 	}
 	
 	private function _onChainingEnd() : Void
 	{
 		Assert.equals( 276, this.result, "result should be ((4 + 3) *20) -1 -3" );
+	}
+	
+	@Test( "test chaining with ArrayUtil" )
+	public function testChainingWithArrayUtil() 
+	{
+		var collection = [ for ( i in 0...10 ) { id: i, name: "user_"+i, isMember: i%2==0 } ];
+
+		var handler = new AsyncHandler<Array<User>>();
+		
+		handler
+			.on( a => a.forEach( e => e.name += "Test" ) )
+			.on( a => collection = a.findAll( e => e.isMember ) )
+			.on( a => a.forEach( e => if ( e.id > 5 ) collection.remove( e ) ) )
+			.on( a => a.forEach( function t( e ){ trace( e );  } ) );
+
+			
+		handler.complete( collection );
+
+		Assert.deepEquals( 
+			[
+				{ id:0, name: "user_0Test", isMember: true },
+				{ id:2, name: "user_2Test", isMember: true },
+				{ id:4, name: "user_4Test", isMember: true }
+			]
+			, collection, "collection content should be the same" );
 	}
 }
 
@@ -72,4 +96,11 @@ private class TimeoutIntHandler extends AsyncHandler<Int>
 	{
 		super.complete( i );
 	}
+}
+
+typedef User =
+{
+	var id : Int;
+	var name : String;
+	var isMember : Bool;
 }
