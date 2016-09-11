@@ -6,7 +6,7 @@ import hex.error.IllegalStateException;
  * ...
  * @author Francis Bourre
  */
-class AssyncResponder<ResultType> implements ICompletable<ResultType>
+class AsyncResponder<ResultType> implements ICompletable<ResultType>
 {
 	var _result 			: ResultType;
 	var _errorMessage 		: String;
