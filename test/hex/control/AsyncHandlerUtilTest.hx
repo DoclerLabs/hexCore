@@ -27,6 +27,24 @@ class AsyncHandlerUtilTest
 		Assert.equals( 7, result, "result should be sum of arg and 3" );
 	}
 	
+	@Test( "test simple lambda chaining" )
+	public function testSimpleLambdaChaining() 
+	{
+		var  result0 = 0;
+		var  result1 = 0;
+		
+		var handler = new AsyncHandler<Int>();
+		
+		handler
+			.on( i => result0 = i + 3 )
+			.on( j => result1 = result0 * 2 );
+			
+		handler.complete( 4 );
+		
+		Assert.equals( 7, result0, "result0 should be 3 + 4" );
+		Assert.equals( 14, result1, "result1 should be 7 * 2" );
+	}
+	
 	@Async( "test lambda chaining" )
 	public function testChainingLambdas() 
 	{
