@@ -1,11 +1,12 @@
 package hex.control;
+
 import hex.error.IllegalStateException;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class AsyncResponder<ResultType> implements ICompletable<ResultType>
+class AssyncResponder<ResultType> implements ICompletable<ResultType>
 {
 	var _result 			: ResultType;
 	var _errorMessage 		: String;
@@ -20,7 +21,8 @@ class AsyncResponder<ResultType> implements ICompletable<ResultType>
 	{
 		this._completeResponder 	= [];
 		this._failResponder 		= [];
-		this._hasCompleted 				= false;
+		this._hasCompleted 			= false;
+		this._hasFailed 			= false;
 	}
 	
 	public function onComplete( callback : ResultType->Void ) : ICompletable<ResultType>
@@ -56,6 +58,7 @@ class AsyncResponder<ResultType> implements ICompletable<ResultType>
 		if ( !this._hasCompleted && !this._hasFailed )
 		{
 			this._result = result;
+			this._hasCompleted = true;
 			for ( responder in this._completeResponder )
 			{
 				responder( result );
