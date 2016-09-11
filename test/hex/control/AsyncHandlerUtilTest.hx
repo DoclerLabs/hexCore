@@ -1,4 +1,5 @@
 package hex.control;
+
 import haxe.Timer;
 import hex.unittest.assertion.Assert;
 import hex.unittest.runner.MethodRunner;
@@ -64,8 +65,7 @@ class AsyncHandlerUtilTest
 		handler
 			.on( a => a.forEach( e => e.name += "Test" ) )
 			.on( a => collection = a.findAll( e => e.isMember ) )
-			.on( a => a.forEach( e => if ( e.id > 5 ) collection.remove( e ) ) )
-			.on( a => a.forEach( function t( e ){ trace( e );  } ) );
+			.on( a => a.forEach( e => if ( e.id > 5 ) collection.remove( e ) ) );
 
 			
 		handler.complete( collection );
