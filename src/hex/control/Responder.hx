@@ -1,6 +1,7 @@
 package hex.control;
 
 import hex.control.ICompletable;
+import hex.error.VirtualMethodException;
 
 /**
  * ...
@@ -13,6 +14,16 @@ class Responder<ResultType> implements ICompletable<ResultType>
 	public function new( ?completable : ICompletable<ResultType> ) 
 	{
 		this._completable = completable;
+	}
+	
+	public function complete( result : ResultType ) : Void
+	{
+		throw new VirtualMethodException( this + ".complete must be overridden" );
+	}
+	
+	public function fail( error : String ) : Void
+	{
+		throw new VirtualMethodException( this + ".fail must be overridden" );
 	}
 	
 	public function onComplete( callback : ResultType->Void ) : ICompletable<ResultType>
