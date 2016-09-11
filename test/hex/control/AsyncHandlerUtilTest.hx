@@ -30,8 +30,8 @@ class AsyncHandlerUtilTest
 		var handler = new AsyncHandler<Int>();
 		
 		handler
-			.on( i => { result0 = i + 3; } )
-			.on( j => { result1 = result0 * 2; } );
+			.on( i => result0 = i + 3 )
+			.on( j => result1 = result0 * 2 );
 			
 		handler.complete( 4 );
 		
