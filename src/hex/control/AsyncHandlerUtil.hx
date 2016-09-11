@@ -86,7 +86,7 @@ class AsyncHandlerUtil
 		return r;
 	}
 	
-	macro public static function on<T>( h : ExprOf<ICompletable<T>>, f : Expr )
+	macro public static function on<T>( h : ExprOf<ICompletable<T>>, f : Expr ) : ExprOf<ICompletable<T>>
 	{
 		var ad 			= AsyncHandlerUtil.arrowDecompose( f );
 		var leftName 	= AsyncHandlerUtil._getLeftName( ad.left );
@@ -96,10 +96,9 @@ class AsyncHandlerUtil
 		var fName 		= locals.pop();
 	
 		var mm = macro { function $fName( $leftName ) { return $fExp; } };
-
 		return macro
 		{
-			return $h.onComplete( $mm );
+			$h.onComplete( $mm );
 		}
 	}
 }
