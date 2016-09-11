@@ -1,5 +1,7 @@
 package hex.control;
+import haxe.Timer;
 import hex.unittest.assertion.Assert;
+import hex.unittest.runner.MethodRunner;
 
 using hex.control.AsyncHandlerUtil;
 
@@ -9,6 +11,8 @@ using hex.control.AsyncHandlerUtil;
  */
 class AsyncHandlerUtilTest
 {
+	var result : Int;
+	
 	@Test( "test simple lambda" )
 	public function testSimpleLambda() 
 	{
@@ -21,21 +25,51 @@ class AsyncHandlerUtilTest
 		Assert.equals( 7, result, "result should be sum of arg and 3" );
 	}
 	
-	@Test( "test lambda chaining" )
+	@Async( "test lambda chaining" )
 	public function testChainingLambdas() 
 	{
-		var  result0 = 0;
-		var  result1 = 0;
+		this.result = 0;
 		
 		var handler = new AsyncHandler<Int>();
 		
 		handler
-			.on( i => result0 = i + 3 )
-			.on( j => result1 = result0 * 2 );
+			.on( i => this.result = i + 3 )
+			.on( j => this.result *= 2 )
+				.triggers ( new AsyncHandler<Int>()
+							.on( l => this.result *= 20 )
+							.on( l => this.result -= 1 )
+				)
+				.triggers ( new TimeoutIntHandler() )
+								.on( l => this.result -= 3 
+				)
+				.onComplete( MethodRunner.asyncHandler( this._onChainingEnd ) );
+
 			
 		handler.complete( 4 );
+
 		
-		Assert.equals( 7, result0, "result0 should be sum of arg and 3" );
-		Assert.equals( 14, result1, "result1 should be sum of arg and 1" );
+	}
+	
+	private function _onChainingEnd() : Void
+	{
+		Assert.equals( 276, this.result, "result should be ((4 + 3) *20) -1 -3" );
+	}
+}
+
+private class TimeoutIntHandler extends AsyncHandler<Int>
+{
+	public function new()
+	{
+		super();
+	}
+	
+	override public function complete( i : Int ) : Void
+	{
+		Timer.delay( this._do.bind( i ), 100 );
+	}
+	
+	private function _do( i : Int ) : Void
+	{
+		super.complete( i );
 	}
 }

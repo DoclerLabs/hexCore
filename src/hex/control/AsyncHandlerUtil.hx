@@ -101,4 +101,16 @@ class AsyncHandlerUtil
 			$h.onComplete( $mm );
 		}
 	}
+	
+	macro public static function triggers<T>( h : ExprOf<ICompletable<T>>, newHandler : ExprOf<ICompletable<T>> ) : ExprOf<ICompletable<T>>
+	{
+		var arg = AsyncHandlerUtil._getUniqueLocalVarNames( 1, Context.getLocalTVars() ).pop();
+		
+		return macro
+		{
+			var $arg = ( $newHandler );
+			$h.onComplete( $i{arg}.complete );
+			$i{arg};
+		}
+	}
 }
