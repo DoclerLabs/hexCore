@@ -6,7 +6,7 @@ import haxe.Constraints.Function;
  * ...
  * @author Francis Bourre
  */
-class ClosureDispatcher
+class ClosureDispatcher implements IClosureDispatcher
 {
     var _callbacks 			: Map<MessageType, Array<Function>>;
     var _callbackSize   	: UInt;

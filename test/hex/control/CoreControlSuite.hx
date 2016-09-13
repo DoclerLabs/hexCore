@@ -10,5 +10,9 @@ import hex.control.payload.CorePayloadSuite;
 class CoreControlSuite
 {
 	@Suite( "Control" )
-    public var list : Array<Class<Dynamic>> = [ CoreGuardSuite, CorePayloadSuite ];
+	#if !neko
+    public var list : Array<Class<Dynamic>> = [ AsyncHandlerTest, AsyncHandlerUtilTest, AsyncResponderTest, CoreGuardSuite, CorePayloadSuite ];
+	#else
+	public var list : Array<Class<Dynamic>> = [ AsyncHandlerTest, AsyncResponderTest, CoreGuardSuite, CorePayloadSuite ];
+	#end
 }

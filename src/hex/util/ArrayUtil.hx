@@ -132,6 +132,24 @@ class ArrayUtil
 		var ad 			= ArrayUtil.arrowDecompose( f );
 		var leftName 	= ArrayUtil._getLeftName( ad.left );
 		var fExp 		= ad.right;
+		
+		var locals 		= ArrayUtil._getUniqueLocalVarNames( 1, Context.getLocalTVars() );
+		var fName 		= locals.pop();
+
+		return macro
+		{
+			for( $i{leftName} in $a )
+			{
+				$fExp;
+			}
+		}
+	}
+	
+	macro public static function forEachCall<T, F>( a : ExprOf<Array<T>>, f ) : ExprOf<Void>
+	{
+		var ad 			= ArrayUtil.arrowDecompose( f );
+		var leftName 	= ArrayUtil._getLeftName( ad.left );
+		var fExp 		= ad.right;
 
 		return macro
 		{
