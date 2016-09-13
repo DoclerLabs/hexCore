@@ -35,7 +35,7 @@ class MacroUtil
 		return macro { $v{ b } };
 	}
 	
-	#if macro
+	#if (macro || doc_gen)
 	static public function getStringFromExpr( e : ExprDef ) : String
 	{
 		switch( e )
