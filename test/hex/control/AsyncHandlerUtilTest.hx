@@ -68,7 +68,7 @@ class AsyncHandlerUtilTest
 		handler.complete( 4 );
 	}
 	
-	private function _onChainingEnd() : Void
+	private function _onChainingEnd( i : Int ) : Void
 	{
 		Assert.equals( 276, this.result, "result should be ((4 + 3) *20) -1 -3" );
 	}
