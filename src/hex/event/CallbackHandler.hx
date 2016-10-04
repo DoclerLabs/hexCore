@@ -15,7 +15,7 @@ class CallbackHandler
 		this.callbacks.push( callback );
 	}
 	
-	public function call( data : Array<Dynamic> ) : Void
+	public function call( data : Dynamic ) : Void
 	{
 		for ( callback in this.callbacks )
 		{

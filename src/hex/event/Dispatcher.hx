@@ -125,12 +125,26 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 
 	public function dispatchTyped<T>( messageType : TypedMessageType<T>, ?data : T ) : Void
 	{
-
+        var iterator = this._listeners.keys();
+        while ( iterator.hasNext() )
+        {
+            var listener : ListenerType 	= iterator.next();
+            var m : Map<MessageType, CallbackHandler> 	= this._listeners.get( listener );
+			
+            if ( Lambda.count( m ) > 0 )
+            {
+				if ( m.exists( messageType ) )
+				{
+					var handler : CallbackHandler = m.get( messageType );
+					handler.call( data );
+				}
+            }
+		}
 	}
 
 	public function addHandlerTyped<T>( messageType : TypedMessageType<T>, scope : Dynamic, callback : T -> Void ) : Bool
 	{
-		return true;
+		return addHandler( messageType, scope, callback );
 	}
 
 	public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
