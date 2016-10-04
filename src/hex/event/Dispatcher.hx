@@ -122,7 +122,17 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 			return false;
 		}
     }
-	
+
+	public function dispatchTyped<T>( messageType : TypedMessageType<T>, ?data : T ) : Void
+	{
+
+	}
+
+	public function addHandlerTyped<T>( messageType : TypedMessageType<T>, scope : Dynamic, callback : T -> Void ) : Bool
+	{
+		return true;
+	}
+
 	public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
     {
 		if ( !this._isSealed )
