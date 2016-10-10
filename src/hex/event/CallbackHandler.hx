@@ -9,7 +9,7 @@ class CallbackHandler
 	public var scope 		: Dynamic;
 	public var callbacks	: Array<Dynamic> = [];
 
-	public function new( scope : Dynamic, callback : Dynamic ) 
+	public function new( scope : Dynamic, callback : Array<Dynamic> ) 
 	{
 		this.scope = scope;
 		this.callbacks.push( callback );
