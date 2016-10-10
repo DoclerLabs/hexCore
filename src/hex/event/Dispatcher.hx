@@ -136,7 +136,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 				if ( m.exists( messageType ) )
 				{
 					var handler : CallbackHandler = m.get( messageType );
-					handler.call( data );
+					handler.call( [ data ] );
 				}
             }
 		}

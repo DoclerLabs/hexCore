@@ -4,7 +4,7 @@ import hex.event.MessageType;
 
 /**
  * ...
- * @author Francis Bourre
+ * @author Heorhiy Kharvat
  */
 class TypedMessageType<T> extends MessageType
 {
