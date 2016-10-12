@@ -21,7 +21,7 @@ class Exception
         this.name       = Stringifier.stringify( this );
 		
 		#if debug
-			Logger.ERROR( this.toString() );
+			Logger.error( this.toString() );
 		#end
     }
 
