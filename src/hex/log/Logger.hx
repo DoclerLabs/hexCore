@@ -82,32 +82,32 @@ class Logger
         return Stringifier.stringify( this );
     }
 	
-	public static function DEBUG( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
+	public static function debug( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
 		Logger.getInstance().log( o, LogLevel.DEBUG, domain, posInfos );
 	}
 	
-	public static function INFO( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
+	public static function info( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
 		Logger.getInstance().log( o, LogLevel.INFO, domain, posInfos );
 	}
 	
-	public static function WARN( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
+	public static function warn( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
 		Logger.getInstance().log( o, LogLevel.WARN, domain, posInfos );
 	}
 	
-	public static function ERROR( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
+	public static function error( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
 		Logger.getInstance().log( o, LogLevel.ERROR, domain, posInfos );
 	}
 	
-	public static function FATAL( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
+	public static function fatal( o : Dynamic, ?domain : Domain, ?posInfos : PosInfos ) : Void
 	{
 		Logger.getInstance().log( o, LogLevel.FATAL, domain, posInfos );
 	}
 	
-	public static function CLEAR_ALL( ?domain : Domain )  : Void
+	public static function clear_all( ?domain : Domain )  : Void
 	{
 		Logger.getInstance().clear();
 	}
