@@ -24,13 +24,14 @@ class GuardUtil
     {
         if ( guards != null )
         {
+			var b = true;
+			
             for ( guard in guards )
             {
-                
                 if ( Std.is( guard, Class ) )
                 {
                     var scope = injector != null ? injector.instantiateUnmapped( guard ) : Type.createInstance( guard, [] );
-					return Reflect.callMethod( scope, Reflect.field( scope, "approve" ), [] );
+					b = Reflect.callMethod( scope, Reflect.field( scope, "approve" ), [] );
                 }
 				else if ( Reflect.hasField( guard, "approve" ) )
 				{
@@ -39,13 +40,13 @@ class GuardUtil
 
                 if ( Reflect.isFunction( guard ) )
                 {
-                    var b : Bool = guard();
-
-                    if ( !b )
-                    {
-                        return false;
-                    }
+                    b = guard();
                 }
+				
+				if ( !b )
+				{
+					return false;
+				}
             }
         }
 

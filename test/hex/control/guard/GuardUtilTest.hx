@@ -13,30 +13,34 @@ import hex.unittest.assertion.Assert;
  */
 class GuardUtilTest
 {
-	@Test( "Test guard-class approval without injector" )
-    public function testGuardClassApproveWithoutInjector() : Void
+	@Test( "Test guard class approval without injector" )
+    public function testGuardClassApprovalWithoutInjector() : Void
     {
-		var guards : Array<Dynamic> = [ MockApproveGuard ];
-        var isApproved : Bool = GuardUtil.guardsApprove( guards );
-        Assert.isTrue( isApproved, "'GuardUtil.guardsApprove' property should return true" );
-		
-		guards = [ MockRefuseGuard ];
-        isApproved = GuardUtil.guardsApprove( guards );
-        Assert.isFalse( isApproved, "'GuardUtil.guardsApprove' property should return false" );
+        Assert.isTrue( GuardUtil.guardsApprove( [ MockApproveGuard ] ), "'GuardUtil.guardsApprove' property should return true" );
+        Assert.isFalse( GuardUtil.guardsApprove( [ MockRefuseGuard ] ), "'GuardUtil.guardsApprove' property should return false" );
+    }
+	
+	@Test( "Test mutiple guard classes approval without injector" )
+    public function testMultipleGuardClassesApprovalWithoutInjector() : Void
+    {
+        Assert.isFalse( GuardUtil.guardsApprove( [ MockApproveGuard, MockRefuseGuard ] ), "'GuardUtil.guardsApprove' property should return false" );
+    }
+	
+	@Test( "Test mixed guards approval without injector" )
+    public function testMixedGuardsApprovalWithoutInjector() : Void
+    {
+		var fFalse = function() : Bool { return false; };
+		var fTrue = function() : Bool { return true; };
+        Assert.isFalse( GuardUtil.guardsApprove( [ MockApproveGuard, fFalse ] ), "'GuardUtil.guardsApprove' property should return false" );
+        Assert.isFalse( GuardUtil.guardsApprove( [ fTrue, MockRefuseGuard ] ), "'GuardUtil.guardsApprove' property should return false" );
     }
 	
 	@Test( "Test guard-class approval with injector" )
-    public function testGuardClassApproveWithInjector() : Void
+    public function testGuardClassApprovalWithInjector() : Void
     {
 		var injector = new MockDependencyInjectorForTestingGuard();
-		
-		var guards 		: Array<Dynamic> 	= [ MockApproveGuard ];
-        var isApproved 	: Bool 				= GuardUtil.guardsApprove( guards, injector );
-        Assert.isTrue( isApproved, "'GuardUtil.guardsApprove' property should return true" );
-		
-		guards 		= [ MockRefuseGuard ];
-        isApproved 	= GuardUtil.guardsApprove( guards, injector );
-        Assert.isFalse( isApproved, "'GuardUtil.guardsApprove' property should return false" );
+        Assert.isTrue( GuardUtil.guardsApprove( [ MockApproveGuard ], injector ), "'GuardUtil.guardsApprove' property should return true" );
+        Assert.isFalse( GuardUtil.guardsApprove( [ MockRefuseGuard ], injector ), "'GuardUtil.guardsApprove' property should return false" );
     }
 }
 
