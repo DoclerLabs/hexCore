@@ -8,9 +8,6 @@ import hex.log.IsLoggable;
  */
 class MockLoggableClass implements IsLoggable
 {
-	@Inject
-	public var logger : ILogger;
-	
 	public var member : String = "member";
 	
 	public function new() 
@@ -43,18 +40,24 @@ class MockLoggableClass implements IsLoggable
 	}
 	
 	@Fatal
+	@New
 	public function fatal( s : String, i : Int ) : Void
 	{
 		
 	}
 	
-	@Debug( {msg: "customMessage"} )
+	@Debug({
+		msg: "customMessage" 
+	})
 	public function debugCustomMessage( s : String, i : Int ) : Void
 	{
 		
 	}
 
-	@Debug( {arg: [ i, this.member ]} )
+	@Debug({
+		msg: "anotherMessage",
+		arg: [ i, this.member ] 
+	})
 	public function debugCustomArgument( s : String, i : Int ) : Void
 	{
 		

@@ -99,11 +99,11 @@ class IsLoggableTest
 		Assert.isNull( logger.fatalArg );
 	}
 	
-	@Ignore( "test custom arguments" )
-	public function testCustomArguments(): Void
+	@Test( "test custom arguments with custom message" )
+	public function testCustomArgumentsWithCustomMessage(): Void
 	{
 		loggable.debugCustomArgument( "debug", 7 );
-		var args : Array<Dynamic> = [ "hex.log.MockLoggableClass::debugCustomArgument", 7, "member" ];
+		var args : Array<Dynamic> = [ "anotherMessage", 7, "member" ];
 		
 		Assert.deepEquals( args, logger.debugArg );
 		Assert.isNull( logger.infoArg );

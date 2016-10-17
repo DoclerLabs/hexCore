@@ -25,11 +25,27 @@ class LoggableBuilder
 	macro static public function build() : Array<Field> 
 	{
 		var fields = Context.getBuildFields();
-		
+
 		if ( Context.getLocalClass().get().isInterface )
 		{
 			return fields;
 		}
+		
+		for ( f in fields )
+		{
+			if ( f.name == "logger" )
+			{
+				Context.error( "'logger' member will be added automatically in class that implements 'IsLoggable'", f.pos );
+			}
+		}
+		
+		fields.push({ 
+				kind: FVar(TPath( { name: "ILogger", pack:  [], params: [] } ), null ), 
+				meta: [ { name: "Inject", params: null, pos: Context.currentPos() } ], 
+				name: "logger", 
+				access: [ Access.APublic ],
+				pos: Context.currentPos()
+			});
 		
 		var className = Context.getLocalClass().get().module;
 		var loggerAnnotations = [ DebugAnnotation, InfoAnnotation, WarnAnnotation, ErrorAnnotation, FatalAnnotation ];
@@ -37,21 +53,31 @@ class LoggableBuilder
 		for ( f in fields )
 		{
 			switch( f.kind )
-			{ 
-				//TODO exclude constructor
-				//TODO add class metadata that adds the injected logger property 
-				//TODO make unit tests
+			{
 				case FFun( func ):
 					
 					var meta = f.meta.filter( function ( m ) { return loggerAnnotations.indexOf( m.name ) != -1; } );
 					var isLoggable = meta.length > 0;
 					if ( isLoggable ) 
 					{
+						if ( f.name == "new" )
+						{
+							Context.error( "log metadata is forbidden on constructor", f.pos );
+						}
+					
 						#if debug
 						var logSetting =  LoggableBuilder._getParameters( meta );
 						
-						var expressions = [ macro @:mergeBlock {} ];
-						var methArgs = [ for ( arg in func.args ) macro @:pos(f.pos) $i { arg.name } ];
+						var methArgs : Array<Expr> = null;
+						var expressions = [ macro @:mergeBlock { } ];
+						if ( logSetting.arg == null )
+						{
+							methArgs = [ for ( arg in func.args ) macro @:pos(f.pos) $i { arg.name } ];
+						}
+						else
+						{
+							methArgs = [ for ( arg in logSetting.arg ) macro @:pos(f.pos) $arg ];
+						}
 						
 						//
 						var message = logSetting.message;
@@ -74,8 +100,10 @@ class LoggableBuilder
 						func.expr = macro @:pos(f.pos) $b { expressions };
 						#end
 						
-						//f.meta = [ meta[ 0 ] ];//TODO Check everything is fine
-						f.meta = [];//TODO remove
+						for ( m in meta )
+						{
+							f.meta.remove( m );
+						}
 					}
 					
 				case _:
@@ -121,26 +149,8 @@ class LoggableBuilder
 									switch( f.expr.expr )
 									{
 										case EArrayDecl( a ):
-											logSetting.arg = [];
-											for ( id in a )
-											{
-												switch( id.expr )
-												{
-													case EConst( CIdent( i ) ):
-														logSetting.arg.push( i.toString() );
-														
-													case EField( _.expr => EConst( CIdent( i ) ), f ):
+											logSetting.arg = a;
 
-														if ( i.toString() != "this" )
-														{
-															Context.error( "'" + i + "." + f + "' is not allowed", id.pos );
-														}
-														logSetting.arg.push( "this." + f );
-														
-													case _:
-												}
-											}
-											
 										case _:
 									}
 									
@@ -164,11 +174,7 @@ class LoggableBuilder
 
 private class LogSetting
 {
-	public function new()
-	{
-		
-	}
-	
+	public function new(){}
 	public var message 	: String;
-	public var arg 		: Array<String>;
+	public var arg 		: Array<Expr>;
 }
