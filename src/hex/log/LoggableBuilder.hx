@@ -142,7 +142,7 @@ class LoggableBuilder
 										case EConst( CString( s ) ):
 											logSetting.message = s;
 
-										case _:
+										case _: null;
 									}
 									
 								case "arg":
@@ -151,10 +151,10 @@ class LoggableBuilder
 										case EArrayDecl( a ):
 											logSetting.arg = a;
 
-										case _:
+										case _: null;
 									}
 									
-								case _:
+								case _: null;
 							}
 						}
 
@@ -162,7 +162,7 @@ class LoggableBuilder
 					
 						return logSetting;
 						
-					case _:
+					case _: null;
 				}
 				
 				//
