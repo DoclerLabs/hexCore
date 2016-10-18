@@ -29,7 +29,7 @@ dispatcher.dispatchEvent( new BasicEvent( "onEvent", this._dispatcher ) );
 ```haxe
 Logger.getInstance().setLevel( LogLevel.DEBUG );
 Logger.getInstance().addListener( new TraceLayout() );
-Logger.DEBUG( "hola mundo " );
+Logger.debug( "hola mundo " );
 ```
 
 ## Logger example with proxy layout
@@ -37,7 +37,7 @@ Logger.DEBUG( "hola mundo " );
 var proxy = new LogProxyLayout();
 proxy.addListener( new SimpleBrowserLayout() );
 
-Logger.INFO( "hola mundo ", MyDomain.DOMAIN );
+Logger.info( "hola mundo ", MyDomain.DOMAIN );
 proxy.filter( LogLevel.INFO, MyDomain.DOMAIN );
 ```
 
@@ -45,7 +45,7 @@ proxy.filter( LogLevel.INFO, MyDomain.DOMAIN );
 ```haxe
 class MyLocator extends Locator<String, ISomething>
 {
-	public function new( builderFactory : BuilderFactory )
+	public function new()
 	{
 		super();
 	}
