@@ -11,8 +11,5 @@ class ExtendedMockLoggableClass extends MockLoggableClass
 
 private class AnotherExtendedMockLoggableClass extends ExtendedMockLoggableClass
 {
-	public function new()
-	{
-		
-	}
+	
 }
