@@ -40,7 +40,7 @@ class LoggableBuilder
 		}
 		
 		fields.push({ 
-				kind: FVar(TPath( { name: "ILogger", pack:  [], params: [] } ), null ), 
+				kind: FVar(TPath( { name: "ILogger", pack:  [ "hex", "log" ], params: [] } ), null ), 
 				meta: [ { name: "Inject", params: null, pos: Context.currentPos() } ], 
 				name: "logger", 
 				access: [ Access.APublic ],
