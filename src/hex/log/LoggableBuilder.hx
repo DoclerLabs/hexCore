@@ -3,6 +3,7 @@ package hex.log;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.error.PrivateConstructorException;
+import hex.util.MacroUtil;
 
 /**
  * ...
@@ -15,6 +16,8 @@ class LoggableBuilder
 	public static inline var WarnAnnotation 	= "Warn";
 	public static inline var ErrorAnnotation 	= "Error";
 	public static inline var FatalAnnotation 	= "Fatal";
+	
+	static var _isLoggableInterface = MacroUtil.getClassType( Type.getClassName( IsLoggable ) );
 	
 	/** @private */
     function new()
@@ -39,13 +42,28 @@ class LoggableBuilder
 			}
 		}
 		
-		fields.push({ 
+		var shouldAddField = true;
+		var superClass = Context.getLocalClass().get().superClass;
+		if ( superClass != null )
+		{
+			var classType = MacroUtil.getClassType( superClass.t.toString() );
+			if ( MacroUtil.implementsInterface( classType, _isLoggableInterface ) )
+			{
+				shouldAddField = false;
+			}
+		}
+		
+		if ( shouldAddField )
+		{
+			fields.push({ 
 				kind: FVar(TPath( { name: "ILogger", pack:  [ "hex", "log" ], params: [] } ), null ), 
 				meta: [ { name: "Inject", params: null, pos: Context.currentPos() } ], 
 				name: "logger", 
 				access: [ Access.APublic ],
 				pos: Context.currentPos()
 			});
+		}
+		
 		
 		var className = Context.getLocalClass().get().module;
 		var loggerAnnotations = [ DebugAnnotation, InfoAnnotation, WarnAnnotation, ErrorAnnotation, FatalAnnotation ];

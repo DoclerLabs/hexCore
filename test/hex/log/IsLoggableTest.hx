@@ -10,8 +10,9 @@ import hex.unittest.assertion.Assert;
  */
 class IsLoggableTest 
 {
-	public var loggable : MockLoggableClass;
-	public var logger	: MockLogger;
+	public var loggable 	: MockLoggableClass;
+	public var extLoggable 	: ExtendedMockLoggableClass;
+	public var logger		: MockLogger;
 	
 	@Before
 	public function setUp(): Void
