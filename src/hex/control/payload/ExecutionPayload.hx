@@ -30,7 +30,6 @@ class ExecutionPayload
 		else
 		{
 			this._type 	= Type.getClass( this._data );
-			trace( this._type );
 		}
 		
 		if ( !Std.is( this._data, this._type ) )
