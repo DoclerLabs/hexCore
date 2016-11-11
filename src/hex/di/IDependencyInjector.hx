@@ -19,5 +19,5 @@ interface IDependencyInjector extends IBasicInjector
 
     function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
 	
-	function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider;
+	function getProvider( className : String, name : String = '' ) : IDependencyProvider;
 }

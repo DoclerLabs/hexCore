@@ -1,9 +1,9 @@
 package hex.control.payload;
 
-import hex.di.InjectionEvent;
 import hex.control.payload.ExecutionPayload;
 import hex.control.payload.PayloadUtil;
 import hex.di.IDependencyInjector;
+import hex.di.InjectionEvent;
 import hex.di.provider.IDependencyProvider;
 import hex.unittest.assertion.Assert;
 
@@ -31,6 +31,17 @@ class PayloadUtilTest
         Assert.deepEquals( 	[[mockImplementation, IMockType, "mockPayload"], ["test", String, "stringPayload"], [anotherMockImplementation, IMockType, "anotherMockPayload"] ], 
 									injector.mappedPayloads,
 									"'CommandExecutor.mapPayload' should map right values" );
+									
+		/*Assert.deepEquals
+		( 								
+			[
+				[ mockImplementation, "hex.control.payload.IMockType", "mockPayload" ],
+				[ "test", String, "stringPayload" ],
+				[ anotherMockImplementation, "hex.control.payload.IMockType", "anotherMockPayload"]
+			], 
+			injector.mappedPayloads, 
+			"'CommandExecutor.mapPayload' should map right values" 
+		);*/
     }
 	
 	@Test( "Test unmapping" )
@@ -51,29 +62,22 @@ class PayloadUtilTest
         Assert.deepEquals( 	[[IMockType, "mockPayload"], [String, "stringPayload"], [IMockType, "anotherMockPayload"] ], 
 									injector.unmappedPayloads,
 									"'CommandExecutor.mapPayload' should unmap right values" );
+								
+		/*Assert.deepEquals
+		( 								
+			[
+				[ "hex.control.payload.IMockType", "mockPayload" ],
+				[ String, "stringPayload" ],
+				[ "hex.control.payload.IMockType", "anotherMockPayload"]
+			], 
+			injector.mappedPayloads, 
+			"'CommandExecutor.mapPayload' should unmap right values" 
+		);*/
     }
-	
-}
-
-private class MockImplementation implements IMockType
-{
-	public var name : String;
-	
-	public function new( name : String )
-	{
-		this.name = name;
-	}
-}
-
-private interface IMockType
-{
-	
 }
 
 private class MockDependencyInjectorForMapping extends MockDependencyInjector
 {
-	public var getOrCreateNewInstanceCallCount 		: Int = 0;
-	public var getOrCreateNewInstanceCallParameter 	: Class<Dynamic>;
 	public var mappedPayloads 						: Array<Array<Dynamic>> = [];
 	public var unmappedPayloads 					: Array<Array<Dynamic>> = [];
 	
@@ -87,11 +91,14 @@ private class MockDependencyInjectorForMapping extends MockDependencyInjector
 		this.unmappedPayloads.push( [ type, name ] );
 	}
 	
-	override public function getOrCreateNewInstance<T>( type : Class<Dynamic> ) : T 
+	override public function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void 
 	{
-		this.getOrCreateNewInstanceCallCount++;
-		this.getOrCreateNewInstanceCallParameter = type;
-		return Type.createInstance( type, [] );
+		this.mappedPayloads.push( [ value, className, name ] );
+	}
+	
+	override public function unmapClassName( className : String, name : String = '' ) : Void
+	{
+		this.unmappedPayloads.push( [ className, name ] );
 	}
 }
 
@@ -172,8 +179,28 @@ private class MockDependencyInjector implements IDependencyInjector
 		return false;
 	}
 	
-	public function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider
+	public function getProvider( className : String, name : String = '' ) : IDependencyProvider
 	{
 		return null;
+	}
+	
+	public function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToType( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToSingleton( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+	
+	public function unmapClassName( className : String, name : String = '' ) : Void
+	{
+		
 	}
 }

@@ -82,7 +82,7 @@ class AsyncHandlerUtilTest
 		
 		handler
 			.on( a => a.forEach( e => e.name += "Test" ) )
-			.on( a => collection = a.findAll( e => e.isMember ) )
+			.on( a => collection = a.filters( e => e.isMember ) )
 			.on( a => a.forEach( e => if ( e.id > 5 ) collection.remove( e ) ) );
 
 			

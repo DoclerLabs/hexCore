@@ -22,7 +22,15 @@ class PayloadUtil
     {
         for ( payload in payloads ) 
 		{
-			injector.mapToValue( payload.getType(), payload.getData(), payload.getName() );
+			var className = payload.getClassName();
+			if ( className != null )
+			{
+				injector.mapClassNameToValue( payload.getClassName(), payload.getData(), payload.getName() );
+			}
+			else
+			{
+				injector.mapToValue( payload.getType(), payload.getData(), payload.getName() );
+			}
 		}
     }
 
@@ -34,8 +42,15 @@ class PayloadUtil
     {
         for ( payload in payloads ) 
 		{
-			injector.unmap( payload.getType(), payload.getName() );
+			var className = payload.getClassName();
+			if ( className != null )
+			{
+				injector.unmapClassName( payload.getClassName(), payload.getName() );
+			}
+			else 
+			{
+				injector.unmap( payload.getType(), payload.getName() );
+			}
 		}
     }
-	
 }

@@ -85,8 +85,28 @@ class MockDependencyInjector implements IDependencyInjector
 		return false;
 	}
 	
-	public function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider
+	public function getProvider( className : String, name : String = '' ) : IDependencyProvider
 	{
 		return null;
+	}
+	
+	public function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToType( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToSingleton( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+	
+	public function unmapClassName( className : String, name : String = '' ) : Void
+	{
+		
 	}
 }
