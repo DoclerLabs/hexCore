@@ -20,4 +20,12 @@ interface IBasicInjector
 	function hasMapping( type : Class<Dynamic>, name : String = '' ) : Bool;
 	
 	function unmap( type : Class<Dynamic>, name : String = '' ) : Void;
+	
+	function unmapClassName( className : String, name : String = '' ) : Void;
+	
+	function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void;
+
+    function mapClassNameToType( className : String, type : Class<Dynamic>, name:String = '' ) : Void;
+
+    function mapClassNameToSingleton( className : String, type : Class<Dynamic>, name:String = '' ) : Void;
 }
