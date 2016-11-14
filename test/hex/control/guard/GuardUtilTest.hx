@@ -110,6 +110,11 @@ private class MockDependencyInjector implements IDependencyInjector
 		return null;
 	}
 	
+	public function getInstanceWithClassName<T>( className : String, name : String = '' ) : T
+	{
+		return null;
+	}
+	
 	public function getOrCreateNewInstance<T>( type : Class<Dynamic> ) : T 
 	{
 		return null;
