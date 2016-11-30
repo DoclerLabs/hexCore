@@ -50,7 +50,7 @@ class MockDependencyInjector implements IDependencyInjector
 		return Type.createInstance( type, [] );
 	}
 	
-	public function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic 
+	public function instantiateUnmapped<T>( type : Class<Dynamic> ) : T 
 	{
 		return Type.createInstance( type, [] );
 	}
