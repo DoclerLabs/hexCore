@@ -77,7 +77,7 @@ private class MockDependencyInjectorForTestingGuard extends MockDependencyInject
 		
 	}
 	
-	override public function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic
+	override public function instantiateUnmapped<T>( type : Class<Dynamic> ) : T 
 	{
 		return Type.createInstance( type, [] );
 	}
@@ -120,7 +120,7 @@ private class MockDependencyInjector implements IDependencyInjector
 		return null;
 	}
 	
-	public function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic 
+	public function instantiateUnmapped<T>( type : Class<Dynamic> ) : T 
 	{
 		return null;
 	}
