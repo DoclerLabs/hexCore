@@ -36,20 +36,6 @@ class MacroUtil
 	}
 	
 	#if (macro || doc_gen)
-	static public function getStringFromExpr( e : ExprDef ) : String
-	{
-		switch( e )
-		{
-			case EConst( CString( s ) ):
-				return s;
-
-			default:
-				throw "type should be string const";
-		}
-
-		return null;
-	}
-
 	static public function getClassNameFromExpr( e : Expr ) : String
 	{
 		var s = haxe.macro.ExprTools.toString( e );
