@@ -17,7 +17,7 @@ using haxe.macro.Context;
 @:final 
 class TriggerBuilder
 {
-	public static inline var OutputAnnotation = "Output";
+	public static inline var OutputAnnotation = "Trigger";
 	
 	/** @private */
     function new()
