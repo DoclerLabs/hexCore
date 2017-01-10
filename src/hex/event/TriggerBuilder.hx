@@ -27,7 +27,6 @@ class TriggerBuilder
         throw new PrivateConstructorException( "This class can't be instantiated." );
     }
 	
-	//TODO make cache system
 	macro static public function build() : Array<Field> 
 	{
 		var fields = Context.getBuildFields();
