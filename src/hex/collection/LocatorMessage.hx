@@ -8,8 +8,8 @@ import hex.event.MessageType;
  */
 class LocatorMessage
 {
-	static public var REGISTER		= new MessageType( "onRegister" );
-	static public var UNREGISTER	= new MessageType( "onUnregister" );
+	inline static public var REGISTER	= new MessageType( "onRegister" );
+	inline static public var UNREGISTER	= new MessageType( "onUnregister" );
 
 	function new() 
 	{

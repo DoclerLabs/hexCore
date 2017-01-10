@@ -8,7 +8,7 @@ import haxe.Constraints.Function;
  */
 class ClosureDispatcher implements IClosureDispatcher
 {
-    var _callbacks 			: Map<MessageType, Array<Function>>;
+    var _callbacks 			: Map<String, Array<Function>>;
     var _callbackSize   	: UInt;
 
 	public function new()

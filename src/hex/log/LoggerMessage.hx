@@ -10,8 +10,8 @@ import hex.event.MessageType;
  */
 class LoggerMessage
 {
-	public static var LOG 	= new MessageType( "onLog" );
-	public static var CLEAR = new MessageType( "onClear" );
+	inline public static var LOG 	= new MessageType( "onLog" );
+	inline public static var CLEAR = new MessageType( "onClear" );
 	
 	public var message 	: Dynamic;
 	public var level 	: LogLevel;

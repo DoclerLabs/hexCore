@@ -14,7 +14,6 @@ class CoreEventSuite
 		CompositeDispatcherTest, 
 		DispatcherTest, 
 		FullClosureDispatcherTest, 
-		MonoTypeClosureDispatcherTest,
 		TriggerTest
 	];
 }
