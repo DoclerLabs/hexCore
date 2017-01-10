@@ -13,10 +13,7 @@ class CoreEventSuite
 		ClosuredispatcherTest, 
 		CompositeDispatcherTest, 
 		DispatcherTest, 
-		EventDispatcherTest, 
 		FullClosureDispatcherTest, 
-		LightweightListenerDispatcherTest, 
-		LightweightClosureDispatcherTest, 
 		MonoTypeClosureDispatcherTest,
 		TriggerTest
 	];
