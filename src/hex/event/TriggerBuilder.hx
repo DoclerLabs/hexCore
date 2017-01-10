@@ -19,6 +19,8 @@ class TriggerBuilder
 {
 	public static inline var OutputAnnotation = "Trigger";
 	
+	static var _cache : Map<String, TypeDefinition> = new Map();
+	
 	/** @private */
     function new()
     {
@@ -47,6 +49,7 @@ class TriggerBuilder
 						
 						Context.error( "'" + f.name + "' property is not public with read access only.\n Use 'public var " +
 							f.name + " ( default, never )' with '@" + TriggerBuilder.OutputAnnotation + "' annotation", f.pos );
+						//Context.error('`${f.name}` property is not public with read access only.\n Use `public var ${f.name}( default, never)` with @${TriggerBuilder.OutputAnnotation} annotation', f.pos );
 					
 					case FProp( get, set, t, e ):
 						
@@ -138,131 +141,142 @@ class TriggerBuilder
 	static function _buildClass( interfaceName : { name: String, pack: Array<String>, fullyQualifiedName: String } ) : { name: String, pack: Array<String> }
 	{
 		var className 	= "__" + TriggerBuilder.OutputAnnotation + '_Class_For__' + interfaceName.name;
-		var typePath 	= MacroUtil.getTypePath( interfaceName.fullyQualifiedName );
-		var type 		= Context.getType( interfaceName.fullyQualifiedName );
-		var complexType = TypeTools.toComplexType( type );
+		var dispatcherClass : TypeDefinition = null;
 		
-		var params = [ TPType( complexType ) ];
-		var connectorTypePath = MacroUtil.getTypePath( Type.getClassName( ITrigger ), params );
-		
-		var dispatcherClass = macro class $className implements $connectorTypePath
-		{ 
-			var _inputs : Array<$complexType>;
-	
-			public function new() 
-			{
-				this._inputs = [];
-			}
-
-			public function connect( input : $complexType ) : Bool
-			{
-				if ( this._inputs.indexOf( input ) == -1 )
-				{
-					this._inputs.push( input );
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-
-			public function disconnect( input : $complexType ) : Bool
-			{
-				var index : Int = this._inputs.indexOf( input );
-				
-				if ( index > -1 )
-				{
-					this._inputs.splice( index, 1 );
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-			}
-		};
-
-		var newFields = dispatcherClass.fields;
-		switch( type )
+		if ( !TriggerBuilder._cache.exists( className ) )
 		{
-			case TInst( _.get() => cls, params ):
-
-				var fields : Array<ClassField> = cls.fields.get();
-
-				for ( field in fields )
+		
+			var typePath 	= MacroUtil.getTypePath( interfaceName.fullyQualifiedName );
+			var type 		= Context.getType( interfaceName.fullyQualifiedName );
+			var complexType = TypeTools.toComplexType( type );
+			
+			var params = [ TPType( complexType ) ];
+			var connectorTypePath = MacroUtil.getTypePath( Type.getClassName( ITrigger ), params );
+			
+			dispatcherClass = macro class $className implements $connectorTypePath
+			{ 
+				var _inputs : Array<$complexType>;
+		
+				public function new() 
 				{
-					switch( field.kind )
+					this._inputs = [];
+				}
+
+				public function connect( input : $complexType ) : Bool
+				{
+					if ( this._inputs.indexOf( input ) == -1 )
 					{
-						case FMethod( k ):
-							
-							var fieldType 					= field.type;
-							var ret : ComplexType 			= null;
-							var args : Array<FunctionArg> 	= [];
-						
-							switch( fieldType )
-							{
-								case TFun( a, r ):
-									
-									ret = r.toComplexType();
-
-									if ( a.length > 0 )
-									{
-										args = a.map( function( arg )
-										{
-											return cast { name: arg.name, type: arg.t.toComplexType(), opt: arg.opt };
-										} );
-									}
-								
-								case _:
-							}
-							
-							var newField : Field = 
-							{
-								meta: field.meta.get(),
-								name: field.name,
-								pos: field.pos,
-								kind: null,
-								access: [ APublic ]
-							}
-
-							var methodName  = field.name;
-							var methArgs = [ for ( arg in args ) macro $i { arg.name } ];
-							var body = 
-							macro 
-							{
-								for ( input in this._inputs ) input.$methodName( $a{ methArgs } );
-							};
-							
-							
-							newField.kind = FFun( 
-								{
-									args: args,
-									ret: ret,
-									expr: body
-								}
-							);
-							
-							newFields.push( newField );
-							
-						case _:
+						this._inputs.push( input );
+						return true;
+					}
+					else
+					{
+						return false;
 					}
 				}
 
-				case _:
-		}
+				public function disconnect( input : $complexType ) : Bool
+				{
+					var index : Int = this._inputs.indexOf( input );
+					
+					if ( index > -1 )
+					{
+						this._inputs.splice( index, 1 );
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+			};
 
-		dispatcherClass.pack = interfaceName.pack.copy();
-		
-		switch( dispatcherClass.kind )
-		{
-			case TDClass( superClass, interfaces, isInterface ):
-				interfaces.push( typePath );
-				
-			case _:
+			var newFields = dispatcherClass.fields;
+			switch( type )
+			{
+				case TInst( _.get() => cls, params ):
+
+					var fields : Array<ClassField> = cls.fields.get();
+
+					for ( field in fields )
+					{
+						switch( field.kind )
+						{
+							case FMethod( k ):
+								
+								var fieldType 					= field.type;
+								var ret : ComplexType 			= null;
+								var args : Array<FunctionArg> 	= [];
+							
+								switch( fieldType )
+								{
+									case TFun( a, r ):
+										
+										ret = r.toComplexType();
+
+										if ( a.length > 0 )
+										{
+											args = a.map( function( arg )
+											{
+												return cast { name: arg.name, type: arg.t.toComplexType(), opt: arg.opt };
+											} );
+										}
+									
+									case _:
+								}
+								
+								var newField : Field = 
+								{
+									meta: field.meta.get(),
+									name: field.name,
+									pos: field.pos,
+									kind: null,
+									access: [ APublic ]
+								}
+
+								var methodName  = field.name;
+								var methArgs = [ for ( arg in args ) macro $i { arg.name } ];
+								var body = 
+								macro 
+								{
+									for ( input in this._inputs ) input.$methodName( $a{ methArgs } );
+								};
+								
+								
+								newField.kind = FFun( 
+									{
+										args: args,
+										ret: ret,
+										expr: body
+									}
+								);
+								
+								newFields.push( newField );
+								
+							case _:
+						}
+					}
+
+					case _:
+			}
+
+			dispatcherClass.pack = interfaceName.pack.copy();
+			
+			switch( dispatcherClass.kind )
+			{
+				case TDClass( superClass, interfaces, isInterface ):
+					interfaces.push( typePath );
+					
+				case _:
+			}
+			
+			Context.defineType( dispatcherClass );
+			TriggerBuilder._cache.set( className, dispatcherClass );
 		}
-		
-		Context.defineType( dispatcherClass );
+		else
+		{
+			dispatcherClass = TriggerBuilder._cache.get( className );
+		}
 		
 		return { name: dispatcherClass.name, pack: dispatcherClass.pack };
 	}
