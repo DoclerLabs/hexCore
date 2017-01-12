@@ -14,10 +14,10 @@ interface IDependencyInjector extends IBasicInjector
     function injectInto( target : Dynamic ) : Void;
 
     function destroyInstance( instance : Dynamic ) : Void;
+	
+	function addListener( listener: IInjectorListener ) : Bool;
 
-    function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
-
-    function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool;
+	function removeListener( listener: IInjectorListener ) : Bool;
 	
 	function getProvider( className : String, name : String = '' ) : IDependencyProvider;
 }

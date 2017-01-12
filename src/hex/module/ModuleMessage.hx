@@ -8,8 +8,8 @@ import hex.event.MessageType;
  */
 class ModuleMessage
 {
-	public static var INITIALIZED       = new MessageType( "onModuleInitialisation" );
-    public static var RELEASED          = new MessageType( "onModuleRelease" );
+	inline public static var INITIALIZED       = new MessageType( "onModuleInitialisation" );
+    inline public static var RELEASED          = new MessageType( "onModuleRelease" );
 	
 	function new() 
 	{

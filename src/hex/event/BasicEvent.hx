@@ -6,7 +6,7 @@ import hex.log.Stringifier;
  * ...
  * @author Francis Bourre
  */
-class BasicEvent implements IEvent
+class BasicEvent
 {
     public var type     : String;
     public var target   : Dynamic;

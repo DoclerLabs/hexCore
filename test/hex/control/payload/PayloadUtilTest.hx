@@ -3,7 +3,7 @@ package hex.control.payload;
 import hex.control.payload.ExecutionPayload;
 import hex.control.payload.PayloadUtil;
 import hex.di.IDependencyInjector;
-import hex.di.InjectionEvent;
+import hex.di.IInjectorListener;
 import hex.di.provider.IDependencyProvider;
 import hex.unittest.assertion.Assert;
 
@@ -31,17 +31,6 @@ class PayloadUtilTest
         Assert.deepEquals( 	[[mockImplementation, IMockType, "mockPayload"], ["test", String, "stringPayload"], [anotherMockImplementation, IMockType, "anotherMockPayload"] ], 
 									injector.mappedPayloads,
 									"'CommandExecutor.mapPayload' should map right values" );
-									
-		/*Assert.deepEquals
-		( 								
-			[
-				[ mockImplementation, "hex.control.payload.IMockType", "mockPayload" ],
-				[ "test", String, "stringPayload" ],
-				[ anotherMockImplementation, "hex.control.payload.IMockType", "anotherMockPayload"]
-			], 
-			injector.mappedPayloads, 
-			"'CommandExecutor.mapPayload' should map right values" 
-		);*/
     }
 	
 	@Test( "Test unmapping" )
@@ -62,17 +51,6 @@ class PayloadUtilTest
         Assert.deepEquals( 	[[IMockType, "mockPayload"], [String, "stringPayload"], [IMockType, "anotherMockPayload"] ], 
 									injector.unmappedPayloads,
 									"'CommandExecutor.mapPayload' should unmap right values" );
-								
-		/*Assert.deepEquals
-		( 								
-			[
-				[ "hex.control.payload.IMockType", "mockPayload" ],
-				[ String, "stringPayload" ],
-				[ "hex.control.payload.IMockType", "anotherMockPayload"]
-			], 
-			injector.mappedPayloads, 
-			"'CommandExecutor.mapPayload' should unmap right values" 
-		);*/
     }
 }
 
@@ -174,12 +152,12 @@ private class MockDependencyInjector implements IDependencyInjector
 		
 	}
 
-	public function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function addListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}
 
-	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function removeListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}

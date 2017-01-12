@@ -9,6 +9,6 @@ import hex.di.mapping.MappingDefinitionTest;
 class CoreDiSuite
 {
     @Suite( "Di" )
-    public var list : Array<Class<Dynamic>> = [ InjectionEventTest, MappingDefinitionTest ];
+    public var list : Array<Class<Dynamic>> = [ MappingDefinitionTest ];
 	
 }

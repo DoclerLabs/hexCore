@@ -4,7 +4,6 @@ import hex.error.Exception;
 import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
 import hex.error.NoSuchElementException;
-import hex.event.IEvent;
 import hex.unittest.assertion.Assert;
 
 /**

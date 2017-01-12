@@ -3,7 +3,7 @@ package hex.control.guard;
 import hex.control.guard.GuardUtil;
 import hex.control.guard.IGuard;
 import hex.di.IDependencyInjector;
-import hex.di.InjectionEvent;
+import hex.di.IInjectorListener;
 import hex.di.provider.IDependencyProvider;
 import hex.unittest.assertion.Assert;
 
@@ -150,12 +150,12 @@ private class MockDependencyInjector implements IDependencyInjector
 		
 	}
 
-	public function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function addListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}
 
-	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function removeListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}

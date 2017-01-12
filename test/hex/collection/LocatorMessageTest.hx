@@ -13,15 +13,13 @@ class LocatorMessageTest
 	public function testRegisterProperty() : Void
 	{
 		var message = LocatorMessage.REGISTER;
-		Assert.isInstanceOf( message, MessageType, "'LocatorMessage.REGISTER' should be an instance of 'MessageType'" );
-		Assert.equals( "onRegister", message.name, "'name' property should be the same" );
+		Assert.equals( "onRegister", message );
 	}
 	
 	@Test( "test 'UNREGISTER' property" ) 
 	public function testUnregisterProperty() : Void
 	{
 		var message = LocatorMessage.UNREGISTER;
-		Assert.isInstanceOf( message, MessageType, "'LocatorMessage.UNREGISTER' should be an instance of 'MessageType'" );
-		Assert.equals( "onUnregister", message.name, "'name' property should be the same" );
+		Assert.equals( "onUnregister", message );
 	}
 }
