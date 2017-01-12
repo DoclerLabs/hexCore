@@ -13,7 +13,6 @@ class LocatorMessageTest
 	public function testRegisterProperty() : Void
 	{
 		var message = LocatorMessage.REGISTER;
-		trace( message );
 		Assert.equals( "onRegister", message );
 	}
 	
