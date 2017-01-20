@@ -41,13 +41,13 @@ install:
   - haxe flash/install.hxml
 
 script:
-  - haxe build-each.hxml -cp hexdoctheme/src --macro "ImportAll.run()" --no-output -php bin
-  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-php.hxml && php bin/index.php; fi
+  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-each.hxml -cp hexdoctheme/src --macro "ImportAll.run()" --no-output -php bin; fi
+  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-php.hxml && php bin; fi
   - haxe build-each.hxml -cp hexdoctheme/src --macro "ImportAll.run()" --no-output -neko bin/docs.n
   - haxe build-neko.hxml         && neko bin/MainCoreTest.n
   - haxe build-each.hxml -cp hexdoctheme/src --macro "ImportAll.run()" --no-output -js bin/docs.js
   - haxe build-js.hxml           && node bin/MainCoreTest.js
-  - haxe build-each.hxml -cp hexdoctheme/src --macro "ImportAll.run()" --no-output -swf-version 11 -swf bin/docs.swf
+  - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-each.hxml -cp hexdoctheme/src --macro "ImportAll.run()" --no-output -swf-version 11 -swf bin/docs.swf; fi
   - if [ $TRAVIS_HAXE_VERSION != "3.2.1" ]; then haxe build-flash.hxml -D fdb && haxe flash/run.hxml bin/MainCoreTest.swf; fi
   
 notifications:
