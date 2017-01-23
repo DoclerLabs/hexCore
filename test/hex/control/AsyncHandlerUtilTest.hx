@@ -1,5 +1,6 @@
 package hex.control;
 
+#if (!neko || haxe_ver >= "3.3")
 import haxe.Timer;
 import hex.unittest.assertion.Assert;
 import hex.unittest.runner.MethodRunner;
@@ -122,3 +123,4 @@ typedef User =
 	var name : String;
 	var isMember : Bool;
 }
+#end
