@@ -27,7 +27,7 @@ class TriggerBuilder
         throw new PrivateConstructorException( "This class can't be instantiated." );
     }
 	
-	inline static function _isOutput( f ) : Bool
+	static function _isOutput( f ) : Bool
 	{
 		switch ( f.kind )
 		{
