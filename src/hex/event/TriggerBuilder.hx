@@ -27,6 +27,18 @@ class TriggerBuilder
         throw new PrivateConstructorException( "This class can't be instantiated." );
     }
 	
+	inline static function _isOutput( f ) : Bool
+	{
+		switch ( f.kind )
+		{
+			case FProp( get, set, TPath( p ), e ):
+				return MacroUtil.getClassFullQualifiedName( p ) == Type.getClassName( ITrigger );
+				
+			default:
+				return false;
+		}
+	}
+	
 	macro static public function build() : Array<Field> 
 	{
 		var fields = Context.getBuildFields();
@@ -38,7 +50,7 @@ class TriggerBuilder
 		
 		for ( f in fields )
 		{
-			var isOutput = f.meta.filter( function ( m ) { return m.name== TriggerBuilder.OutputAnnotation; } ).length > 0;
+			var isOutput = TriggerBuilder._isOutput( f );
 			if ( isOutput ) 
 			{
 				switch( f.kind )
@@ -48,8 +60,7 @@ class TriggerBuilder
 						
 						Context.error( "'" + f.name + "' property is not public with read access only.\n Use 'public var " +
 							f.name + " ( default, never )' with '@" + TriggerBuilder.OutputAnnotation + "' annotation", f.pos );
-						//Context.error('`${f.name}` property is not public with read access only.\n Use `public var ${f.name}( default, never)` with @${TriggerBuilder.OutputAnnotation} annotation', f.pos );
-					
+
 					case FProp( get, set, t, e ):
 						
 						if ( get != "default" || set != "never" )

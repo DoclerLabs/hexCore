@@ -34,10 +34,8 @@ class TriggerTest
 
 private class MockModel implements ITriggerOwner
 {
-    @Trigger
     public var intOutput( default, never ) : ITrigger<IIntConnection>;
 	
-	@Trigger
     public var stringOutput( default, never )  : ITrigger<IStringConnection>;
 	
 	public var size : Size = new Size( 10, 20 );
