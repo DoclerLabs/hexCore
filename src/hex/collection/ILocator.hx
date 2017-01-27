@@ -1,12 +1,10 @@
 package hex.collection;
 
-import hex.event.IObservable;
-
 /**
  * ...
  * @author Francis Bourre
  */
-interface ILocator<KeyType, ValueType> extends IObservable
+interface ILocator<KeyType, ValueType>
 {
     function keys() : Array<KeyType>;
 

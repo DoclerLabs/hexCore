@@ -3,15 +3,20 @@ package hex.collection;
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
 import hex.event.ClosureDispatcher;
-import hex.event.MessageType;
+import hex.event.ITrigger;
+import hex.event.ITriggerOwner;
 import hex.log.Stringifier;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
+class Locator<KeyType, ValueType> 
+	//implements ITriggerOwner
+	implements ILocator<KeyType, ValueType>
 {
+	//public var trigger ( default, never ) : ITrigger<ILocatorListener<String, Bool>>;
+	
     var _dispatcher     : ClosureDispatcher;
     var _map    		: HashMap<KeyType, ValueType>;
 
@@ -102,16 +107,6 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
             return false;
         }
     }
-	
-	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.addHandler( messageType, callback );
-	}
-	
-	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.removeHandler( messageType, callback );
-	}
 
     public function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
