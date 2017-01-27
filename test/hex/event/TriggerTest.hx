@@ -38,6 +38,8 @@ private class MockModel implements ITriggerOwner
 	
     public var stringOutput( default, never )  : ITrigger<IStringConnection>;
 	
+//public var genericOutput( default, never )  : ITrigger<GenericConnection<Int>>;
+	
 	public var size : Size = new Size( 10, 20 );
 
     public function new()
