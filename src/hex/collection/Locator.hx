@@ -132,11 +132,11 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 
     function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {
-		
+		this._dispatcher.dispatch( LocatorMessage.REGISTER, [ key, element ] );
     }
 
     function  _dispatchUnregisterEvent( key : KeyType ) : Void
     {
-		
+		this._dispatcher.dispatch( LocatorMessage.UNREGISTER, [ key ] );
     }
 }
