@@ -4,6 +4,9 @@ import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type.ClassField;
+import haxe.macro.Type.ClassType;
+import haxe.macro.Type.Ref;
+import haxe.macro.Type.TypeParameter;
 import haxe.macro.TypeTools;
 import hex.error.PrivateConstructorException;
 import hex.event.ITrigger;
@@ -119,7 +122,7 @@ class TriggerBuilder
 				}
 			
 			case FProp( get, set, TPath( p ), e ):
-				
+			
 				TriggerBuilder._checkITriggerImplementation( f, p );
 				connectionDefinition = TriggerBuilder._getConnectionDefinition( p.params );
 				connectionDefinition.typePath = p;
@@ -197,6 +200,11 @@ class TriggerBuilder
 			};
 
 			var newFields = dispatcherClass.fields;
+			
+			
+var rt = Context.resolveType( interfaceName.paramComplexType, Context.currentPos() );
+//trace( switch(rt) { case TInst( t, p ): p; case _: null; } );
+			
 
 			switch( ComplexTypeTools.toType( interfaceName.paramComplexType ) )
 			{
@@ -224,6 +232,17 @@ class TriggerBuilder
 										{
 											args = a.map( function( arg )
 											{
+												switch( arg.t )
+												{
+													case TInst( t, p ):
+														var i = _getIndex( t, cls.params );
+														if ( i != -1 )
+														{
+															return cast { name: arg.name, type: params[i].toComplexType(), opt: arg.opt };
+														}
+
+													case _:
+												}
 												return cast { name: arg.name, type: arg.t.toComplexType(), opt: arg.opt };
 											} );
 										}
@@ -320,6 +339,45 @@ class TriggerBuilder
 		{
 			Context.error( "'" + f.name + "' property is not typed '" + Type.getClassName( ITrigger ) + "<ConnecttionType>'", f.pos );
 		}
+	}
+	
+// [{ name => U, t => TInst(hex.event.GenericConnection.U,[]) }]
+//hex.event.GenericConnection.U,[]
+
+	/*static function _f( arg : {t:Type, opt:Bool, name:String} ) : Ref<ClassType>
+	{
+		var r;
+		switch( arg.t )
+		{
+			case TInst( t, p ):
+				trace( t, p );
+				r = t;
+				
+			case _:
+				r = null;
+		}
+		return r;
+	}*/
+
+	static function _getIndex( t:Ref<ClassType>, params : Array<TypeParameter> ): Int
+	{
+		var l = params.length;
+		for ( i in 0...l )
+		{
+			var param = params[ i ];
+
+			switch( param.t )
+			{
+				case TInst( tt, pp ):
+
+					if ( "" + tt == "" + t ) 
+					{
+						return i;
+					}
+				case _:
+			}
+		}
+		return -1;
 	}
 	
 	static function _getConnectionDefinition( params : Array<TypeParam> )
