@@ -1,5 +1,6 @@
 package hex.event;
 
+#if macro
 import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -11,7 +12,6 @@ import haxe.macro.TypeTools;
 import hex.error.PrivateConstructorException;
 import hex.event.ITrigger;
 import hex.util.MacroUtil;
-
 
 using haxe.macro.Context;
 
@@ -412,3 +412,4 @@ var rt = Context.resolveType( interfaceName.paramComplexType, Context.currentPos
 		return null;
 	}
 }
+#end
