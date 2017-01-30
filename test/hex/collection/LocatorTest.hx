@@ -236,7 +236,7 @@ class LocatorTest
 		locator.unregister( 'test' );
 		Assert.equals( 1, listener.callbackCallCount );
 		Assert.equals( 'test', listener.callbackKey );
-		Assert.isNull( listener.callbackValue );
+		Assert.isFalse( listener.callbackValue );
 	}
 }
 
