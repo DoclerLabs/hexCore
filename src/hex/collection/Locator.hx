@@ -2,7 +2,6 @@ package hex.collection;
 
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
-import hex.event.ClosureDispatcher;
 import hex.event.ITrigger;
 import hex.event.ITriggerOwner;
 import hex.log.Stringifier;
@@ -12,18 +11,16 @@ import hex.log.Stringifier;
  * @author Francis Bourre
  */
 class Locator<KeyType, ValueType> 
-	//implements ITriggerOwner
+	implements ITriggerOwner
 	implements ILocator<KeyType, ValueType>
 {
-	//public var trigger ( default, never ) : ITrigger<ILocatorListener<String, Bool>>;
+	public var trigger ( default, never ) : ITrigger<ILocatorListener<Dynamic, Dynamic>>;
 	
-    var _dispatcher     : ClosureDispatcher;
     var _map    		: HashMap<KeyType, ValueType>;
 
     public function new()
     {
-        this._map   		= new HashMap();
-        this._dispatcher    = new ClosureDispatcher();
+        this._map = new HashMap();
     }
 	
 	public function clear() : Void
@@ -34,7 +31,9 @@ class Locator<KeyType, ValueType>
 	public function release() : Void
 	{
 		this.clear();
-		this._dispatcher.removeAllListeners();
+		#if !macro
+		this.trigger.disconnectAll();
+		#end
 	}
 	
 	public function isEmpty() : Bool
@@ -110,14 +109,12 @@ class Locator<KeyType, ValueType>
 
     public function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
-		var b = this._dispatcher.addHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.addHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.connect( listener );
     }
 
     public function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
-		var b = this._dispatcher.removeHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.removeHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.disconnect( listener );
     }
 
     public function toString() : String
@@ -127,11 +124,15 @@ class Locator<KeyType, ValueType>
 
     function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {
-		this._dispatcher.dispatch( LocatorMessage.REGISTER, [ key, element ] );
+		#if !macro
+		this.trigger.onRegister( key, element );
+		#end
     }
 
     function  _dispatchUnregisterEvent( key : KeyType ) : Void
     {
-		this._dispatcher.dispatch( LocatorMessage.UNREGISTER, [ key ] );
+		#if !macro
+		this.trigger.onUnregister( key );
+		#end
     }
 }

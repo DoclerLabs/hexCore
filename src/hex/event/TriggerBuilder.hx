@@ -197,6 +197,11 @@ class TriggerBuilder
 						return false;
 					}
 				}
+				
+				public function disconnectAll() : Void
+				{
+					this._inputs = [];
+				}
 			};
 
 			var newFields = dispatcherClass.fields;
