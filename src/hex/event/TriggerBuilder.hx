@@ -201,11 +201,6 @@ class TriggerBuilder
 
 			var newFields = dispatcherClass.fields;
 			
-			
-var rt = Context.resolveType( interfaceName.paramComplexType, Context.currentPos() );
-//trace( switch(rt) { case TInst( t, p ): p; case _: null; } );
-			
-
 			switch( ComplexTypeTools.toType( interfaceName.paramComplexType ) )
 			{
 				case TInst( _.get() => cls, params ):
