@@ -255,7 +255,7 @@ private class MockListener implements ILocatorListener<String, Bool>
 	{
 		this.callbackCallCount 	= 0;
 		this.callbackKey 		= null;
-		this.callbackValue 		= null;
+		this.callbackValue 		= false;
 	}
 	
 	public function onRegister( key : String, value : Bool ) : Void
