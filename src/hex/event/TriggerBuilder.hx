@@ -32,13 +32,13 @@ class TriggerBuilder
 	
 	static function _isOutput( f ) : Bool
 	{
-		switch ( f.kind )
+		return switch ( f.kind )
 		{
 			case FProp( get, set, TPath( p ), e ):
-				return MacroUtil.getClassFullQualifiedName( p ) == Type.getClassName( ITrigger );
+				MacroUtil.getClassFullQualifiedName( p ) == Type.getClassName( ITrigger );
 				
 			default:
-				return false;
+				false;
 		}
 	}
 	
@@ -62,14 +62,14 @@ class TriggerBuilder
 					case FVar( t, e ):
 						
 						Context.error( "'" + f.name + "' property is not public with read access only.\n Use 'public var " +
-							f.name + " ( default, never )' with '@Trigger' annotation", f.pos );
+							f.name + " ( default, never )'", f.pos );
 
 					case FProp( get, set, t, e ):
 						
 						if ( get != "default" || set != "never" )
 						{
 							Context.error( "'" + f.name + "' property is not public with read access only.\n Use 'public var " +
-							f.name + " ( default, never )' with '@Trigger' annotation", f.pos );
+							f.name + " ( default, never )'", f.pos );
 						}
 						
 						f.kind = _getKind( f, get, set );
@@ -82,7 +82,7 @@ class TriggerBuilder
         return fields;
     }
 	
-	static function _getKind( f, ?get, ?set )
+	static function _getKind( f: Field, get, set )
 	{
 		var outputDefinition 	= TriggerBuilder._getOutputDefinition( f );
 		var e 					= TriggerBuilder._buildClass( outputDefinition );
@@ -90,66 +90,44 @@ class TriggerBuilder
 		var typePath 			= MacroUtil.getTypePath( className, f.pos );
 		var complexType 		= TypeTools.toComplexType( Context.getType( className ) );
 		
-		return ( get == null && set == null ) ?
-			FVar( complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } ):
-			FProp( get, set, complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } );
-
+		return FProp( get, set, complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } );
 	}
 	
-	static function _getOutputDefinition( f ) : { name: String, typePath : TypePath, paramComplexType : Null<ComplexType> }
+	static function _getOutputDefinition( f: Field ) : { name: String, typePath : TypePath, paramComplexType : Null<ComplexType> }
 	{
-		var name 					: String 			= "";
-		var connectionDefinition = null;
-		
-		//TODO DRY
 		switch ( f.kind )
 		{
-			case FVar( TPath( p ), e ):
+			case FProp( _, _, TPath( p ), e ):
 
-				TriggerBuilder._checkITriggerImplementation( f, p );
-				connectionDefinition = TriggerBuilder._getConnectionDefinition( p.params );
-				connectionDefinition.typePath = p;
-				
-				var t : haxe.macro.Type = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
-				
-				switch ( t )
+				for ( param in p.params )
 				{
-					case TInst( t, p ):
-						var ct = t.get();
-						name = ct.pack.concat( [ ct.name ] ).join( '.' );
+					switch( param )
+					{
+						case TPType( tp ) :
 
-					case _:
-				}
-			
-			case FProp( get, set, TPath( p ), e ):
-			
-				TriggerBuilder._checkITriggerImplementation( f, p );
-				connectionDefinition = TriggerBuilder._getConnectionDefinition( p.params );
-				connectionDefinition.typePath = p;
-				
-				var t : haxe.macro.Type = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
-				
-				switch ( t )
-				{
-					case TInst( t, p ):
-						var ct = t.get();
-						name = ct.pack.concat( [ ct.name ] ).join( '.' );
-
-					case _:
+							switch( tp )
+							{
+								case TPath( p ):
+									switch ( Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) ) )
+									{
+										case TInst( t, pp ):
+											return { name: t.get().name, paramComplexType: tp, typePath: p };
+											
+										case _:
+									}
+									
+								case _:
+							}
+							
+						case _:
+						
+					}
 				}
 
 			case _:
 		}
-		
-		//TODO check double
-		var tpName = connectionDefinition.fullyQualifiedName;
-		if ( name != Type.getClassName( ITrigger ) )
-		{
-			Context.error( "'" + f.name + "' property should be typed '" + Type.getClassName( ITrigger ) + "<" + tpName 
-				+ ">' instead of '" + name + "<" + tpName + ">'", f.pos );
-		}
-		
-		return connectionDefinition;
+
+		return null;
 	}
 	
 	static function _buildClass( interfaceName : { name: String, typePath : TypePath, paramComplexType : Null<ComplexType> } ) : { name: String, pack: Array<String> }
@@ -330,34 +308,6 @@ class TriggerBuilder
 		
 		return { name: dispatcherClass.name, pack: dispatcherClass.pack };
 	}
-	
-	static function _checkITriggerImplementation( f, tp : TypePath ) : Void
-	{
-		var className = MacroUtil.getClassFullQualifiedName( tp );
-		
-		if ( className != Type.getClassName( ITrigger )  )
-		{
-			Context.error( "'" + f.name + "' property is not typed '" + Type.getClassName( ITrigger ) + "<ConnecttionType>'", f.pos );
-		}
-	}
-	
-// [{ name => U, t => TInst(hex.event.GenericConnection.U,[]) }]
-//hex.event.GenericConnection.U,[]
-
-	/*static function _f( arg : {t:Type, opt:Bool, name:String} ) : Ref<ClassType>
-	{
-		var r;
-		switch( arg.t )
-		{
-			case TInst( t, p ):
-				trace( t, p );
-				r = t;
-				
-			case _:
-				r = null;
-		}
-		return r;
-	}*/
 
 	static function _getIndex( t:Ref<ClassType>, params : Array<TypeParameter> ): Int
 	{
@@ -378,38 +328,6 @@ class TriggerBuilder
 			}
 		}
 		return -1;
-	}
-	
-	static function _getConnectionDefinition( params : Array<TypeParam> )
-	{
-		for ( param in params )
-		{
-			switch( param )
-			{
-				case TPType( tp ) :
-
-					switch( tp )
-					{
-						case TPath( p ):
-							var t = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
-							switch ( t )
-							{
-								case TInst( t, p ):
-									var ct = t.get();
-									return { name: ct.name, fullyQualifiedName: ct.pack.concat( [ ct.name ] ).join( '.' ), paramComplexType: tp, typePath: null };
-									
-								case _:
-							}
-							
-						case _:
-					}
-					
-				case _:
-				
-			}
-		}
-		
-		return null;
 	}
 }
 #end
