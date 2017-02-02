@@ -8,7 +8,7 @@ import haxe.PosInfos;
  */
 class VirtualMethodException extends Exception
 {
-    public function new ( message : String, ?posInfos : PosInfos )
+    public function new ( ?message : String = 'this method must be overridden', ?posInfos : PosInfos )
     {
         super( message, posInfos );
     }
