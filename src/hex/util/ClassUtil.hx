@@ -2,7 +2,6 @@ package hex.util;
 
 import hex.error.IllegalArgumentException;
 import hex.error.PrivateConstructorException;
-import hex.log.Stringifier;
 
 /**
  * ...
@@ -10,9 +9,10 @@ import hex.log.Stringifier;
  */
 class ClassUtil
 {
+	/** @private */
     function new()
     {
-        throw new PrivateConstructorException( "'" + Stringifier.stringify( this ) + "' class can't be instantiated." );
+        throw new PrivateConstructorException();
     }
 
     static public function getInheritanceChain( clazz : Class<Dynamic> ) : Array<Class<Dynamic>>

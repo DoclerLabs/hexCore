@@ -9,9 +9,10 @@ import hex.error.PrivateConstructorException;
  */
 class GuardUtil
 {
+	/** @private */
 	function new() 
 	{
-		throw new PrivateConstructorException( "'GuardUtil' class can't be instantiated." );
+		throw new PrivateConstructorException();
 	}
 	
 	/**

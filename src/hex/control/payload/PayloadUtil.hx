@@ -9,9 +9,10 @@ import hex.error.PrivateConstructorException;
  */
 class PayloadUtil
 {
-	public function new() 
+	/** @private */
+	function new() 
 	{
-		throw new PrivateConstructorException( "'PayloadUtil' class can't be instantiated." );
+		throw new PrivateConstructorException();
 	}
 	
 	/**
