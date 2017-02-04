@@ -1,9 +1,9 @@
 package hex.control.payload;
 
-import hex.di.InjectionEvent;
 import hex.control.payload.ExecutionPayload;
 import hex.control.payload.PayloadUtil;
 import hex.di.IDependencyInjector;
+import hex.di.IInjectorListener;
 import hex.di.provider.IDependencyProvider;
 import hex.unittest.assertion.Assert;
 
@@ -52,28 +52,10 @@ class PayloadUtilTest
 									injector.unmappedPayloads,
 									"'CommandExecutor.mapPayload' should unmap right values" );
     }
-	
-}
-
-private class MockImplementation implements IMockType
-{
-	public var name : String;
-	
-	public function new( name : String )
-	{
-		this.name = name;
-	}
-}
-
-private interface IMockType
-{
-	
 }
 
 private class MockDependencyInjectorForMapping extends MockDependencyInjector
 {
-	public var getOrCreateNewInstanceCallCount 		: Int = 0;
-	public var getOrCreateNewInstanceCallParameter 	: Class<Dynamic>;
 	public var mappedPayloads 						: Array<Array<Dynamic>> = [];
 	public var unmappedPayloads 					: Array<Array<Dynamic>> = [];
 	
@@ -87,11 +69,14 @@ private class MockDependencyInjectorForMapping extends MockDependencyInjector
 		this.unmappedPayloads.push( [ type, name ] );
 	}
 	
-	override public function getOrCreateNewInstance<T>( type : Class<Dynamic> ) : T 
+	override public function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void 
 	{
-		this.getOrCreateNewInstanceCallCount++;
-		this.getOrCreateNewInstanceCallParameter = type;
-		return Type.createInstance( type, [] );
+		this.mappedPayloads.push( [ value, className, name ] );
+	}
+	
+	override public function unmapClassName( className : String, name : String = '' ) : Void
+	{
+		this.unmappedPayloads.push( [ className, name ] );
 	}
 }
 
@@ -127,12 +112,17 @@ private class MockDependencyInjector implements IDependencyInjector
 		return null;
 	}
 	
+	public function getInstanceWithClassName<T>( className : String, name : String = '' ) : T
+	{
+		return null;
+	}
+	
 	public function getOrCreateNewInstance<T>( type : Class<Dynamic> ) : T 
 	{
 		return null;
 	}
 	
-	public function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic 
+	public function instantiateUnmapped<T>( type : Class<Dynamic> ) : T 
 	{
 		return null;
 	}
@@ -162,18 +152,38 @@ private class MockDependencyInjector implements IDependencyInjector
 		
 	}
 
-	public function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function addListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}
 
-	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function removeListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}
 	
-	public function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider
+	public function getProvider( className : String, name : String = '' ) : IDependencyProvider
 	{
 		return null;
+	}
+	
+	public function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToType( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToSingleton( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+	
+	public function unmapClassName( className : String, name : String = '' ) : Void
+	{
+		
 	}
 }

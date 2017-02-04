@@ -2,7 +2,6 @@ package hex.control.payload;
 
 import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
-import hex.log.Stringifier;
 
 /**
  * ...
@@ -10,24 +9,35 @@ import hex.log.Stringifier;
  */
 class ExecutionPayload
 {
-    var _data : Dynamic;
-    var _type : Class<Dynamic>;
-    var _name : String;
-
-    public function new( data : Dynamic, type : Class<Dynamic>, name : String = "" )
+    var _data 		: Dynamic;
+    var _type 		: Class<Dynamic>;
+    var _className 	: String;
+    var _name 		: String;
+	
+    public function new( data : Dynamic, type : Class<Dynamic> = null, name : String = "" )
     {
         if ( data == null )
         {
             throw new NullPointerException( "ExecutionPayload data can't be null" );
         }
-		else if ( !Std.is( data, type ) )
-		{
-			throw new IllegalArgumentException( "ExecutionPayload data '" + data + "' should be an instance of type '" + type + "'" );
-		}
 
-        this._data = data;
-        this._type = type;
-        this._name = name;
+        this._data 		= data;
+		
+		if ( type != null )
+		{
+			this._type 	= type;
+		}
+		else
+		{
+			this._type 	= Type.getClass( this._data );
+		}
+		
+		if ( !Std.is( this._data, this._type ) )
+		{
+			throw new IllegalArgumentException( "ExecutionPayload data '" + this._data + "' should be an instance of type '" + this._type + "'" );
+		}
+        
+        this._name 		= name;
     }
 
     public function getData() : Dynamic
@@ -39,21 +49,36 @@ class ExecutionPayload
     {
         return this._type;
     }
+	
+	/**
+	 * 
+	 * @return 	null when withClassName was not called
+	 */
+	public function getClassName() : String
+    {
+        return this._className;
+    }
 
     public function getName() : String
     {
         return this._name;
     }
 
-    public function withClass( type : Class<Dynamic> ) : ExecutionPayload
-    {
-        this._type = type;
-        return this;
-    }
-
     public function withName( name : String ) : ExecutionPayload
     {
         this._name = name != null ? name : "";
+        return this;
+    }
+	
+	public function withClassName( className : String ) : ExecutionPayload
+    {
+        this._type 	= Type.resolveClass( className.split( '<' )[ 0 ] );
+		if ( this._type == null )
+		{
+			throw new IllegalArgumentException( "type '" + className + "' not found" );
+		}
+		
+        this._className = className;
         return this;
     }
 }

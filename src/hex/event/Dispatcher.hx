@@ -12,7 +12,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 {
 	var _isSealed 			: Bool;
 	var _cachedMethodCalls 	: Array<Void->Void>;
-    var _listeners 			: Map<ListenerType, Map<MessageType, CallbackHandler>>;
+    var _listeners 			: Map<ListenerType, Map<String, CallbackHandler>>;
 
 	public function new()
     {
@@ -31,7 +31,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         while ( iterator.hasNext() )
         {
             var listener : ListenerType 	= iterator.next();
-            var m : Map<MessageType, CallbackHandler> 	= this._listeners.get( listener );
+            var m : Map<String, CallbackHandler> 	= this._listeners.get( listener );
 			
             if ( Lambda.count( m ) > 0 )
             {
@@ -43,7 +43,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             }
             else
             {
-				var messageName : String = messageType.name;
+				var messageName : String = messageType;
                 var callback = Reflect.field( listener, messageName );
                 if ( callback != null && messageName != 'handleMessage' )
                 {
@@ -69,7 +69,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 					} else
 					{
 						var msg : String = Stringifier.stringify( this ) + ".dispatch failed. " +
-						" You must implement '" + messageType.name + "' or 'handleMessage' method in '" +
+						" You must implement '" + messageType + "' or 'handleMessage' method in '" +
 						Stringifier.stringify( listener ) + "' instance.";
 						throw( new UnsupportedOperationException( msg ) );
 					}
@@ -86,7 +86,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		{
 			if ( this._listeners.exists( scope ) )
 			{
-				var m : Map<MessageType, Dynamic> = this._listeners.get( scope );
+				var m : Map<String, Dynamic> = this._listeners.get( scope );
 
 				if ( Lambda.count( m ) == 0 )
 				{
@@ -108,7 +108,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 			}
 			else
 			{
-				var m = new Map<MessageType, CallbackHandler>();
+				var m = new Map<String, CallbackHandler>();
 				var handler = new CallbackHandler( scope, callback );
 				m.set( messageType, handler );
 				this._listeners.set( scope, m );
@@ -153,7 +153,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		{
 			if ( this._listeners.exists( scope ) )
 			{
-				var m : Map<MessageType, CallbackHandler> = this._listeners.get( scope );
+				var m : Map<String, CallbackHandler> = this._listeners.get( scope );
 
 				if ( Lambda.count( m ) == 0 )
 				{
@@ -201,7 +201,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		{
 			if ( this._listeners.exists( listener ) )
 			{
-				var m : Map<MessageType, CallbackHandler> = this._listeners.get( listener );
+				var m : Map<String, CallbackHandler> = this._listeners.get( listener );
 				if ( Lambda.count( m ) > 0 )
 				{
 					var msg : String = Stringifier.stringify( this ) + ".addListener failed. " +
@@ -222,7 +222,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 			}
 			else
 			{
-				this._listeners.set( listener, new Map<MessageType, CallbackHandler>() );
+				this._listeners.set( listener, new Map<String, CallbackHandler>() );
 				return true;
 			}
 		}
@@ -281,7 +281,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             }
             else
             {
-			var m : Map<MessageType, CallbackHandler> = this._listeners.get( listener );
+			var m : Map<String, CallbackHandler> = this._listeners.get( listener );
                 return m.exists( messageType );
             }
         }
@@ -299,7 +299,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
             while ( iterator.hasNext() )
             {
                 var listener : ListenerType = iterator.next();
-				var m : Map<MessageType, CallbackHandler> = this._listeners.get( listener );
+				var m : Map<String, CallbackHandler> = this._listeners.get( listener );
 				if ( Lambda.count( m ) == 0 )
 				{
 					return true;
@@ -316,7 +316,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         {
             if ( this._listeners.exists( scope ) )
             {
-				var m : Map<MessageType, CallbackHandler> = this._listeners.get( scope );
+				var m : Map<String, CallbackHandler> = this._listeners.get( scope );
 				if ( Lambda.count( m ) == 0 )
 				{
 					return true;

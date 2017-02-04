@@ -1,7 +1,7 @@
 package hex;
 
-import hex.di.InjectionEvent;
 import hex.di.IDependencyInjector;
+import hex.di.IInjectorListener;
 import hex.di.provider.IDependencyProvider;
 
 /**
@@ -40,12 +40,17 @@ class MockDependencyInjector implements IDependencyInjector
 		return null;
 	}
 	
+	public function getInstanceWithClassName<T>( className : String, name : String = '' ) : T
+	{
+		return null;
+	}
+	
 	public function getOrCreateNewInstance<T>( type : Class<Dynamic> ) : T 
 	{
 		return Type.createInstance( type, [] );
 	}
 	
-	public function instantiateUnmapped( type : Class<Dynamic> ) : Dynamic 
+	public function instantiateUnmapped<T>( type : Class<Dynamic> ) : T 
 	{
 		return Type.createInstance( type, [] );
 	}
@@ -75,18 +80,38 @@ class MockDependencyInjector implements IDependencyInjector
 		
 	}
 
-	public function addEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function addListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}
 
-	public function removeEventListener( eventType : String, callback : InjectionEvent->Void ) : Bool
+	public function removeListener( listener : IInjectorListener ) : Bool
 	{
 		return false;
 	}
 	
-	public function getProvider( type : Class<Dynamic>, name : String = '' ) : IDependencyProvider
+	public function getProvider( className : String, name : String = '' ) : IDependencyProvider
 	{
 		return null;
+	}
+	
+	public function mapClassNameToValue( className : String, value : Dynamic, ?name : String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToType( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+
+    public function mapClassNameToSingleton( className : String, type : Class<Dynamic>, name:String = '' ) : Void
+	{
+		
+	}
+	
+	public function unmapClassName( className : String, name : String = '' ) : Void
+	{
+		
 	}
 }

@@ -5,6 +5,7 @@ import haxe.macro.Expr;
 import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypePath;
 import haxe.macro.Type.ClassType;
+import haxe.macro.TypeTools;
 
 /**
  * ...
@@ -36,20 +37,6 @@ class MacroUtil
 	}
 	
 	#if (macro || doc_gen)
-	static public function getStringFromExpr( e : ExprDef ) : String
-	{
-		switch( e )
-		{
-			case EConst( CString( s ) ):
-				return s;
-
-			default:
-				throw "type should be string const";
-		}
-
-		return null;
-	}
-
 	static public function getClassNameFromExpr( e : Expr ) : String
 	{
 		var s = haxe.macro.ExprTools.toString( e );
@@ -222,6 +209,33 @@ class MacroUtil
 	static public inline function instantiate( t : TypePath, ?args ) : ExprDef
 	{
 		return ENew( t, args == null ? [] : args );
+	}
+	
+	static public inline function assertTypeMatching( typeName1 : String, typeName2 : String, ?pos : Position ) : Void
+	{
+		var varType1 = 
+					TypeTools.toComplexType(
+						Context.typeof( 
+							Context.parseInlineString( '( null : ${typeName1})', Context.currentPos() ) ) );
+		
+		var varType2 = 
+					TypeTools.toComplexType(
+						Context.typeof( 
+							Context.parseInlineString( '( null : ${typeName2})', Context.currentPos() ) ) );
+		
+		Context.typeof( 
+			macro @:pos( pos != null? pos: Context.currentPos() ) 
+				{ var o2 : $varType2 = null; var o1 : $varType1 = o2; } );
+	}
+	
+	static public inline function assertValueMatching( typeName : String, value : Expr, ?pos : Position ) : Void
+	{
+		//check type matching
+		var varType = 
+					TypeTools.toComplexType( 
+						Context.typeof( 
+							Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) ) );
+		Context.typeof( macro @:pos( pos != null? pos: Context.currentPos() ) { var v : $varType = $value; } );
 	}
 	#end
 }

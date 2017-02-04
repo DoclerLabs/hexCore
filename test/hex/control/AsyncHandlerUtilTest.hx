@@ -1,5 +1,6 @@
 package hex.control;
 
+#if (!neko || haxe_ver >= "3.3")
 import haxe.Timer;
 import hex.unittest.assertion.Assert;
 import hex.unittest.runner.MethodRunner;
@@ -82,7 +83,7 @@ class AsyncHandlerUtilTest
 		
 		handler
 			.on( a => a.forEach( e => e.name += "Test" ) )
-			.on( a => collection = a.findAll( e => e.isMember ) )
+			.on( a => collection = a.filters( e => e.isMember ) )
 			.on( a => a.forEach( e => if ( e.id > 5 ) collection.remove( e ) ) );
 
 			
@@ -122,3 +123,4 @@ typedef User =
 	var name : String;
 	var isMember : Bool;
 }
+#end

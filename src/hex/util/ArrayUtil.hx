@@ -160,7 +160,31 @@ class ArrayUtil
 		}
 	}
 	
-	macro public static function findAll<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : ExprOf<Array<T>>
+	macro public static function findIndex<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : ExprOf<Int>
+	{
+		var ad 			= ArrayUtil.arrowDecompose( f );
+		var leftName 	= ArrayUtil._getLeftName( ad.left );
+		var fExp 		= ad.right;
+		var locals 		= ArrayUtil._getUniqueLocalVarNames( 1, Context.getLocalTVars() );
+		var index 		= locals.pop();
+
+		return macro
+		{
+			var $index 	= 0;
+			for( $i{leftName} in $a )
+			{
+				$i { index } += 1;
+				if( $fExp ) 
+				{
+					$i {index};
+					break;
+				}
+			}
+			-1;
+		}
+	}
+	
+	macro public static function filters<T>( a : ExprOf<Array<T>>, f : ExprOf<Bool> ) : ExprOf<Array<T>>
 	{
 		var ad 			= ArrayUtil.arrowDecompose( f );
 		var leftName 	= ArrayUtil._getLeftName( ad.left );
