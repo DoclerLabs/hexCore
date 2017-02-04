@@ -129,7 +129,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
         while ( iterator.hasNext() )
         {
             var listener : ListenerType 	= iterator.next();
-            var m : Map<MessageType, CallbackHandler> 	= this._listeners.get( listener );
+            var m : Map<String, CallbackHandler> 	= this._listeners.get( listener );
 			
             if ( Lambda.count( m ) > 0 )
             {

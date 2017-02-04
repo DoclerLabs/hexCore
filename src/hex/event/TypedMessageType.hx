@@ -6,10 +6,24 @@ import hex.event.MessageType;
  * ...
  * @author Heorhiy Kharvat
  */
-class TypedMessageType<T> extends MessageType
+abstract TypedMessageType<T>( MessageType )
 {
-	public function new( ?messageName : String ) 
+	inline public function new( ?name : MessageType )
 	{
-		super(messageName);
+		if ( name == null ) {
+			this = new MessageType( "handleMessage" );
+		} else {
+			this = name;
+		}
+	}
+
+	@:to public inline function toMessageType() : MessageType
+	{
+		return this;
+	}
+
+	@:to public inline function toString() : String
+	{
+		return this;
 	}
 }
