@@ -1,6 +1,5 @@
 package hex.control;
 
-import hex.control.AsyncResponder;
 import hex.error.IllegalStateException;
 import hex.unittest.assertion.Assert;
 

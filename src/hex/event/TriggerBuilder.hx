@@ -87,7 +87,7 @@ class TriggerBuilder
 		var outputDefinition 	= TriggerBuilder._getOutputDefinition( f );
 		var e 					= TriggerBuilder._buildClass( outputDefinition );
 		var className 			= e.pack.join( '.' ) + '.' + e.name;
-		var typePath 			= MacroUtil.getTypePath( className, f.pos );
+		var typePath 			= MacroUtil.getTypePath( className );
 		var complexType 		= TypeTools.toComplexType( Context.getType( className ) );
 		
 		return FProp( get, set, complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } );
