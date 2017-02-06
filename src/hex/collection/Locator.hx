@@ -88,7 +88,9 @@ class Locator<KeyType, ValueType>
         else
         {
             this._map.put( key, element );
+			#if !macro
             this._dispatchRegisterEvent( key, element );
+			#end
             return true;
         }
     }
@@ -98,7 +100,9 @@ class Locator<KeyType, ValueType>
         if ( this.isRegisteredWithKey( key ) )
         {
             this._map.remove( key );
+			#if !macro
             this._dispatchUnregisterEvent( key );
+			#end
             return true;
         }
         else
@@ -126,6 +130,8 @@ class Locator<KeyType, ValueType>
     {
 		#if !macro
 		this.trigger.onRegister( key, element );
+		#else
+		haxe.macro.Context.error( "Dispatch cannot be used at compile time.", haxe.macro.Context.currentPos() );
 		#end
     }
 
@@ -133,6 +139,8 @@ class Locator<KeyType, ValueType>
     {
 		#if !macro
 		this.trigger.onUnregister( key );
+		#else
+		haxe.macro.Context.error( "Dispatch cannot be used at compile time.", haxe.macro.Context.currentPos() );
 		#end
     }
 }
