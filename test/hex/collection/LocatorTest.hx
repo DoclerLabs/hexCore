@@ -260,8 +260,6 @@ private class MockListener implements ILocatorListener<String, Bool>
 	
 	public function onRegister( key : String, value : Bool ) : Void
 	{
-		trace( key, value );
-		
 		this.callbackCallCount++;
 		this.callbackKey 	= key;
 		this.callbackValue 	= value;
@@ -269,7 +267,6 @@ private class MockListener implements ILocatorListener<String, Bool>
 	
     public function onUnregister( key : String ) : Void
 	{
-		trace( key );
 		this.callbackCallCount++;
 		this.callbackKey 	= key;
 	}
