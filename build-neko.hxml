@@ -1,2 +1,11 @@
 build-each.hxml
+
+--each
+
+--macro include('hex')
+--no-output
+-neko bin/docs.n
+
+--next
+
 -neko bin/MainCoreTest.n
