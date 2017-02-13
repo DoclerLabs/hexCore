@@ -1,8 +1,13 @@
 package hex.event;
 
+#if macro
+import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type.ClassField;
+import haxe.macro.Type.ClassType;
+import haxe.macro.Type.Ref;
+import haxe.macro.Type.TypeParameter;
 import haxe.macro.TypeTools;
 import hex.error.PrivateConstructorException;
 import hex.event.ITrigger;
@@ -17,15 +22,26 @@ using haxe.macro.Context;
 @:final 
 class TriggerBuilder
 {
-	public static inline var OutputAnnotation = "Trigger";
-	
-	static var _cache : Map<String, TypeDefinition> = new Map();
+	static var _cache 	: Map<String, TypeDefinition> 	= new Map();
+	static var _ID 		: UInt 							= 0;
 	
 	/** @private */
     function new()
     {
-        throw new PrivateConstructorException( "This class can't be instantiated." );
+        throw new PrivateConstructorException();
     }
+	
+	static function _isOutput( f ) : Bool
+	{
+		return switch ( f.kind )
+		{
+			case FProp( get, set, TPath( p ), e ):
+				MacroUtil.getClassFullQualifiedName( p ) == Type.getClassName( ITrigger );
+				
+			default:
+				false;
+		}
+	}
 	
 	macro static public function build() : Array<Field> 
 	{
@@ -38,24 +54,22 @@ class TriggerBuilder
 		
 		for ( f in fields )
 		{
-			var isOutput = f.meta.filter( function ( m ) { return m.name== TriggerBuilder.OutputAnnotation; } ).length > 0;
+			var isOutput = TriggerBuilder._isOutput( f );
 			if ( isOutput ) 
 			{
 				switch( f.kind )
 				{ 
-					//TODO handle properties with virtual getters/setters
 					case FVar( t, e ):
 						
 						Context.error( "'" + f.name + "' property is not public with read access only.\n Use 'public var " +
-							f.name + " ( default, never )' with '@" + TriggerBuilder.OutputAnnotation + "' annotation", f.pos );
-						//Context.error('`${f.name}` property is not public with read access only.\n Use `public var ${f.name}( default, never)` with @${TriggerBuilder.OutputAnnotation} annotation', f.pos );
-					
+							f.name + " ( default, never )'", f.pos );
+
 					case FProp( get, set, t, e ):
 						
 						if ( get != "default" || set != "never" )
 						{
 							Context.error( "'" + f.name + "' property is not public with read access only.\n Use 'public var " +
-							f.name + " ( default, never )' with '@" + TriggerBuilder.OutputAnnotation + "' annotation", f.pos );
+							f.name + " ( default, never )'", f.pos );
 						}
 						
 						f.kind = _getKind( f, get, set );
@@ -68,130 +82,172 @@ class TriggerBuilder
         return fields;
     }
 	
-	static function _getKind( f, ?get, ?set )
+	static function _getKind( f: Field, get, set )
 	{
-		var outputDefinition 	= TriggerBuilder._getOutputDefinition( f );
-		var e 					= TriggerBuilder._buildClass( outputDefinition );
-		var className 			= e.pack.join( '.' ) + '.' + e.name;
-		var typePath 			= MacroUtil.getTypePath( className );
-		var complexType 		= TypeTools.toComplexType( Context.getType( className ) );
+		var triggerDefinition 	= TriggerBuilder._getTriggerDefinition( f );
 		
-		return ( get == null && set == null ) ?
-			FVar( complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } ):
-			FProp( get, set, complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } );
+		var classVO : ClassVO = null;
+		if ( triggerDefinition.tPath != null )
+		{
+			classVO = TriggerBuilder._buildClassVOFromTPath( triggerDefinition.tPath );
+		}
+		else
+		{
+			classVO = TriggerBuilder._buildClassVOFromTFunction( triggerDefinition.tFun );
+		}
 
+		var typePath 			= MacroUtil.getTypePath( classVO.fullClassName );
+		var complexType 		= TypeTools.toComplexType( Context.getType( classVO.fullClassName ) );
+		
+		return FProp( get, set, complexType, { expr: MacroUtil.instantiate( typePath ), pos: f.pos } );
 	}
 	
-	static function _getOutputDefinition( f ) : { name: String, pack: Array<String>, fullyQualifiedName: String }
+	static function _getTriggerDefinition( f: Field )
 	{
-		var name 					: String 			= "";
-		var connectionDefinition 	: { name: String, pack: Array<String>, fullyQualifiedName: String } = null;
-		
-		//TODO DRY
 		switch ( f.kind )
 		{
-			case FVar( TPath( p ), e ):
+			case FProp( _, _, TPath( p ), e ):
 
-				TriggerBuilder._checkITriggerImplementation( f, p );
-				connectionDefinition = TriggerBuilder._getConnectionDefinition( p.params );
-				
-				var t : haxe.macro.Type = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
-				
-				switch ( t )
+				for ( param in p.params )
 				{
-					case TInst( t, p ):
-						var ct = t.get();
-						name = ct.pack.concat( [ ct.name ] ).join( '.' );
+					switch( param )
+					{
+						case TPType( tp ) :
 
-					case _:
-				}
-			
-			case FProp( get, set, TPath( p ), e ):
-				
-				TriggerBuilder._checkITriggerImplementation( f, p );
-				connectionDefinition = TriggerBuilder._getConnectionDefinition( p.params );
-				
-				var t : haxe.macro.Type = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
-				
-				switch ( t )
-				{
-					case TInst( t, p ):
-						var ct = t.get();
-						name = ct.pack.concat( [ ct.name ] ).join( '.' );
-
-					case _:
+							switch( tp )
+							{
+								case TPath( p ):
+									switch ( Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) ) )
+									{
+										case TInst( t, pp ):
+											return { tPath: { name: t.get().name, triggerParamType: tp, typePath: p }, tFun: null };
+											
+										case _:
+									}
+								
+									case TFunction( args, ret ):
+										return { tPath: null, tFun: { args: args, ret: ret, triggerParamType: tp } };
+								case _:
+							}
+							
+						case _:
+						
+					}
 				}
 
 			case _:
 		}
-		
-		//TODO check double
-		var tpName = connectionDefinition.fullyQualifiedName;
-		if ( name != Type.getClassName( ITrigger ) )
-		{
-			Context.error( "'" + f.name + "' property with '@" + TriggerBuilder.OutputAnnotation 
-				+ "' annotation should be typed '" + Type.getClassName( ITrigger ) + "<" + tpName 
-				+ ">' instead of '" + name + "<" + tpName + ">'", f.pos );
-		}
-		
-		return connectionDefinition;
+
+		return null;
 	}
 	
-	static function _buildClass( interfaceName : { name: String, pack: Array<String>, fullyQualifiedName: String } ) : { name: String, pack: Array<String> }
+	static function _getClassSkeleton( className : String, listenerType : Null<ComplexType> ) : TypeDefinition
 	{
-		var className 	= "__" + TriggerBuilder.OutputAnnotation + '_Class_For__' + interfaceName.name;
+		return macro class $className
+		{ 
+			var _inputs : Array<$listenerType>;
+	
+			public function new() 
+			{
+				this._inputs = [];
+			}
+
+			public function connect( input : $listenerType ) : Bool
+			{
+				if ( this._inputs.indexOf( input ) == -1 )
+				{
+					this._inputs.push( input );
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			public function disconnect( input : $listenerType ) : Bool
+			{
+				var index : Int = this._inputs.indexOf( input );
+				
+				if ( index > -1 )
+				{
+					this._inputs.splice( index, 1 );
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			
+			public function disconnectAll() : Void
+			{
+				this._inputs = [];
+			}
+		};
+	}
+	
+	static function _buildClassVOFromTFunction( triggerDefinition : { args: Array<ComplexType>, ret: ComplexType, triggerParamType : Null<ComplexType> } ) : ClassVO
+	{
+		var className 	= '__Trigger_Class__' + (TriggerBuilder._ID++);
+		var dispatcherClass : TypeDefinition = null;
+		
+		dispatcherClass = TriggerBuilder._getClassSkeleton( className, triggerDefinition.triggerParamType );
+
+		var l = triggerDefinition.args.length;
+		var args = [ for ( i in 0...l ) { name: 'arg' + i, type: triggerDefinition.args[ i ], opt: false } ];
+		
+		var newField : Field = 
+		{
+			meta: null,
+			name: 'trigger',
+			pos: Context.currentPos(),
+			kind: null,
+			access: [ APublic ]
+		}
+
+		var methArgs = [ for ( arg in args ) macro $i { arg.name } ];
+		var body = 
+		macro 
+		{
+			for ( input in this._inputs ) input( $a{ methArgs } );
+		};
+		
+		newField.kind = FFun( 
+			{
+				args: args,
+				ret: triggerDefinition.ret,
+				expr: body
+			}
+		);
+		
+		dispatcherClass.fields.push( newField );
+		dispatcherClass.pack = [ 'hex', 'event' ];
+
+		switch( dispatcherClass.kind )
+		{
+			case TDClass( superClass, interfaces, isInterface ):
+				//interfaces.push( typePath );
+				interfaces.push( MacroUtil.getTypePath( Type.getClassName( ITrigger ), [ TPType( triggerDefinition.triggerParamType ) ] ) );
+				
+			case _:
+		}
+
+		Context.defineType( dispatcherClass );
+		return { name: dispatcherClass.name, pack: dispatcherClass.pack, fullClassName: dispatcherClass.pack.join( '.' ) + '.' + dispatcherClass.name };
+	}
+	
+	static function _buildClassVOFromTPath( triggerDefinition : { name: String, typePath : TypePath, triggerParamType : Null<ComplexType> } ) : ClassVO
+	{
+		var className 	= '__Trigger_Class_For__' + triggerDefinition.name;
 		var dispatcherClass : TypeDefinition = null;
 		
 		if ( !TriggerBuilder._cache.exists( className ) )
 		{
-		
-			var typePath 	= MacroUtil.getTypePath( interfaceName.fullyQualifiedName );
-			var type 		= Context.getType( interfaceName.fullyQualifiedName );
-			var complexType = TypeTools.toComplexType( type );
-			
-			var params = [ TPType( complexType ) ];
-			var connectorTypePath = MacroUtil.getTypePath( Type.getClassName( ITrigger ), params );
-			
-			dispatcherClass = macro class $className implements $connectorTypePath
-			{ 
-				var _inputs : Array<$complexType>;
-		
-				public function new() 
-				{
-					this._inputs = [];
-				}
-
-				public function connect( input : $complexType ) : Bool
-				{
-					if ( this._inputs.indexOf( input ) == -1 )
-					{
-						this._inputs.push( input );
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
-
-				public function disconnect( input : $complexType ) : Bool
-				{
-					var index : Int = this._inputs.indexOf( input );
-					
-					if ( index > -1 )
-					{
-						this._inputs.splice( index, 1 );
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
-			};
+			dispatcherClass = TriggerBuilder._getClassSkeleton( className, triggerDefinition.triggerParamType );
 
 			var newFields = dispatcherClass.fields;
-			switch( type )
+			switch( ComplexTypeTools.toType( triggerDefinition.triggerParamType ) )
 			{
 				case TInst( _.get() => cls, params ):
 
@@ -217,13 +273,24 @@ class TriggerBuilder
 										{
 											args = a.map( function( arg )
 											{
+												switch( arg.t )
+												{
+													case TInst( t, p ):
+														var i = _getIndex( t, cls.params );
+														if ( i != -1 )
+														{
+															return cast { name: arg.name, type: params[i].toComplexType(), opt: arg.opt };
+														}
+
+													case _:
+												}
 												return cast { name: arg.name, type: arg.t.toComplexType(), opt: arg.opt };
 											} );
 										}
 									
 									case _:
 								}
-								
+
 								var newField : Field = 
 								{
 									meta: field.meta.get(),
@@ -258,13 +325,38 @@ class TriggerBuilder
 
 					case _:
 			}
-
-			dispatcherClass.pack = interfaceName.pack.copy();
 			
+			var typePath 	: TypePath;
+			var pack 		: Array<String>;
+			
+			switch( triggerDefinition.triggerParamType )
+			{
+				case TPath( p ):
+					var t = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
+
+					switch ( t )
+					{
+						case TInst( t, p ):
+							var ct = t.get();
+							pack = ct.pack.copy();
+							
+						case _:
+					}
+
+					typePath = p;
+
+					
+				case _:
+			}
+
+			dispatcherClass.pack = pack;
+
 			switch( dispatcherClass.kind )
 			{
 				case TDClass( superClass, interfaces, isInterface ):
 					interfaces.push( typePath );
+					//interfaces.push( interfaceName.typePath );
+					interfaces.push( MacroUtil.getTypePath( Type.getClassName( ITrigger ), [ TPType( triggerDefinition.triggerParamType ) ] ) );
 					
 				case _:
 			}
@@ -277,50 +369,35 @@ class TriggerBuilder
 			dispatcherClass = TriggerBuilder._cache.get( className );
 		}
 		
-		return { name: dispatcherClass.name, pack: dispatcherClass.pack };
+		return { name: dispatcherClass.name, pack: dispatcherClass.pack, fullClassName: dispatcherClass.pack.join( '.' ) + '.' + dispatcherClass.name };
 	}
-	
-	static function _checkITriggerImplementation( f, tp : TypePath ) : Void
-	{
-		var className = MacroUtil.getClassFullQualifiedName( tp );
-		
-		if ( className != Type.getClassName( ITrigger )  )
-		{
-			Context.error( "'" + f.name + "' property with '@" + TriggerBuilder.OutputAnnotation 
-								+ "' annotation is not typed '" + Type.getClassName( ITrigger ) 
-								+ "<ConnecttionType>'", f.pos );
-		}
-	}
-	
-	static function _getConnectionDefinition( params : Array<TypeParam> ) : { name: String, pack: Array<String>, fullyQualifiedName: String }
-	{
-		for ( param in params )
-		{
-			switch( param )
-			{
-				case TPType( tp ) :
 
-					switch( tp )
+	static function _getIndex( t:Ref<ClassType>, params : Array<TypeParameter> ): Int
+	{
+		var l = params.length;
+		for ( i in 0...l )
+		{
+			var param = params[ i ];
+
+			switch( param.t )
+			{
+				case TInst( tt, pp ):
+
+					if ( "" + tt == "" + t ) 
 					{
-						case TPath( p ):
-							var t = Context.getType( p.pack.concat( [ p.name ] ).join( '.' ) );
-							switch ( t )
-							{
-								case TInst( t, p ):
-									var ct = t.get();
-									return { name: ct.name, pack: ct.pack, fullyQualifiedName: ct.pack.concat( [ ct.name ] ).join( '.' ) };
-									
-								case _:
-							}
-							
-						case _:
+						return i;
 					}
-					
 				case _:
-				
 			}
 		}
-		
-		return null;
+		return -1;
 	}
+}
+#end
+
+typedef ClassVO =
+{
+	name: String, 
+	pack: Array<String>,
+	fullClassName: String
 }

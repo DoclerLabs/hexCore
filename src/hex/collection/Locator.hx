@@ -2,23 +2,25 @@ package hex.collection;
 
 import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
-import hex.event.ClosureDispatcher;
-import hex.event.MessageType;
+import hex.event.ITrigger;
+import hex.event.ITriggerOwner;
 import hex.log.Stringifier;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType>
+class Locator<KeyType, ValueType> 
+	implements ITriggerOwner
+	implements ILocator<KeyType, ValueType>
 {
-    var _dispatcher     : ClosureDispatcher;
+	public var trigger ( default, never ) : ITrigger<ILocatorListener<Dynamic, Dynamic>>;
+	
     var _map    		: HashMap<KeyType, ValueType>;
 
     public function new()
     {
-        this._map   		= new HashMap();
-        this._dispatcher    = new ClosureDispatcher();
+        this._map = new HashMap();
     }
 	
 	public function clear() : Void
@@ -29,7 +31,9 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 	public function release() : Void
 	{
 		this.clear();
-		this._dispatcher.removeAllListeners();
+		#if !macro
+		this.trigger.disconnectAll();
+		#end
 	}
 	
 	public function isEmpty() : Bool
@@ -84,7 +88,9 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         else
         {
             this._map.put( key, element );
+			#if !macro
             this._dispatchRegisterEvent( key, element );
+			#end
             return true;
         }
     }
@@ -94,7 +100,9 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
         if ( this.isRegisteredWithKey( key ) )
         {
             this._map.remove( key );
+			#if !macro
             this._dispatchUnregisterEvent( key );
+			#end
             return true;
         }
         else
@@ -102,27 +110,15 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
             return false;
         }
     }
-	
-	public function addHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.addHandler( messageType, callback );
-	}
-	
-	public function removeHandler( messageType : MessageType, callback : Dynamic ) : Bool
-	{
-		return this._dispatcher.removeHandler( messageType, callback );
-	}
 
     public function addListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
-		var b = this._dispatcher.addHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.addHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.connect( listener );
     }
 
     public function removeListener( listener : ILocatorListener<KeyType, ValueType> ) : Bool
     {
-		var b = this._dispatcher.removeHandler( LocatorMessage.REGISTER, listener.onRegister );
-		return this._dispatcher.removeHandler( LocatorMessage.UNREGISTER, listener.onUnregister ) || b;
+		return this.trigger.disconnect( listener );
     }
 
     public function toString() : String
@@ -132,11 +128,19 @@ class Locator<KeyType:Dynamic, ValueType> implements ILocator<KeyType, ValueType
 
     function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {
-		
+		#if !macro
+		this.trigger.onRegister( key, element );
+		#else
+		haxe.macro.Context.error( "Dispatch cannot be used at compile time.", haxe.macro.Context.currentPos() );
+		#end
     }
 
     function  _dispatchUnregisterEvent( key : KeyType ) : Void
     {
-		
+		#if !macro
+		this.trigger.onUnregister( key );
+		#else
+		haxe.macro.Context.error( "Dispatch cannot be used at compile time.", haxe.macro.Context.currentPos() );
+		#end
     }
 }

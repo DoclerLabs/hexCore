@@ -20,12 +20,12 @@ class ResultResponder<ResultType> implements ICompletable<ResultType>
 	
 	public function complete( result : ResultType ) : Void
 	{
-		throw new VirtualMethodException( this + ".complete must be overridden" );
+		throw new VirtualMethodException();
 	}
 	
 	public function fail( error : String ) : Void
 	{
-		throw new VirtualMethodException( this + ".fail must be overridden" );
+		throw new VirtualMethodException();
 	}
 	
 	public function onComplete( callback : ResultType->Void ) : ICompletable<ResultType>

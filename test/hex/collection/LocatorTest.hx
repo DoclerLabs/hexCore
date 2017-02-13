@@ -218,6 +218,58 @@ class LocatorTest
 		Assert.equals( 0, MockLocator.dispatchRegisterEventCallcount, "'register' event should not be dispatched" );
 		Assert.equals( 1, MockLocator.dispatchUnegisterEventCallcount, "'unregister' event should not be dispatched anymore" );
     }
+	
+	@Test( "Test without inheritance" )
+    public function testWithoutInheritance() : Void
+    {
+		var locator = new Locator<String, Bool>();
+		var listener = new MockListener();
+		locator.addListener( listener );
+		
+		listener.reset();
+		locator.register( 'test', true );
+		Assert.equals( 1, listener.callbackCallCount );
+		Assert.equals( 'test', listener.callbackKey );
+		Assert.equals( true, listener.callbackValue );
+		
+		listener.reset();
+		locator.unregister( 'test' );
+		Assert.equals( 1, listener.callbackCallCount );
+		Assert.equals( 'test', listener.callbackKey );
+		Assert.isFalse( listener.callbackValue );
+	}
+}
+
+private class MockListener implements ILocatorListener<String, Bool>
+{
+	public var callbackCallCount 	: Int = 0;
+	public var callbackKey 			: String;
+	public var callbackValue 		: Bool;
+	
+	public function new()
+	{
+		
+	}
+	
+	public function reset() : Void
+	{
+		this.callbackCallCount 	= 0;
+		this.callbackKey 		= null;
+		this.callbackValue 		= false;
+	}
+	
+	public function onRegister( key : String, value : Bool ) : Void
+	{
+		this.callbackCallCount++;
+		this.callbackKey 	= key;
+		this.callbackValue 	= value;
+	}
+	
+    public function onUnregister( key : String ) : Void
+	{
+		this.callbackCallCount++;
+		this.callbackKey 	= key;
+	}
 }
 
 private class MockKeyClass

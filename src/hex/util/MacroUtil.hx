@@ -63,13 +63,20 @@ class MacroUtil
 
 	static public function getTypePath( className : String, ?params : Array<TypeParam>, position : Position = null ) : TypePath
 	{
-		try
+		if ( position != null )
+		{
+			try
+			{
+				Context.getType( className );
+			}
+			catch( e : Dynamic )
+			{
+				Context.error( "Fails to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position );
+			}
+		}
+		else
 		{
 			Context.getType( className );
-		}
-		catch( e : Dynamic )
-		{
-			Context.error( "Fails to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
 		}
 		
 		var pack = className.split( "." );

@@ -12,7 +12,7 @@ class Stringifier
     /** @private */
     function new()
     {
-        throw new PrivateConstructorException( "Stringifier class can't be instantiated." );
+        throw new PrivateConstructorException();
     }
 
     //--------------------------------------------------------------------

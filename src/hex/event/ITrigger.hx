@@ -7,4 +7,5 @@ interface ITrigger<Connection>
 {
 	function connect( input : Connection ) : Bool;
 	function disconnect( input : Connection ) : Bool;
+	function disconnectAll() : Void;
 }

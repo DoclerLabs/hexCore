@@ -9,93 +9,105 @@ import hex.unittest.assertion.Assert;
  */
 class TriggerTest
 {
-	@Test( "test output instantiation and callbacks" )
-    public function testOutputInstantiationAndCallbacks() : Void
+	@Test( "test trigger instantiation and callbacks" )
+    public function testTriggerInstantiationAndCallbacks() : Void
     {
-		var model 				= new MockModel();
+		var model 				= new MockModel<Bool>();
 		var intMockDriver 		= new IntMockDriver();
 		var stringMockDriver 	= new StringMockDriver();
-		
-		Assert.isInstanceOf( model.size, Size, "property that is not annotated should kept its initial type and value" );
+		var genericMockDriver 	= new GenericMockDriver();
 		
 		model.intOutput.connect( intMockDriver );
 		model.stringOutput.connect( stringMockDriver );
+		model.genericOutput.connect( genericMockDriver );
+		var callbackResult;
+		model.callbacks.connect( function ( s : String, i : Int ) callbackResult = { s: s, i: i } );
 		
-		IntMockDriver.reset();
-		StringMockDriver.reset();
+		model.changeAllValues( 3, "test", this );
+		Assert.equals( 1, intMockDriver.callbackCallCount );
+		Assert.equals( 1, stringMockDriver.callbackCallCount );
+		Assert.equals( 1, genericMockDriver.callbackCallCount );
+		Assert.equals( 3, intMockDriver.callbackParam );
+		Assert.equals( "test", stringMockDriver.callbackParam );
+		Assert.equals( this, genericMockDriver.callbackParam );
+		Assert.equals( "test", callbackResult.s );
+		Assert.equals( 3, callbackResult.i );
 		
-		model.changeAllValues( 3, "test" );
-		Assert.equals( 1, IntMockDriver.callbackCallCount, "callback should have been called once" );
-		Assert.equals( 1, StringMockDriver.callbackCallCount, "callback should have been called once" );
-		Assert.equals( 3, IntMockDriver.callbackParam, "callback parameter should be the same" );
-		Assert.equals( "test", StringMockDriver.callbackParam, "callback parameter should be the same" );
+		model.stringOutput.disconnectAll();
+		model.genericOutput.disconnectAll();
+		model.callbacks.disconnectAll();
+
+		model.changeAllValues( 4, "another test", this );
+		Assert.equals( 2, intMockDriver.callbackCallCount );
+		Assert.equals( 1, stringMockDriver.callbackCallCount );
+		Assert.equals( 1, genericMockDriver.callbackCallCount );
+		Assert.equals( 4, intMockDriver.callbackParam );
+		Assert.equals( "test", stringMockDriver.callbackParam );
+		Assert.equals( this, genericMockDriver.callbackParam );
+		Assert.equals( "test", callbackResult.s );
+		Assert.equals( 3, callbackResult.i );
     }
 }
 
-private class MockModel implements ITriggerOwner
+private class MockModel<T> implements ITriggerOwner
 {
-    @Trigger
     public var intOutput( default, never ) : ITrigger<IIntConnection>;
 	
-	@Trigger
     public var stringOutput( default, never )  : ITrigger<IStringConnection>;
 	
-	public var size : Size = new Size( 10, 20 );
-
-    public function new()
-    {
-        //
-    }
+	public var genericOutput( default, never )  : ITrigger<GenericConnection<TriggerTest>>;
 	
-	public function changeAllValues( i : Int, s : String ) : Void
+	public var callbacks( default, never )  : ITrigger<String->Int->Void>;
+
+    public function new(){}
+	
+	public function changeAllValues( i : Int, s : String, o : TriggerTest ) : Void
     {
         this.intOutput.onChangeIntValue( i );
         this.stringOutput.onChangeStringValue( s );
+		this.genericOutput.onChangeValue( o );
+		this.callbacks.trigger( s, i );
     }
 }
 
 private class IntMockDriver implements IIntConnection
 {
-	public static var callbackCallCount : Int = 0;
-	public static var callbackParam 	: Int = 0;
+	public var callbackCallCount : Int = 0;
+	public var callbackParam 	: Int = 0;
 	
-	public function new()
-	{
-		
-	}
-	
-	static public function reset() : Void
-	{
-		IntMockDriver.callbackCallCount = 0;
-		IntMockDriver.callbackParam = 0;
-	}
+	public function new(){}
 	
     public function onChangeIntValue( i : Int ) : Void
 	{
-		IntMockDriver.callbackCallCount++;
-		IntMockDriver.callbackParam = i;
+		this.callbackCallCount++;
+		this.callbackParam = i;
 	}
 }
 
 private class StringMockDriver implements IStringConnection
 {
-	public static var callbackCallCount : Int 		= 0;
-	public static var callbackParam 	: String 	= null;
+	public var callbackCallCount : Int 		= 0;
+	public var callbackParam 	: String 	= null;
 	
-	public function new()
-	{
-		
-	}
-	
-	static public function reset() : Void
-	{
-		StringMockDriver.callbackCallCount = 0;
-		StringMockDriver.callbackParam = null;
-	}
+	public function new(){}
 	
     public function onChangeStringValue( s : String ) : Void
 	{
-		StringMockDriver.callbackCallCount++;
-		StringMockDriver.callbackParam = s;
+		this.callbackCallCount++;
+		this.callbackParam = s;
+	}
+}
+
+private class GenericMockDriver implements GenericConnection<TriggerTest>
+{
+	public var callbackCallCount : Int 			= 0;
+	public var callbackParam 	: TriggerTest 	= null;
+	
+	public function new(){}
+	
+    public function onChangeValue( o : TriggerTest ) : Void
+	{
+		this.callbackCallCount++;
+		this.callbackParam = o;
 	}
 }

@@ -15,7 +15,7 @@ class AsyncHandlerUtil
 	/** @private */
     function new()
     {
-        throw new PrivateConstructorException( "This class can't be instantiated." );
+        throw new PrivateConstructorException();
     }
 	
 	static function arrowDecompose( f: Expr ) : { left: Expr, right: Expr }

@@ -8,7 +8,7 @@ import haxe.PosInfos;
  */
 class PrivateConstructorException extends Exception
 {
-    public function new ( message : String, ?posInfos : PosInfos )
+    public function new ( ?message : String = "This class can't be instantiated.", ?posInfos : PosInfos )
     {
         super( message, posInfos );
     }
