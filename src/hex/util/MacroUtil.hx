@@ -36,7 +36,7 @@ class MacroUtil
 		return macro { $v{ b } };
 	}
 	
-	#if (macro || doc_gen)
+	#if macro
 	static public function getClassNameFromExpr( e : Expr ) : String
 	{
 		var s = haxe.macro.ExprTools.toString( e );

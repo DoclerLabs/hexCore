@@ -50,10 +50,10 @@ class PerformanceUtil
 			}
 			else
 			{
-				return null;
+				return 0;
 			}
 		#else
-			return null;
+			return 0;
 		#end
 	}
 	
