@@ -8,4 +8,4 @@ build-each.hxml
 
 --next
 
--js bin/MainCoreTest.js
+-js bin/MainTest.js

@@ -8,4 +8,4 @@ build-each.hxml
 
 --next
 
--neko bin/MainCoreTest.n
+-neko bin/MainTest.n
