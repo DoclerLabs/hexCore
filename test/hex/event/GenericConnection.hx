@@ -6,6 +6,5 @@ package hex.event;
  */
 interface GenericConnection<U>
 {
-	@:astSource
 	function onChangeValue( value : U ) : Void;
 }
