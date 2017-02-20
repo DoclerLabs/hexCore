@@ -78,7 +78,7 @@ class ExecutionPayload
 			throw new IllegalArgumentException( "type '" + className + "' not found" );
 		}*/
 		
-        this._className = className;
+        this._className = className.split( " " ).join( '' );
         return this;
     }
 }
