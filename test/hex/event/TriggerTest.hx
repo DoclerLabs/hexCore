@@ -22,6 +22,8 @@ class TriggerTest
 		model.genericOutput.connect( genericMockDriver );
 		var callbackResult;
 		model.callbacks.connect( function ( s : String, i : Int ) callbackResult = { s: s, i: i } );
+		var colorResult = MockColor.Red;
+		model.colorCallbacks.connect( function ( color : MockColor ) colorResult = color );
 		
 		model.changeAllValues( 3, "test", this );
 		Assert.equals( 1, intMockDriver.callbackCallCount );
@@ -32,6 +34,7 @@ class TriggerTest
 		Assert.equals( this, genericMockDriver.callbackParam );
 		Assert.equals( "test", callbackResult.s );
 		Assert.equals( 3, callbackResult.i );
+		Assert.equals( MockColor.Blue, colorResult );
 		
 		model.stringOutput.disconnectAll();
 		model.genericOutput.disconnectAll();
@@ -58,6 +61,8 @@ private class MockModel<T> implements ITriggerOwner
 	public var genericOutput( default, never )  : ITrigger<GenericConnection<TriggerTest>>;
 	
 	public var callbacks( default, never )  : ITrigger<String->Int->Void>;
+	
+	public var colorCallbacks( default, never ) : ITrigger<MockColor->Void>;
 
     public function new(){}
 	
@@ -67,6 +72,7 @@ private class MockModel<T> implements ITriggerOwner
         this.stringOutput.onChangeStringValue( s );
 		this.genericOutput.onChangeValue( o );
 		this.callbacks.trigger( s, i );
+		this.colorCallbacks.trigger( MockColor.Blue );
     }
 }
 
