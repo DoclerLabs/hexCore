@@ -45,12 +45,6 @@ class ExecutionPayloadTest
     }
 	#end
 	
-	@Test( "Test constructor throws IllegalArgumentException" )
-    public function testConstructorThrowsIllegalArgumentException() : Void
-    {
-        Assert.constructorCallThrows( IllegalArgumentException, ExecutionPayload, [ this._data, String ], "constructor should throw IllegalArgumentException" );
-    }
-	
 	/*@Test( "Test overwriting type property" )
     public function testOverwritingType() : Void
     {
