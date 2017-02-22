@@ -13,6 +13,12 @@ import hex.unittest.assertion.Assert;
  */
 class PayloadUtilTest
 {
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( PayloadUtil );
+	}
+	
 	@Test( "Test mapping" )
     public function testMapping() : Void
     {

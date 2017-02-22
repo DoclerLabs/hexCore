@@ -1,7 +1,5 @@
 package hex.domain;
 
-import hex.domain.Domain;
-
 /**
  * ...
  * @author Francis Bourre

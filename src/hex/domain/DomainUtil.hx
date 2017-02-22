@@ -1,7 +1,6 @@
 package hex.domain;
 
-import hex.error.IllegalArgumentException;
-import hex.util.ClassUtil;
+import hex.error.PrivateConstructorException;
 
 /**
  * ...
@@ -11,10 +10,11 @@ class DomainUtil
 {
 	static var _domain = new Map<String,Dynamic>();
 	
-	function new() 
-	{
-		
-	}
+	/** @private */
+    function new()
+    {
+        throw new PrivateConstructorException();
+    }
 	
 	static public function getDomain<DomainType:Domain>( domainName : String, type : Class<DomainType> ) : DomainType
 	{

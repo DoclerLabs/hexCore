@@ -1,6 +1,5 @@
 package hex.control;
 
-import haxe.Constraints.Function;
 import haxe.ds.StringMap;
 import haxe.macro.Context;
 import haxe.macro.Expr;

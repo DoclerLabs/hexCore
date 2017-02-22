@@ -8,6 +8,12 @@ import hex.unittest.assertion.Assert;
  */
 class DomainUtilTest
 {
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( DomainUtil );
+	}
+	
 	@Test( "Test 'getDomain' method" )
     public function testDomainCreation() : Void
     {

@@ -1,11 +1,19 @@
 package hex.data;
 
+import hex.error.PrivateConstructorException;
+
 /**
  * ...
  * @author Krisztian Fekete
  */
 class GUID 
 {
+	/** @private */
+    function new()
+    {
+        throw new PrivateConstructorException();
+    }
+	
 	inline public static function randomIntegerWithinRange( min : Int, max : Int ) : Int 
 	{
 		return Math.floor( Math.random() * ( 1 + max - min ) + min );

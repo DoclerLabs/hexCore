@@ -6,6 +6,7 @@ import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypePath;
 import haxe.macro.Type.ClassType;
 import haxe.macro.TypeTools;
+import hex.error.PrivateConstructorException;
 
 /**
  * ...
@@ -13,10 +14,11 @@ import haxe.macro.TypeTools;
  */
 class MacroUtil
 {
-	function new() 
-	{
-		
-	}
+	/** @private */
+    function new()
+    {
+        throw new PrivateConstructorException();
+    }
 
 	macro public static function classImplementsInterface( classRef : haxe.macro.Expr.ExprOf<String>, interfaceRef : haxe.macro.Expr.ExprOf<String> ) : Expr
 	{

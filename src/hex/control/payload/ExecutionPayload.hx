@@ -1,6 +1,5 @@
 package hex.control.payload;
 
-import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
 
 /**
@@ -31,11 +30,6 @@ class ExecutionPayload
 		{
 			this._type 	= Type.getClass( this._data );
 		}
-		
-		/*if ( !Std.is( this._data, this._type ) )
-		{
-			throw new IllegalArgumentException( "ExecutionPayload data '" + this._data + "' should be an instance of type '" + this._type + "'" );
-		}*/
         
         this._name 		= name;
     }
@@ -73,11 +67,6 @@ class ExecutionPayload
 	public function withClassName( className : String ) : ExecutionPayload
     {
         this._type 	= Type.resolveClass( className.split( '<' )[ 0 ] );
-		/*if ( this._type == null )
-		{
-			throw new IllegalArgumentException( "type '" + className + "' not found" );
-		}*/
-		
         this._className = className.split( " " ).join( '' );
         return this;
     }

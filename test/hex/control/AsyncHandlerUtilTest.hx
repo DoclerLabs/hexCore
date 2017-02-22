@@ -16,6 +16,12 @@ class AsyncHandlerUtilTest
 {
 	var result : Int;
 	
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( AsyncHandlerUtil );
+	}
+	
 	@Test( "test simple lambda" )
 	public function testSimpleLambda() 
 	{
