@@ -230,12 +230,26 @@ class LocatorTest
 		locator.register( 'test', true );
 		Assert.equals( 1, listener.callbackCallCount );
 		Assert.equals( 'test', listener.callbackKey );
-		Assert.equals( true, listener.callbackValue );
+		Assert.isTrue( listener.callbackValue );
 		
 		listener.reset();
 		locator.unregister( 'test' );
 		Assert.equals( 1, listener.callbackCallCount );
 		Assert.equals( 'test', listener.callbackKey );
+		Assert.isFalse( listener.callbackValue );
+		
+		locator.removeListener( listener );
+		
+		listener.reset();
+		locator.register( 'test', true );
+		Assert.equals( 0, listener.callbackCallCount );
+		Assert.isNull( listener.callbackKey );
+		Assert.isFalse( listener.callbackValue );
+		
+		listener.reset();
+		locator.unregister( 'test' );
+		Assert.equals( 0, listener.callbackCallCount );
+		Assert.isNull( listener.callbackKey );
 		Assert.isFalse( listener.callbackValue );
 	}
 }
