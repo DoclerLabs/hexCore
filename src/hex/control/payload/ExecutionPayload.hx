@@ -60,7 +60,7 @@ class ExecutionPayload
 
     public function withName( name : String ) : ExecutionPayload
     {
-        this._name = name != null ? name : "";
+        this._name = name;
         return this;
     }
 	

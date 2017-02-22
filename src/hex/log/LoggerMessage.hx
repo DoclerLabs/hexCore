@@ -8,6 +8,7 @@ import hex.event.MessageType;
  * ...
  * @author Francis Bourre
  */
+@IgnoreCover
 class LoggerMessage
 {
 	inline public static var LOG 	= new MessageType( "onLog" );

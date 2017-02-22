@@ -10,6 +10,7 @@ import js.Browser;
  * ...
  * @author Francis Bourre
  */
+@IgnoreCover
 class JavaScriptConsoleLayout implements ILogListener
 {
 	public function new() 

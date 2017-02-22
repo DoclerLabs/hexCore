@@ -9,6 +9,7 @@ import hex.log.Logger;
  * ...
  * @author Francis Bourre
  */
+@IgnoreCover
 class DomainLogger implements ILogger
 {
 	var _domain		: Domain;

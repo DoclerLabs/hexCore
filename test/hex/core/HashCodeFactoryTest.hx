@@ -40,6 +40,13 @@ class HashCodeFactoryTest
         var anotherKey : Int = HashCodeFactory.getKey( o );
         Assert.equals( key, anotherKey, "Two 'HashCodeFactory.getKEY' calls on the same target should return the same value" );
     }
+	
+	@Test( "Test 'getNextName'" )
+    public function testGetNextName() : Void
+    {
+        var previewKey : Int = HashCodeFactory.previewNextKey();
+        Assert.equals( "" + previewKey, HashCodeFactory.getNextName(), "'HashCodeFactory.getNextName' and 'HashCodeFactory.previewNextKey' should return the same String value" );
+    }
 }
 
 private class MockObject

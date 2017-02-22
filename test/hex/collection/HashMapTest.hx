@@ -76,54 +76,6 @@ class HashMapTest
         Assert.methodCallThrows( NullPointerException, this._map, this._map.put, [mockKey, null], "'put' should throw NullPointerException" );
     }
 	
-	@Test( "Test 'put' and 'get' behaviors with Int" )
-    public function testPutAndGetWithInt() : Void
-    {
-		var map = new HashMap<Int, Int>();
-        var mockKey     = 3;
-        var mockValue   = 4;
-
-        var value = map.put( mockKey, mockValue );
-        Assert.isNull( value, "'put' should return null when key was never registered" );
-        Assert.equals( mockValue, map.get( mockKey ), "'get' should return value argument" );
-	}
-	
-	@Test( "Test 'put' and 'get' behaviors with Float" )
-    public function testPutAndGetWitFloat() : Void
-    {
-		var map = new HashMap<Float, Float>();
-        var mockKey     = 3.1;
-        var mockValue   = 4.2;
-
-        var value = map.put( mockKey, mockValue );
-        Assert.isNull( value, "'put' should return null when key was never registered" );
-        Assert.equals( mockValue, map.get( mockKey ), "'get' should return value argument" );
-	}
-	
-	@Test( "Test 'put' and 'get' behaviors with Bool" )
-    public function testPutAndGetWithBool() : Void
-    {
-		var map = new HashMap<Bool, Bool>();
-        var mockKey     = false;
-        var mockValue   = true;
-
-        var value = map.put( mockKey, mockValue );
-        Assert.isNull( value, "'put' should return null when key was never registered" );
-        Assert.equals( mockValue, map.get( mockKey ), "'get' should return value argument" );
-	}
-	
-	@Test( "Test 'put' and 'get' behaviors with String" )
-    public function testPutAndGetWithString() : Void
-    {
-		var map = new HashMap<String, String>();
-        var mockKey     = 'a';
-        var mockValue   = 'b';
-
-        var value = map.put( mockKey, mockValue );
-        Assert.isNull( value, "'put' should return null when key was never registered" );
-        Assert.equals( mockValue, map.get( mockKey ), "'get' should return value argument" );
-	}
-	
 	@Test( "Test 'remove' behavior" )
     public function testRemove() : Void
     {

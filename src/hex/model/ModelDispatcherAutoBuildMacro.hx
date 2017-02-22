@@ -1,5 +1,6 @@
 package hex.model;
 
+#if macro
 import haxe.macro.Context;
 import haxe.macro.Expr.Field;
 
@@ -41,3 +42,4 @@ class ModelDispatcherAutoBuildMacro
 		return fields;
 	}
 }
+#end

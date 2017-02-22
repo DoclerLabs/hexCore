@@ -4,6 +4,7 @@ package hex.log;
  * ...
  * @author Francis Bourre
  */
+@IgnoreCover
 class LogLevel
 {
     static var _ALL 	= new LogLevel( 0 );

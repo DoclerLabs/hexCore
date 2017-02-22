@@ -9,6 +9,7 @@ import hex.log.LoggerMessage;
  * ...
  * @author Francis Bourre
  */
+@IgnoreCover
 class TraceLayout implements ILogListener
 {
 	public function new() 

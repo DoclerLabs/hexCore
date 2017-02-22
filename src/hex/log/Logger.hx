@@ -9,6 +9,7 @@ import hex.domain.NoDomain;
  * ...
  * @author Francis Bourre
  */
+@IgnoreCover
 class Logger
 {
 	static var _Instance 	: Logger = null;

@@ -45,15 +45,6 @@ class ExecutionPayloadTest
     }
 	#end
 	
-	/*@Test( "Test overwriting type property" )
-    public function testOverwritingType() : Void
-    {
-		this._executionPayload.withClass( IMockType );
-        Assert.notEquals( IMockData, this._executionPayload.getType(), "type should not be the same" );
-        Assert.equals( IMockType, this._executionPayload.getType(), "type should be the same" );
-		Assert.equals( "hex.control.payload.IMockType", this._executionPayload.getClassName(), "class name should be the same" );
-    }*/
-	
 	@Test( "Test overwriting name property" )
     public function testOverwritingName() : Void
     {

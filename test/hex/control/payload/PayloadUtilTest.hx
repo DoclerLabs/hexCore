@@ -58,6 +58,46 @@ class PayloadUtilTest
 									injector.unmappedPayloads,
 									"'CommandExecutor.mapPayload' should unmap right values" );
     }
+	
+	@Test( "Test mapping with class name" )
+    public function testMappingWithClassName() : Void
+    {
+		var injector 					= new MockDependencyInjectorForMapping();
+		
+		var mockImplementation 			= new MockImplementation( "mockImplementation" );
+		var anotherMockImplementation 	= new MockImplementation( "anotherMockImplementation" );
+		
+		var mockPayload 				= new ExecutionPayload( mockImplementation, IMockType, "mockPayload" ).withClassName( 'MockImplementation' );
+		var stringPayload 				= new ExecutionPayload( "test", String, "stringPayload" );
+		var anotherMockPayload 			= new ExecutionPayload( anotherMockImplementation, IMockType, "anotherMockPayload" ).withClassName( 'MockImplementation' );
+		
+		var payloads 					: Array<ExecutionPayload> 	= [ mockPayload, stringPayload, anotherMockPayload ];
+		PayloadUtil.mapPayload( payloads, injector );
+		
+        Assert.deepEquals( 	[[mockImplementation, 'MockImplementation', "mockPayload"], ["test", String, "stringPayload"], [anotherMockImplementation, 'MockImplementation', "anotherMockPayload"] ], 
+									injector.mappedPayloads,
+									"'CommandExecutor.mapPayload' should map right values" );
+    }
+	
+	@Test( "Test unmapping with class name" )
+    public function testUnmappingWithClassName() : Void
+    {
+		var injector 					= new MockDependencyInjectorForMapping();
+		
+		var mockImplementation 			= new MockImplementation( "mockImplementation" );
+		var anotherMockImplementation 	= new MockImplementation( "anotherMockImplementation" );
+		
+		var mockPayload 				= new ExecutionPayload( mockImplementation, IMockType, "mockPayload" ).withClassName( 'MockImplementation' );
+		var stringPayload 				= new ExecutionPayload( "test", String, "stringPayload" );
+		var anotherMockPayload 			= new ExecutionPayload( anotherMockImplementation, IMockType, "anotherMockPayload" ).withClassName( 'MockImplementation' );
+		
+		var payloads 					: Array<ExecutionPayload> 	= [ mockPayload, stringPayload, anotherMockPayload ];
+		PayloadUtil.unmapPayload( payloads, injector );
+		
+        Assert.deepEquals( 	[['MockImplementation', "mockPayload"], [String, "stringPayload"], ['MockImplementation', "anotherMockPayload"] ], 
+									injector.unmappedPayloads,
+									"'CommandExecutor.mapPayload' should unmap right values" );
+    }
 }
 
 private class MockDependencyInjectorForMapping extends MockDependencyInjector
