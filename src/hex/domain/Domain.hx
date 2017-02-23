@@ -14,7 +14,7 @@ class Domain
     var _domainName : String;
     static var _domainNames = new Map<String, Domain>();
 
-	@:allow( hex.domain )
+	//@:allow( hex.domain )
     function new( domainName : String )
     {
         if ( domainName == null )

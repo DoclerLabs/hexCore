@@ -14,7 +14,7 @@ class DomainTest
     @Test( "Test 'name' property passed to constructor" )
     public function testConstructor() : Void
     {
-        var domain = new Domain( "testConstructor" );
+        var domain = Type.createInstance( Domain, [ "testConstructor" ] );
         Assert.equals( "testConstructor", domain.getName(), "'name' property should be the same passed to constructor" );
     }
 
@@ -29,21 +29,21 @@ class DomainTest
     @Test( "Test using twice the same 'name' value" )
     public function testConstructorWithNameValues() : Void
     {
-        var domain = new Domain( "testConstructorWithNameValues" );
+        var domain = Type.createInstance( Domain, [ "testConstructorWithNameValues" ] );
         Assert.constructorCallThrows( IllegalArgumentException, Domain, ["testConstructorWithNameValues"], "" );
     }
 
     @Test( "Test getName function" )
 	public function testGetName() : Void
 	{
-    	var domain = new Domain( "testGetName" );
+    	var domain = Type.createInstance( Domain, [ "testGetName" ] );
         Assert.equals( "testGetName", domain.getName(), "'getName' method should return correct domain's name" );
 	}
 
     @Test( "Test getDomain function" )
 	public function testGetDomain() : Void
 	{
-    	var newDomain = new Domain( "testGetDomain" );
+    	var newDomain = Type.createInstance( Domain, [ "testGetDomain" ] );
         var domain = Domain.getDomain( "testGetDomain" );
         Assert.equals( newDomain, domain, "getDomain method should return the same instance if it already exists" );
 
@@ -54,7 +54,7 @@ class DomainTest
     @Test( "Test toString function" )
 	public function testToString() : Void
 	{
-        var domain = new Domain( "testToString" );
+        var domain = Type.createInstance( Domain, [ "testToString" ] );
         var expectedString = "hex.domain.Domain with name 'testToString'";
         Assert.equals( expectedString, domain.toString(), "toString method should return expected string value" );
 	}
