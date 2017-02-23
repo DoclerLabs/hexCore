@@ -1,6 +1,6 @@
 package hex.domain;
 
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 import hex.error.NullPointerException;
 import hex.error.IllegalArgumentException;
 

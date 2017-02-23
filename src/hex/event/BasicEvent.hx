@@ -1,6 +1,6 @@
 package hex.event;
 
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...

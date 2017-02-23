@@ -2,7 +2,7 @@ package hex.error;
 
 import haxe.PosInfos;
 import hex.log.Logger;
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...

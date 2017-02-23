@@ -4,6 +4,7 @@ import haxe.PosInfos;
 import hex.domain.Domain;
 import hex.domain.DomainDispatcher;
 import hex.domain.NoDomain;
+import hex.util.Stringifier;
 
 /**
  * ...

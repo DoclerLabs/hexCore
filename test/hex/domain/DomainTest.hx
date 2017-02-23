@@ -1,8 +1,8 @@
 package hex.domain;
 
 import hex.domain.Domain;
-import hex.error.NullPointerException;
 import hex.error.IllegalArgumentException;
+import hex.error.NullPointerException;
 import hex.unittest.assertion.Assert;
 
 /**

@@ -8,7 +8,6 @@ import hex.di.CoreDiSuite;
 import hex.domain.CoreDomainSuite;
 import hex.event.CoreEventSuite;
 import hex.error.CoreErrorSuite;
-import hex.log.CoreLogSuite;
 import hex.model.CoreModelSuite;
 import hex.module.CoreModuleSuite;
 import hex.service.CoreServiceSuite;
@@ -32,7 +31,6 @@ class HexCoreSuite
 		CoreDomainSuite, 
 		CoreEventSuite, 
 		CoreErrorSuite,
-		CoreLogSuite,
 		CoreModelSuite, 
 		CoreModuleSuite, 
 		CoreServiceSuite, 

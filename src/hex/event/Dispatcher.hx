@@ -2,7 +2,7 @@ package hex.event;
 
 import hex.error.IllegalArgumentException;
 import hex.error.UnsupportedOperationException;
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...
