@@ -36,8 +36,28 @@ class DomainTest
     @Test( "Test getName function" )
 	public function testGetName() : Void
 	{
-    	var domain = Type.createInstance( Domain, [ "testGetName" ] );
-        Assert.equals( "testGetName", domain.getName(), "'getName' method should return correct domain's name" );
+		var domainName = Type.getClassName( Type.getClass( this ) ) + "_testGetName";
+    	var domain = Domain.getDomain( domainName );
+		
+        Assert.equals( domainName, domain.getName(), "`getName` method should return correct domain's name" );
+	}
+	
+	@Test( "Test `getParent` function" )
+	public function testGetParent() : Void
+	{
+		var domainName = 'parent.' + Type.getClassName( Type.getClass( this ) ) + '_testGetParent';
+    	var domain = Domain.getDomain( domainName );
+		
+        Assert.equals( TopLevelDomain.DOMAIN, domain.getParent(), "`getParent` method should return root parent" );
+		
+		var childDomain = Domain.getDomain( domainName + '.child' );
+		Assert.notEquals( domain, childDomain, "domains should not be the same" );
+		Assert.equals( domain, childDomain.getParent(), "`getParent` method should return parent" );
+		
+		var parentDomain = Domain.getDomain( 'parent' );
+		Assert.notEquals( parentDomain, domain, "domains should not be the same" );
+		Assert.notEquals( parentDomain, childDomain, "domains should not be the same" );
+		Assert.equals( parentDomain, domain.getParent(), "`getParent` method should return root parent" );
 	}
 
     @Test( "Test getDomain function" )
@@ -48,7 +68,8 @@ class DomainTest
         Assert.equals( newDomain, domain, "getDomain method should return the same instance if it already exists" );
 
         domain = Domain.getDomain( "nonExistingDomain" );
-        Assert.equals( null, domain, "'getDomain' method should return null if the requested domain doesn't exist" );
+        Assert.isInstanceOf( domain, Domain, "'getDomain' method should return new instance if it doesn't exist" );
+        Assert.equals( "nonExistingDomain", domain.getName(), "'getDomain' method should return new instance if it doesn't exist" );
 	}
 
     @Test( "Test toString function" )
@@ -58,4 +79,26 @@ class DomainTest
         var expectedString = "hex.domain.Domain with name 'testToString'";
         Assert.equals( expectedString, domain.toString(), "toString method should return expected string value" );
 	}
+	
+	@Test( "Test `getDomain` method" )
+    public function testDomainCreation() : Void
+    {
+		var domainName = Type.getClassName( Type.getClass( this ) ) + "_testDomainCreation";
+		
+		var domain = Domain.getDomain( domainName );
+		Assert.isNotNull( domain, "`getDomain` function should create a domain if doesn't exist" );
+		Assert.isInstanceOf( domain, Domain, "`getDomain` should return a domain instance of the requested type" );
+		Assert.equals( domainName, domain.getName(), "domain's name should be the same that was requested" );
+	}
+	
+    @Test( "Test `getDomain` twice" )
+    public function testGetDomainTwice() : Void
+    {
+		var domainName = Type.getClassName( Type.getClass( this ) ) + "_testGetDomainTwice";
+		
+        var domain = Domain.getDomain( domainName );
+        var anotherDomainWithTheSameName = Domain.getDomain( domainName );
+		
+        Assert.equals( domain, anotherDomainWithTheSameName, "getDomain should return the same domain" );
+    }
 }

@@ -6,5 +6,5 @@ package hex.domain;
  */
 class NoDomain
 {
-    public static var DOMAIN = DomainUtil.getDomain( "NoDomain" );
+    public static var DOMAIN = Domain.getDomain( "NoDomain" );
 }

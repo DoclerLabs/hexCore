@@ -1,7 +1,6 @@
 package hex.domain;
 
 import hex.core.HashCodeFactory;
-import hex.domain.Domain;
 import hex.error.IllegalStateException;
 import hex.module.IModule;
 
@@ -53,7 +52,7 @@ class DomainExpert
 				}
 				else
 				{
-					var domain = DomainUtil.getDomain( key );
+					var domain = Domain.getDomain( key );
 					this._removedModules.set( key, false );
 					this._subscribedModules.set( module, domain );
 					return domain;

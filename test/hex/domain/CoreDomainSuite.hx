@@ -7,5 +7,11 @@ package hex.domain;
 class CoreDomainSuite
 {
     @Suite( "Domain" )
-    public var list : Array<Class<Dynamic>> = [ DefaultDomainTest, DomainTest, DomainUtilTest, NoDomainTest, TopLevelDomainTest ];
+    public var list : Array<Class<Dynamic>> = 
+	[ 
+		DefaultDomainTest, 
+		DomainTest, 
+		NoDomainTest, 
+		TopLevelDomainTest 
+	];
 }

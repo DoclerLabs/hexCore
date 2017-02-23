@@ -6,5 +6,5 @@ package hex.domain;
  */
 class DefaultDomain
 {
-	public static var DOMAIN = DomainUtil.getDomain( "DefaultDomain" );
+	public static var DOMAIN = Domain.getDomain( "DefaultDomain" );
 }
