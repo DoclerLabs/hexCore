@@ -80,7 +80,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		this._seal( false );
     }
 	
-	public function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
+	public function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Bool
     {
 		if ( !this._isSealed )
 		{
@@ -123,7 +123,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		}
     }
 	
-	public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
+	public function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Bool
     {
 		if ( !this._isSealed )
 		{

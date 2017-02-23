@@ -32,9 +32,9 @@ interface IDomainDispatcher<ListenerType:{}>
 
     function removeListener( listener : ListenerType, ?domain : Domain ) : Bool;
 
-    function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool;
+    function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T, domain : Domain ) : Bool;
 
-    function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool;
+    function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T, domain : Domain ) : Bool;
 
     function dispatch( messageType : MessageType, ?domain : Domain, ?data : Array<Dynamic> ) : Void;
 

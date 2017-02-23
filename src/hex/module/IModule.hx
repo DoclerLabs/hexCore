@@ -21,9 +21,9 @@ interface IModule extends IContextOwner
 
     function dispatchPublicMessage( messageType : MessageType, ?data : Array<Dynamic> ) : Void;
 
-    function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Void;
+    function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Void;
 
-    function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Void;
+    function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Void;
 	
 	function getDomain() : Domain;
 	
