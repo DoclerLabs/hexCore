@@ -4,7 +4,7 @@ package hex.domain;
  * ...
  * @author Francis Bourre
  */
-class TopLevelDomain extends Domain
+class TopLevelDomain
 {
-	public static var DOMAIN : TopLevelDomain = DomainUtil.getDomain( "TopLevelDomain", TopLevelDomain );
+	public static var DOMAIN : Domain = DomainUtil.getDomain( "TopLevelDomain" );
 }

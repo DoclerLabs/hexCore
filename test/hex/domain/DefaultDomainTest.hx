@@ -17,6 +17,6 @@ class DefaultDomainTest
 	@Test( "Test if DefaultDomain.DOMAIN is an instance of DefaultDomain" )
     public function testDefaultDomainStaticVariableType() : Void
     {
-        Assert.isInstanceOf( DefaultDomain.DOMAIN, DefaultDomain, "domain should be an instance of 'DefaultDomain'" );
+        Assert.isInstanceOf( DefaultDomain.DOMAIN, Domain, "domain should be an instance of 'DefaultDomain'" );
     }
 }

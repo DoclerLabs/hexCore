@@ -16,9 +16,9 @@ class DomainUtil
         throw new PrivateConstructorException();
     }
 	
-	static public function getDomain<DomainType:Domain>( domainName : String, type : Class<DomainType> ) : DomainType
+	static public function getDomain( domainName : String ) : Domain
 	{
-		var domain : DomainType = null;
+		var domain = null;
 		
 		if ( DomainUtil._domain.exists( domainName ) )
 		{
@@ -26,7 +26,7 @@ class DomainUtil
 		}
 		else
 		{
-			domain = Type.createInstance( type, [ domainName ] );
+			domain = Type.createInstance( Domain, [ domainName ] );
 			DomainUtil._domain.set( domainName, domain );
 		}
 		

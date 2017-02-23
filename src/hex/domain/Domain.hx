@@ -8,6 +8,7 @@ import hex.error.IllegalArgumentException;
  * ...
  * @author Francis Bourre
  */
+@:final
 class Domain
 {
     var _domainName : String;

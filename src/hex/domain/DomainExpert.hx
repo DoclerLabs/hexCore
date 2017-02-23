@@ -53,7 +53,7 @@ class DomainExpert
 				}
 				else
 				{
-					var domain = DomainUtil.getDomain( key, Domain );
+					var domain = DomainUtil.getDomain( key );
 					this._removedModules.set( key, false );
 					this._subscribedModules.set( module, domain );
 					return domain;

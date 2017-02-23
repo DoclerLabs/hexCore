@@ -4,7 +4,7 @@ package hex.domain;
  * ...
  * @author Francis Bourre
  */
-class NoDomain extends Domain
+class NoDomain
 {
-    public static var DOMAIN : NoDomain = DomainUtil.getDomain( "NoDomain", NoDomain );
+    public static var DOMAIN : Domain = DomainUtil.getDomain( "NoDomain" );
 }
