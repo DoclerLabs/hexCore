@@ -1,6 +1,5 @@
 package hex.log;
 
-import haxe.PosInfos;
 import hex.error.PrivateConstructorException;
 
 /**
@@ -15,30 +14,22 @@ class Stringifier
         throw new PrivateConstructorException();
     }
 
-    //--------------------------------------------------------------------
-    // Private properties
-    //--------------------------------------------------------------------
-
     static var _STRATEGY : IStringifierStrategy;
 
-    //--------------------------------------------------------------------
-    // Public API
-    //--------------------------------------------------------------------
-
     /**
-     * Sets the concrete stringifier to use for process.
+     * Sets the concrete stringifier to be used.
      *
-     * @param       o Stringifier concrete implementation
+     * @param	stringifier Stringifier concrete implementation
      *
-     * @see BasicStringifier
+     * @see hex.log.BasicStringifierStrategy
      */
-    public static function setStringifier( o : IStringifierStrategy ) : Void
+    public static function setStringifier( stringifier : IStringifierStrategy ) : Void
     {
-        Stringifier._STRATEGY = o;
+        Stringifier._STRATEGY = stringifier;
     }
 
     /**
-     * Returns the current used stringifier.
+     * Returns the current stringifier used.
      */
     public static function getStringifier() : IStringifierStrategy
     {
@@ -48,9 +39,9 @@ class Stringifier
     /**
      * Process stringify processing.
      *
-     * @param       target  Object to stringify
+     * @param 	target  Object to stringified
      */
-    public static function stringify( target : Dynamic ) : String
+    public static function stringify<T>( target : T ) : String
     {
         if ( Stringifier._STRATEGY == null )
         {
@@ -58,13 +49,5 @@ class Stringifier
         }
 
         return Stringifier._STRATEGY.stringify( target );
-    }
-
-    /**
-     * Returns the current code postion informations.
-     */
-    public static function getPosInfos( ?posInfos : PosInfos ) : PosInfos
-    {
-        return posInfos;
     }
 }
