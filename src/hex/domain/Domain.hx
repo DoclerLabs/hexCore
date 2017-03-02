@@ -55,9 +55,9 @@ class Domain
 		{
 			domain = new Domain( domainName );
 			Domain._domains.set( domainName, domain );
+			Domain._reparent();
 		}
 		
-		Domain._reparent();
 		return domain;
 	}
 
