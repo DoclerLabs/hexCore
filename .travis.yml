@@ -33,8 +33,8 @@ before_install:
 
 install:
   - haxelib newrepo
-  - haxelib git hexunit https://github.com/DoclerLabs/hexUnit.git --never
-  - haxelib git hexlog https://github.com/DoclerLabs/hexLog.git --never
+  - haxelib git hexunit https://github.com/DoclerLabs/hexUnit.git#$DEPENDENCIES_BRANCH --never
+  - haxelib git hexlog https://github.com/DoclerLabs/hexLog.git#$DEPENDENCIES_BRANCH --never
   - haxelib dev hexcore .
   - haxelib path hexcore
   - export DISPLAY=:99.0;
