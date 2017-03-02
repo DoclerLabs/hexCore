@@ -32,7 +32,11 @@ before_install:
   - sudo apt-get install -qq libgtk2.0-0:i386
 
 install:
-  - git clone --recursive -b $DEPENDENCIES_BRANCH https://github.com/DoclerLabs/hexUnit.git ./hexunit
+  - haxelib newrepo
+  - haxelib git hexunit https://github.com/DoclerLabs/hexUnit.git --never
+  - haxelib git hexlog https://github.com/DoclerLabs/hexLog.git --never
+  - haxelib dev hexcore .
+  - haxelib path hexcore
   - export DISPLAY=:99.0;
   - export AUDIODEV=null;
   - haxe flash/install.hxml
