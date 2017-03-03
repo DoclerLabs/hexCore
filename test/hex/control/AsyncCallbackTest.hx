@@ -182,7 +182,7 @@ class AsyncCallbackTest
 			.whenComplete( i => r0 = 3 + i )
 			.onFail( function(e) { error = e; } );
 		
-		Assert.isInstanceOf( error, Exception );
+		Assert.isInstanceOf( error, IllegalArgumentException );
 		Assert.equals( 'message', error.message );
 		Assert.equals( 0.0, r0 );
 	}
