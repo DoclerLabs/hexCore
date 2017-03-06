@@ -17,6 +17,6 @@ class NoDomainTest
 	@Test( "Test if NoDomain.DOMAIN is an instance of NoDomain" )
     public function testNoDomainStaticVariableType() : Void
     {
-        Assert.isInstanceOf( NoDomain.DOMAIN, NoDomain, "domain should be an instance of 'NoDomain'" );
+        Assert.isInstanceOf( NoDomain.DOMAIN, Domain, "domain should be an instance of 'NoDomain'" );
     }
 }

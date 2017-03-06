@@ -1,7 +1,7 @@
 package hex.event;
 
 import hex.error.UnsupportedOperationException;
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...

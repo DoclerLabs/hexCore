@@ -1,4 +1,4 @@
-package hex.log;
+package hex.util;
 
 /**
  * ...

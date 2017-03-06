@@ -17,6 +17,6 @@ class TopLevelDomainTest
 	@Test( "Test if TopLevelDomain.DOMAIN is an instance of TopLevelDomain" )
     public function testTopLevelDomainStaticVariableType() : Void
     {
-        Assert.isInstanceOf( TopLevelDomain.DOMAIN, TopLevelDomain, "domain should be an instance of 'TopLevelDomain'" );
+        Assert.isInstanceOf( TopLevelDomain.DOMAIN, Domain, "domain should be an instance of 'TopLevelDomain'" );
     }
 }

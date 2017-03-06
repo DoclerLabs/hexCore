@@ -1,5 +1,6 @@
 package hex.control.forward;
 
+#if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import hex.error.PrivateConstructorException;
@@ -107,3 +108,4 @@ class ForwarderBuilder
 		return a;
 	}
 }
+#end

@@ -7,5 +7,11 @@ package hex.structures;
 class CoreStructuresSuite
 {
 	@Suite( "Structures" )
-    public var list : Array<Class<Dynamic>> = [ PointTest, PointFTest, SizeTest ];
+    public var list : Array<Class<Dynamic>> = 
+	[ 
+		PointTest, 
+		PointFTest, 
+		PointFactoryTest,
+		SizeTest 
+	];
 }

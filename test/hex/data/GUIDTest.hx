@@ -8,6 +8,12 @@ import hex.unittest.assertion.Assert;
  */
 class GUIDTest
 {
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( GUID );
+	}
+	
     @Test( "Test randomIntegerWithinRange function" )
     public function testRandomIntegerWithinRange() : Void
     {

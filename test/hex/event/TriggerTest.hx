@@ -1,5 +1,7 @@
 package hex.event;
 
+import hex.event.MockTypedef;
+import hex.data.IParser;
 import hex.structures.Size;
 import hex.unittest.assertion.Assert;
 
@@ -20,8 +22,18 @@ class TriggerTest
 		model.intOutput.connect( intMockDriver );
 		model.stringOutput.connect( stringMockDriver );
 		model.genericOutput.connect( genericMockDriver );
+		
 		var callbackResult;
 		model.callbacks.connect( function ( s : String, i : Int ) callbackResult = { s: s, i: i } );
+		
+		var colorResult = MockColor.Red;
+		model.colorCallbacks.connect( function ( color : MockColor ) colorResult = color );
+		
+		var parserResult = '';
+		model.triggerParser.connect( function ( parser : IParser<String> ) parserResult = parser.parse( 'test' ) );
+		
+		var parserResult2;
+		model.triggerParser2.connect( function ( parser : IParser<MockTypedef> ) parserResult2 = parser.parse( 'test' ) );
 		
 		model.changeAllValues( 3, "test", this );
 		Assert.equals( 1, intMockDriver.callbackCallCount );
@@ -32,6 +44,9 @@ class TriggerTest
 		Assert.equals( this, genericMockDriver.callbackParam );
 		Assert.equals( "test", callbackResult.s );
 		Assert.equals( 3, callbackResult.i );
+		Assert.equals( MockColor.Blue, colorResult );
+		Assert.equals('test was parsed', parserResult );
+		Assert.equals('test', parserResult2.name );
 		
 		model.stringOutput.disconnectAll();
 		model.genericOutput.disconnectAll();
@@ -58,6 +73,13 @@ private class MockModel<T> implements ITriggerOwner
 	public var genericOutput( default, never )  : ITrigger<GenericConnection<TriggerTest>>;
 	
 	public var callbacks( default, never )  : ITrigger<String->Int->Void>;
+	
+	public var colorCallbacks( default, never ) : ITrigger<MockColor->Void>;
+	
+	public var triggerParser( default, never ) : ITrigger<IParser<String>->Void>;
+	
+	public var triggerParser2( default, never ) : ITrigger<IParser<MockTypedef>->Void>;
+	
 
     public function new(){}
 	
@@ -67,7 +89,28 @@ private class MockModel<T> implements ITriggerOwner
         this.stringOutput.onChangeStringValue( s );
 		this.genericOutput.onChangeValue( o );
 		this.callbacks.trigger( s, i );
+		this.colorCallbacks.trigger( MockColor.Blue );
+		this.triggerParser.trigger( new MockParser() );
+		this.triggerParser2.trigger( new MockParser2() );
     }
+}
+
+private class MockParser implements IParser<String>
+{
+	public function new() {}
+	public function parse( serializedContent : Dynamic, target : Dynamic = null ) : String
+	{
+		return serializedContent + " was parsed";
+	}
+}
+
+private class MockParser2 implements IParser<MockTypedef>
+{
+	public function new() {}
+	public function parse( serializedContent : Dynamic, target : Dynamic = null ) : MockTypedef
+	{
+		return {name:serializedContent};
+	}
 }
 
 private class IntMockDriver implements IIntConnection

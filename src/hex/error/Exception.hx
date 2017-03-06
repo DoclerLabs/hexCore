@@ -1,8 +1,11 @@
 package hex.error;
 
-import hex.log.Logger;
-import hex.log.Stringifier;
 import haxe.PosInfos;
+import hex.util.Stringifier;
+
+#if (!macro && debug)
+import hex.log.HexLog.*;
+#end
 
 /**
  * ...
@@ -20,8 +23,10 @@ class Exception
         this.posInfos   = posInfos;
         this.name       = Stringifier.stringify( this );
 		
-		#if debug
-			Logger.error( this.toString() );
+		#if (!macro && debug)
+			error(this.toString());
+		#elseif (macro && debug)
+			trace(this.toString());
 		#end
     }
 

@@ -6,8 +6,8 @@ package hex.event;
 interface IDispatcher<ListenerType:{}>
 {
 	function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void;
-	function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
-	function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool;
+	function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Bool;
+	function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Bool;
 	function addListener( listener : ListenerType ) : Bool;
 	function removeListener( listener : ListenerType ) : Bool;
 	function removeAllListeners() : Void;

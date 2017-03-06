@@ -11,6 +11,12 @@ class ClassUtilTest
 {
 	public static inline var STATIC_REF : String = "static_ref";
 	
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( ClassUtil );
+	}
+	
 	@Test( "Test getClassReference" )
     public function testGetClassReference() : Void
     {

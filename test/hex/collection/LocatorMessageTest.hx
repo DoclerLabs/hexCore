@@ -1,6 +1,5 @@
 package hex.collection;
 
-import hex.event.MessageType;
 import hex.unittest.assertion.Assert;
 
 /**
@@ -9,6 +8,12 @@ import hex.unittest.assertion.Assert;
  */
 class LocatorMessageTest
 {
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( LocatorMessage );
+	}
+	
 	@Test( "test 'REGISTER' property" ) 
 	public function testRegisterProperty() : Void
 	{

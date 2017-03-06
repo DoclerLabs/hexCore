@@ -176,7 +176,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 		{
 			s = '_B' + o;
 		}
-		else if ( Std.is( o, Float ) || Std.is( o, Int ) )
+		else if ( Std.is( o, Float ) )
 		{
 			s = '_N' + o;
 		}

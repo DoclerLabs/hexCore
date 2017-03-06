@@ -1,12 +1,10 @@
 package hex.domain;
 
-import hex.domain.Domain;
-
 /**
  * ...
  * @author Francis Bourre
  */
-class NoDomain extends Domain
+class NoDomain
 {
-    public static var DOMAIN : NoDomain = DomainUtil.getDomain( "NoDomain", NoDomain );
+    public static var DOMAIN = Domain.getDomain( "NoDomain" );
 }

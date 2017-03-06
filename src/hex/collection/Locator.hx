@@ -4,7 +4,7 @@ import hex.error.IllegalArgumentException;
 import hex.error.NoSuchElementException;
 import hex.event.ITrigger;
 import hex.event.ITriggerOwner;
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...

@@ -101,12 +101,12 @@ class DomainDispatcher<ListenerType:{}> implements IDomainDispatcher<ListenerTyp
         return this.getDomainDispatcher( domain ).removeListener( listener );
     }
 
-    public function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool
+    public function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T, domain : Domain ) : Bool
     {
         return this.getDomainDispatcher( domain ).addHandler( messageType, scope, callback );
     }
 
-    public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic, domain : Domain ) : Bool
+    public function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T, domain : Domain ) : Bool
     {
         return this.getDomainDispatcher( domain ).removeHandler( messageType, scope, callback );
     }

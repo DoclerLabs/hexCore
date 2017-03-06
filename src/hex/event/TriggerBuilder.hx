@@ -14,6 +14,7 @@ import hex.event.ITrigger;
 import hex.util.MacroUtil;
 
 using haxe.macro.Context;
+using haxe.macro.Tools;
 
 /**
  * ...
@@ -189,14 +190,39 @@ class TriggerBuilder
 	
 	static function _buildClassVOFromTFunction( triggerDefinition : { args: Array<ComplexType>, ret: ComplexType, triggerParamType : Null<ComplexType> } ) : ClassVO
 	{
-		var className 	= '__Trigger_Class__' + (TriggerBuilder._ID++);
-		var dispatcherClass : TypeDefinition = null;
+		var getPack = function( className : String ) : { pack: Array<String>, className: String }
+		{
+			var pack = className.split( "." );
+			var className = pack[ pack.length -1 ];
+			pack.splice( pack.length - 1, 1 );
 		
-		dispatcherClass = TriggerBuilder._getClassSkeleton( className, triggerDefinition.triggerParamType );
+			return { pack: pack, className: className };
+		}
 
 		var l = triggerDefinition.args.length;
-		var args = [ for ( i in 0...l ) { name: 'arg' + i, type: triggerDefinition.args[ i ], opt: false } ];
+		var args = [];
+		for ( i in 0...l ) 
+		{
+			var t = triggerDefinition.args[ i ];
+			switch( t )
+			{
+				case TPath( p ):
+					var ttype = t.toType().toString().split('<')[0];
+					var tPack = getPack( ttype );
+					//do the dirty job of setting the right pack for each argument if the developer forgets to set it.
+					p.pack = tPack.pack;
+					
+				case _:
+			}
+			args.push( { name: 'arg' + i, type: t, opt: false } );
+		}
 		
+		var className 	= '__Trigger_Class__' + (TriggerBuilder._ID++);
+		var dispatcherClass : TypeDefinition = null;
+
+		//build class
+		dispatcherClass = TriggerBuilder._getClassSkeleton( className, triggerDefinition.triggerParamType );
+
 		var newField : Field = 
 		{
 			meta: null,

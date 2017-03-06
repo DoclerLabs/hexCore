@@ -5,6 +5,12 @@ import hex.unittest.assertion.Assert;
 
 class HashCodeFactoryTest
 {
+	@Test( "test constructor is private" ) 
+	public function testPrivateConstructor() : Void
+	{
+		Assert.constructorIsPrivate( HashCodeFactory );
+	}
+	
     @Test( "Test constructor can't be called" )
     public function testConstructorNullException() : Void
     {
@@ -33,6 +39,13 @@ class HashCodeFactoryTest
 
         var anotherKey : Int = HashCodeFactory.getKey( o );
         Assert.equals( key, anotherKey, "Two 'HashCodeFactory.getKEY' calls on the same target should return the same value" );
+    }
+	
+	@Test( "Test 'getNextName'" )
+    public function testGetNextName() : Void
+    {
+        var previewKey : Int = HashCodeFactory.previewNextKey();
+        Assert.equals( "" + previewKey, HashCodeFactory.getNextName(), "'HashCodeFactory.getNextName' and 'HashCodeFactory.previewNextKey' should return the same String value" );
     }
 }
 

@@ -7,7 +7,9 @@ import hex.data.CoreDataSuite;
 import hex.di.CoreDiSuite;
 import hex.domain.CoreDomainSuite;
 import hex.event.CoreEventSuite;
+import hex.error.CoreErrorSuite;
 import hex.model.CoreModelSuite;
+import hex.module.CoreModuleSuite;
 import hex.service.CoreServiceSuite;
 import hex.structures.CoreStructuresSuite;
 import hex.util.CoreUtilSuite;
@@ -19,5 +21,20 @@ import hex.util.CoreUtilSuite;
 class HexCoreSuite
 {
     @Suite( "HexCore" )
-    public var list : Array<Class<Dynamic>> = [ CoreCollectionSuite, CoreControlSuite, CoreCoreSuite, CoreDataSuite, CoreDiSuite, CoreDomainSuite, CoreEventSuite, CoreModelSuite, CoreServiceSuite, CoreStructuresSuite, CoreUtilSuite ];
+    public var list : Array<Class<Dynamic>> = 
+	[ 
+		CoreCollectionSuite, 
+		CoreControlSuite, 
+		CoreCoreSuite, 
+		CoreDataSuite, 
+		CoreDiSuite, 
+		CoreDomainSuite, 
+		CoreEventSuite, 
+		CoreErrorSuite,
+		CoreModelSuite, 
+		CoreModuleSuite, 
+		CoreServiceSuite, 
+		CoreStructuresSuite, 
+		CoreUtilSuite 
+	];
 }

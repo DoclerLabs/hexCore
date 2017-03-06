@@ -2,7 +2,7 @@ package hex.event;
 
 import hex.error.IllegalArgumentException;
 import hex.error.UnsupportedOperationException;
-import hex.log.Stringifier;
+import hex.util.Stringifier;
 
 /**
  * ...
@@ -23,64 +23,71 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 	
 	public function dispatch( messageType : MessageType, ?data : Array<Dynamic> ) : Void
     {
-		this._seal( true );
-		
-		var parameters : Array<Dynamic> = null;
-		
-        var iterator = this._listeners.keys();
-        while ( iterator.hasNext() )
-        {
-            var listener : ListenerType 	= iterator.next();
-            var m : Map<String, CallbackHandler> 	= this._listeners.get( listener );
+		if ( !this._isSealed )
+		{
+			this._seal( true );
 			
-            if ( Lambda.count( m ) > 0 )
-            {
-				if ( m.exists( messageType ) )
+			var parameters : Array<Dynamic> = null;
+			
+			var iterator = this._listeners.keys();
+			while ( iterator.hasNext() )
+			{
+				var listener : ListenerType 	= iterator.next();
+				var m : Map<String, CallbackHandler> 	= this._listeners.get( listener );
+				
+				if ( Lambda.count( m ) > 0 )
 				{
-					var handler : CallbackHandler = m.get( messageType );
-					handler.call( data );
-				}
-            }
-            else
-            {
-				var messageName : String = messageType;
-                var callback = Reflect.field( listener, messageName );
-                if ( callback != null && messageName != 'handleMessage' )
-                {
-					Reflect.callMethod ( listener, callback, data );
-                }
-                else
-                {
-					callback = Reflect.field( listener, 'handleMessage' );
-					
-					if ( callback != null )
+					if ( m.exists( messageType ) )
 					{
-						if ( parameters == null )
-						{
-							parameters = [messageType];
-							if ( data != null )
-							{
-								parameters = parameters.concat( data );
-							}
-							}
-						
-						Reflect.callMethod ( listener, callback, parameters );
-						
-					} else
-					{
-						var msg : String = Stringifier.stringify( this ) + ".dispatch failed. " +
-						" You must implement '" + messageType + "' or 'handleMessage' method in '" +
-						Stringifier.stringify( listener ) + "' instance.";
-						throw( new UnsupportedOperationException( msg ) );
+						var handler : CallbackHandler = m.get( messageType );
+						handler.call( data );
 					}
-                }
-            }
-        }
-
-		this._seal( false );
+				}
+				else
+				{
+					var messageName : String = messageType;
+					var callback = Reflect.field( listener, messageName );
+					if ( callback != null && messageName != 'handleMessage' )
+					{
+						Reflect.callMethod ( listener, callback, data );
+					}
+					else
+					{
+						callback = Reflect.field( listener, 'handleMessage' );
+						
+						if ( callback != null )
+						{
+							if ( parameters == null )
+							{
+								parameters = [messageType];
+								if ( data != null )
+								{
+									parameters = parameters.concat( data );
+								}
+								}
+							
+							Reflect.callMethod ( listener, callback, parameters );
+							
+						} else
+						{
+							var msg : String = Stringifier.stringify( this ) + ".dispatch failed. " +
+							" You must implement '" + messageType + "' or 'handleMessage' method in '" +
+							Stringifier.stringify( listener ) + "' instance.";
+							throw( new UnsupportedOperationException( msg ) );
+						}
+					}
+				}
+			}
+			
+			this._seal( false );
+		}
+		else
+		{
+			this._cachedMethodCalls.push( this.dispatch.bind( messageType, data ) );
+		}
     }
 	
-	public function addHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
+	public function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Bool
     {
 		if ( !this._isSealed )
 		{
@@ -123,7 +130,7 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		}
     }
 	
-	public function removeHandler( messageType : MessageType, scope : Dynamic, callback : Dynamic ) : Bool
+	public function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Bool
     {
 		if ( !this._isSealed )
 		{
