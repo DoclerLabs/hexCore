@@ -17,12 +17,14 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 	
 	var _completeResponder 	: Array<Callback<ResultType>>;
 	var _failResponder 		: Array<Exception->Void>;
+	var _cancelResponder 	: Array<Void->Void>;
 	var _result				: AsyncResult<ResultType>;
 	
 	public function new() 
 	{
 		this._completeResponder 	= [];
 		this._failResponder 		= [];
+		this._cancelResponder 		= [];
 		this._result				= Result.WAITING;
 		
 		AsyncCallback._map.set( this, true );
@@ -30,9 +32,9 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 
 	public static function get<ResultType>( callback : Callback<Handler<ResultType>> ) : AsyncCallback<ResultType>
 	{
-		var handler = new AsyncCallback();
-		callback.invoke( handler._complete );
-		return handler;
+		var acb = new AsyncCallback();
+		callback.invoke( acb._complete );
+		return acb;
 	}
 	
 	macro public function whenComplete<ResultType>( ethis : Expr, clazz : Expr ) : ExprOf<AsyncCallback<ResultType>>
@@ -72,6 +74,22 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 		return this;
 	}
 	
+	public function onCancel( onCancel : Void->Void ) : AsyncCallback<ResultType>
+	{
+		switch( this._result )
+		{
+			case Result.WAITING:
+				this._cancelResponder.push( onCancel );
+				
+			case Result.CANCELLED:
+				onCancel();
+				
+			case _:
+		}
+		
+		return this;
+	}
+	
 	function _complete( result : AsyncResult<ResultType> ) : Void
 	{
 		switch( result )
@@ -81,6 +99,9 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 				
 			case Result.FAILED( error ):
 				this._doFail( error );
+				
+			case Result.CANCELLED:
+				this._doCancel();
 				
 			case _:
 		}
@@ -100,7 +121,7 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 		}
 		else
 		{
-			throw new IllegalStateException( 'AsyncCallback is disposed' );
+			throw new IllegalStateException( 'AsyncCallback cannot be completed, it is disposed' );
 		}
 	}
 	
@@ -118,15 +139,35 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 		}
 		else
 		{
-			throw new IllegalStateException( 'AsyncCallback is disposed' );
+			throw new IllegalStateException( 'AsyncCallback cannot be failed, it is disposed' );
+		}
+	}
+	
+	function _doCancel() : Void
+	{
+		if ( AsyncCallback._map.exists( this ) )
+		{
+			this._result = Result.CANCELLED;
+			for ( responder in this._cancelResponder )
+			{
+				responder();
+			}
+			
+			this._dispose();
+		}
+		else
+		{
+			throw new IllegalStateException( 'AsyncCallback cannot be cancelled, it is disposed' );
 		}
 	}
 	
 	function _dispose() : Void
 	{
 		AsyncCallback._map.remove( this );
-		this._completeResponder = null;
-		this._failResponder = null;
+		
+		this._completeResponder 	= null;
+		this._failResponder 		= null;
+		this._cancelResponder 		= null;
 	}
 }
 
@@ -135,6 +176,7 @@ enum Result<T>
 	WAITING;
 	DONE( result : T );
 	FAILED( e : Exception );
+	CANCELLED;
 }
 
 private class AsyncCallbackUtil 

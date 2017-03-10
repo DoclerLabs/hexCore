@@ -10,4 +10,5 @@ interface IAsyncCallback<ResultType>
 {
 	function onComplete( onComplete : Callback<ResultType> ) : IAsyncCallback<ResultType>;
 	function onFail( onFail : Exception->Void ) : IAsyncCallback<ResultType>;
+	function onCancel( onCancel : Void->Void ) : IAsyncCallback<ResultType>;
 }
