@@ -22,43 +22,93 @@ class AsyncCallbackTest
 	{
 		var result 	: String;
 		var error 	: Exception;
+		var cancel = false;
 		
 		//test completion
-		_loadString( false ).onComplete( function(r) {result = r;} ).onFail( function(e) {error = e;} );
+		_loadString( Result.DONE( 'test' ) )
+			.onComplete( function(r) result = r )
+			.onFail( function(e) error = e )
+			.onCancel( function() cancel = true );
 
 		Assert.equals( 'test', result );
 		Assert.isNull( error );
+		Assert.isFalse( cancel );
 		
 		//test failure
 		result = null;
 		error = null;
-		_loadString( true ).onComplete( function(r) { result = r; } ).onFail( function(e) { error = e; } );
+		cancel = false;
+		
+		_loadString( Result.FAILED( new Exception( 'message' ) ) )
+			.onComplete( function(r) result = r )
+			.onFail( function(e) error = e )
+			.onCancel( function() cancel = true );
 
 		Assert.isInstanceOf( error, Exception );
 		Assert.equals( 'message', error.message );
 		Assert.isNull( result );
+		Assert.isFalse( cancel );
+		
+		//test cancel
+		result = null;
+		error = null;
+		cancel = false;
+		
+		_loadString( Result.CANCELLED )
+			.onComplete( function(r) result = r )
+			.onFail( function(e) error = e )
+			.onCancel( function() cancel = true );
+
+		Assert.isTrue( cancel );
+		Assert.isNull( result );
+		Assert.isNull( error );
 	}
 	
 	@Test( 'Test without argument result' )
 	public function testWithoutArgumentResult() : Void
 	{
-		var result 	: String;
+		var result 	: Nothing;
 		var error 	: Exception;
+		var cancel = false;
 		
 		//test completion
-		_load( false ).onComplete( function() {result = 'test';} ).onFail( function(e) {error = e;} );
+		_load( Result.DONE( Nothing ) )
+			.onComplete( function() result = Nothing )
+			.onFail( function(e) error = e )
+			.onCancel( function() cancel = true );
 
-		Assert.equals( 'test', result );
+		Assert.equals( Nothing, result );
 		Assert.isNull( error );
+		Assert.isFalse( cancel );
 		
 		//test failure
 		result = null;
 		error = null;
-		_load( true ).onComplete( function() { result = 'test'; } ).onFail( function(e) { error = e; } );
+		cancel = false;
+		
+		_load( Result.FAILED( new Exception( 'message' ) ) )
+			.onComplete( function(r) result = r )
+			.onFail( function(e) error = e )
+			.onCancel( function() cancel = true );
 
 		Assert.isInstanceOf( error, Exception );
 		Assert.equals( 'message', error.message );
 		Assert.isNull( result );
+		Assert.isFalse( cancel );
+		
+		//test cancel
+		result = null;
+		error = null;
+		cancel = false;
+		
+		_load( Result.CANCELLED )
+			.onComplete( function(r) result = r )
+			.onFail( function(e) error = e )
+			.onCancel( function() cancel = true );
+
+		Assert.isTrue( cancel );
+		Assert.isNull( result );
+		Assert.isNull( error );
 	}
 	
 	@Test( 'Test completion twice' )
@@ -109,6 +159,30 @@ class AsyncCallbackTest
 		Assert.isInstanceOf( error, IllegalStateException );
 	}
 	
+	@Test( 'Test cancel twice' )
+	public function tesCancelTwice() : Void
+	{
+		var error : IllegalStateException = null;
+		
+		try 
+		{
+			AsyncCallback.get
+			(
+				function ( handler : Handler<Nothing> )
+				{
+					handler( Result.CANCELLED );
+					handler( Result.CANCELLED );
+				}
+			);
+		}
+		catch ( e : IllegalStateException )
+		{
+			error = e;
+		}
+
+		Assert.isInstanceOf( error, IllegalStateException );
+	}
+	
 	@Test( 'Test completion and failure at the same time' )
 	public function testCompletionAndFailureAtTheSameTime() : Void
 	{
@@ -121,6 +195,126 @@ class AsyncCallbackTest
 				function ( handler : Handler<Nothing> )
 				{
 					handler( Nothing );
+					handler( new Exception( 'message' ) );
+				}
+			);
+		}
+		catch ( e : IllegalStateException )
+		{
+			error = e;
+		}
+
+		Assert.isInstanceOf( error, IllegalStateException );
+	}
+	
+	@Test( 'Test failure and completion at the same time' )
+	public function testFailureAndCompletionAtTheSameTime() : Void
+	{
+		var error : IllegalStateException = null;
+		
+		try 
+		{
+			AsyncCallback.get
+			(
+				function ( handler : Handler<Nothing> )
+				{
+					handler( new Exception( 'message' ) );
+					handler( Nothing );
+				}
+			);
+		}
+		catch ( e : IllegalStateException )
+		{
+			error = e;
+		}
+
+		Assert.isInstanceOf( error, IllegalStateException );
+	}
+	
+	@Test( 'Test completion and cancel at the same time' )
+	public function testCompletionAndCancelAtTheSameTime() : Void
+	{
+		var error : IllegalStateException = null;
+		
+		try 
+		{
+			AsyncCallback.get
+			(
+				function ( handler : Handler<Nothing> )
+				{
+					handler( Nothing );
+					handler( Result.CANCELLED );
+				}
+			);
+		}
+		catch ( e : IllegalStateException )
+		{
+			error = e;
+		}
+
+		Assert.isInstanceOf( error, IllegalStateException );
+	}
+	
+	@Test( 'Test completion and cancel at the same time' )
+	public function testCancelAndCompletionAtTheSameTime() : Void
+	{
+		var error : IllegalStateException = null;
+		
+		try 
+		{
+			AsyncCallback.get
+			(
+				function ( handler : Handler<Nothing> )
+				{
+					handler( Result.CANCELLED );
+					handler( Nothing );
+				}
+			);
+		}
+		catch ( e : IllegalStateException )
+		{
+			error = e;
+		}
+
+		Assert.isInstanceOf( error, IllegalStateException );
+	}
+	
+	@Test( 'Test failure and cancel at the same time' )
+	public function testFailureAndCancelAtTheSameTime() : Void
+	{
+		var error : IllegalStateException = null;
+		
+		try 
+		{
+			AsyncCallback.get
+			(
+				function ( handler : Handler<Nothing> )
+				{
+					handler( new Exception( 'message' ) );
+					handler( Result.CANCELLED );
+				}
+			);
+		}
+		catch ( e : IllegalStateException )
+		{
+			error = e;
+		}
+
+		Assert.isInstanceOf( error, IllegalStateException );
+	}
+	
+	@Test( 'Test cancel and failure at the same time' )
+	public function testCancelAndFailureAtTheSameTime() : Void
+	{
+		var error : IllegalStateException = null;
+		
+		try 
+		{
+			AsyncCallback.get
+			(
+				function ( handler : Handler<Nothing> )
+				{
+					handler( Result.CANCELLED );
 					handler( new Exception( 'message' ) );
 				}
 			);
@@ -214,38 +408,24 @@ class AsyncCallbackTest
 			, collection, "collection content should be the same" );
 	}
 	
-	static function _load( failure : Bool ) : IAsyncCallback<Nothing>
+	static function _load( result : Result<Nothing> ) : IAsyncCallback<Nothing>
 	{
 		return AsyncCallback.get
 		(
 			function ( handler : Handler<Nothing> )
 			{
-				if ( !failure )
-				{
-					handler( Nothing );
-				}
-				else
-				{
-					handler( new Exception( 'message' ) );
-				}
+				handler( result );
 			}
 		);
 	}
 	
-	static function _loadString( failure : Bool ) : IAsyncCallback<String>
+	static function _loadString<ResultType>( result : Result<String> ) : IAsyncCallback<String>
 	{
 		return AsyncCallback.get
 		(
 			function ( handler : Handler<String> )
 			{
-				if ( !failure )
-				{
-					handler( 'test' );
-				}
-				else
-				{
-					handler( new Exception( 'message' ) );
-				}
+				handler( result );
 			}
 		);
 	}
