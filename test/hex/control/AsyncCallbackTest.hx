@@ -25,7 +25,7 @@ class AsyncCallbackTest
 		var cancel = false;
 		
 		//test completion
-		_loadString( Result.DONE( 'test' ) )
+		var acb = _loadString( Result.DONE( 'test' ) )
 			.onComplete( function(r) result = r )
 			.onFail( function(e) error = e )
 			.onCancel( function() cancel = true );
@@ -34,12 +34,16 @@ class AsyncCallbackTest
 		Assert.isNull( error );
 		Assert.isFalse( cancel );
 		
+		Assert.isTrue( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
+		Assert.isFalse( acb.isCancelled );
+		
 		//test failure
 		result = null;
 		error = null;
 		cancel = false;
 		
-		_loadString( Result.FAILED( new Exception( 'message' ) ) )
+		acb = _loadString( Result.FAILED( new Exception( 'message' ) ) )
 			.onComplete( function(r) result = r )
 			.onFail( function(e) error = e )
 			.onCancel( function() cancel = true );
@@ -49,12 +53,16 @@ class AsyncCallbackTest
 		Assert.isNull( result );
 		Assert.isFalse( cancel );
 		
+		Assert.isTrue( acb.isFailed );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isCancelled );
+		
 		//test cancel
 		result = null;
 		error = null;
 		cancel = false;
 		
-		_loadString( Result.CANCELLED )
+		acb = _loadString( Result.CANCELLED )
 			.onComplete( function(r) result = r )
 			.onFail( function(e) error = e )
 			.onCancel( function() cancel = true );
@@ -62,6 +70,10 @@ class AsyncCallbackTest
 		Assert.isTrue( cancel );
 		Assert.isNull( result );
 		Assert.isNull( error );
+		
+		Assert.isTrue( acb.isCancelled );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
 	}
 	
 	@Test( 'Test without argument result' )
@@ -72,7 +84,7 @@ class AsyncCallbackTest
 		var cancel = false;
 		
 		//test completion
-		_load( Result.DONE( Nothing ) )
+		var acb = _load( Result.DONE( Nothing ) )
 			.onComplete( function() result = Nothing )
 			.onFail( function(e) error = e )
 			.onCancel( function() cancel = true );
@@ -81,12 +93,16 @@ class AsyncCallbackTest
 		Assert.isNull( error );
 		Assert.isFalse( cancel );
 		
+		Assert.isTrue( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
+		Assert.isFalse( acb.isCancelled );
+		
 		//test failure
 		result = null;
 		error = null;
 		cancel = false;
 		
-		_load( Result.FAILED( new Exception( 'message' ) ) )
+		acb = _load( Result.FAILED( new Exception( 'message' ) ) )
 			.onComplete( function(r) result = r )
 			.onFail( function(e) error = e )
 			.onCancel( function() cancel = true );
@@ -96,12 +112,16 @@ class AsyncCallbackTest
 		Assert.isNull( result );
 		Assert.isFalse( cancel );
 		
+		Assert.isTrue( acb.isFailed );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isCancelled );
+		
 		//test cancel
 		result = null;
 		error = null;
 		cancel = false;
 		
-		_load( Result.CANCELLED )
+		acb = _load( Result.CANCELLED )
 			.onComplete( function(r) result = r )
 			.onFail( function(e) error = e )
 			.onCancel( function() cancel = true );
@@ -109,23 +129,31 @@ class AsyncCallbackTest
 		Assert.isTrue( cancel );
 		Assert.isNull( result );
 		Assert.isNull( error );
+		
+		Assert.isTrue( acb.isCancelled );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
 	}
 	
 	@Test( 'Test completion twice' )
 	public function testCompletionTwice() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( Nothing );
-					handler( Nothing );
-				}
-			);
+			handler( Nothing );
+			handler( Nothing );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -133,23 +161,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
+		Assert.isFalse( acb.isCancelled );
 	}
 	
 	@Test( 'Test failure twice' )
 	public function testFailureTwice() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( new Exception( 'message' ) );
-					handler( new Exception( 'message' ) );
-				}
-			);
+			handler( new Exception( 'message' ) );
+			handler( new Exception( 'message' ) );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -157,23 +193,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isFailed );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isCancelled );
 	}
 	
 	@Test( 'Test cancel twice' )
 	public function tesCancelTwice() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( Result.CANCELLED );
-					handler( Result.CANCELLED );
-				}
-			);
+			handler( Result.CANCELLED );
+			handler( Result.CANCELLED );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -181,23 +225,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isCancelled );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
 	}
 	
 	@Test( 'Test completion and failure at the same time' )
 	public function testCompletionAndFailureAtTheSameTime() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( Nothing );
-					handler( new Exception( 'message' ) );
-				}
-			);
+			handler( Nothing );
+			handler( new Exception( 'message' ) );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -205,23 +257,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
+		Assert.isFalse( acb.isCancelled );
 	}
 	
 	@Test( 'Test failure and completion at the same time' )
 	public function testFailureAndCompletionAtTheSameTime() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( new Exception( 'message' ) );
-					handler( Nothing );
-				}
-			);
+			handler( new Exception( 'message' ) );
+			handler( Nothing );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -229,23 +289,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isFailed );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isCancelled );
 	}
 	
 	@Test( 'Test completion and cancel at the same time' )
 	public function testCompletionAndCancelAtTheSameTime() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( Nothing );
-					handler( Result.CANCELLED );
-				}
-			);
+			handler( Nothing );
+			handler( Result.CANCELLED );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -253,23 +321,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
+		Assert.isFalse( acb.isCancelled );
 	}
 	
 	@Test( 'Test completion and cancel at the same time' )
 	public function testCancelAndCompletionAtTheSameTime() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( Result.CANCELLED );
-					handler( Nothing );
-				}
-			);
+			handler( Result.CANCELLED );
+			handler( Nothing );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -277,23 +353,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isCancelled );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
 	}
 	
 	@Test( 'Test failure and cancel at the same time' )
 	public function testFailureAndCancelAtTheSameTime() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( new Exception( 'message' ) );
-					handler( Result.CANCELLED );
-				}
-			);
+			handler( new Exception( 'message' ) );
+			handler( Result.CANCELLED );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -301,23 +385,31 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isFailed );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isCancelled );
 	}
 	
 	@Test( 'Test cancel and failure at the same time' )
 	public function testCancelAndFailureAtTheSameTime() : Void
 	{
 		var error : IllegalStateException = null;
+		var acb : AsyncCallback<Nothing> = null;
+		var handler : Handler<Nothing> = null;
+		
+		acb = AsyncCallback.get
+		(
+			function ( h : Handler<Nothing> )
+			{
+				handler = h;
+			}
+		);
 		
 		try 
 		{
-			AsyncCallback.get
-			(
-				function ( handler : Handler<Nothing> )
-				{
-					handler( Result.CANCELLED );
-					handler( new Exception( 'message' ) );
-				}
-			);
+			handler( Result.CANCELLED );
+			handler( new Exception( 'message' ) );
 		}
 		catch ( e : IllegalStateException )
 		{
@@ -325,6 +417,10 @@ class AsyncCallbackTest
 		}
 
 		Assert.isInstanceOf( error, IllegalStateException );
+		
+		Assert.isTrue( acb.isCancelled );
+		Assert.isFalse( acb.isCompleted );
+		Assert.isFalse( acb.isFailed );
 	}
 	
 	@Test( "test simple lambda chaining" )
