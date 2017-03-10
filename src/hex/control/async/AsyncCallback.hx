@@ -1,8 +1,11 @@
 package hex.control.async;
 
-import haxe.ds.StringMap;
+#if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
+#end
+
+import haxe.ds.StringMap;
 import hex.error.Exception;
 import hex.error.IllegalStateException;
 import hex.error.PrivateConstructorException;
@@ -40,6 +43,48 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 	macro public function whenComplete<ResultType>( ethis : Expr, clazz : Expr ) : ExprOf<AsyncCallback<ResultType>>
 	{
 		return AsyncCallbackUtil.whenComplete( ethis, clazz );
+	}
+	
+	@:final 
+	public var isCompleted( get, null ) : Bool;
+    public function get_isCompleted() : Bool
+	{
+		switch( this._result )
+		{
+			case Result.DONE( result ):
+				return true;
+				
+			case _:
+				return false;
+		}
+	}
+	
+	@:final 
+	public var isFailed( get, null ) : Bool;
+    public function get_isFailed() : Bool
+	{
+		switch( this._result )
+		{
+			case Result.FAILED( error ):
+				return true;
+				
+			case _:
+				return false;
+		}
+	}
+	
+	@:final 
+	public var isCancelled( get, null ) : Bool;
+    public function get_isCancelled() : Bool
+	{
+		switch( this._result )
+		{
+			case Result.CANCELLED:
+				return true;
+				
+			case _:
+				return false;
+		}
 	}
 	
 	public function onComplete( onComplete : Callback<ResultType> ) : AsyncCallback<ResultType>
