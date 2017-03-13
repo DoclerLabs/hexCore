@@ -323,14 +323,13 @@ class Dispatcher<ListenerType:{}> implements IDispatcher<ListenerType>
 		if ( isSealed != this._isSealed )
 		{
 			this._isSealed = isSealed;
-			if ( !this._isSealed && this._cachedMethodCalls.length > 0 )
+			if ( !this._isSealed )
 			{
-				for ( cachedMethodCall in this._cachedMethodCalls )
+				while ( this._cachedMethodCalls.length > 0 )
 				{
-					cachedMethodCall();
+					var func = this._cachedMethodCalls.shift();
+					func();
 				}
-				
-				this._cachedMethodCalls = [];
 			}
 		}
 	}
