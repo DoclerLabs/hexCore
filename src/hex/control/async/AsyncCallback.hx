@@ -46,6 +46,20 @@ class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
 	}
 	
 	@:final 
+	public var isWaiting( get, null ) : Bool;
+    public function get_isWaiting() : Bool
+	{
+		switch( this._result )
+		{
+			case Result.WAITING:
+				return true;
+				
+			case _:
+				return false;
+		}
+	}
+	
+	@:final 
 	public var isCompleted( get, null ) : Bool;
     public function get_isCompleted() : Bool
 	{
