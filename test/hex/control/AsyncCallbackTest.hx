@@ -2,7 +2,7 @@ package hex.control;
 
 import hex.control.async.AsyncCallback;
 import hex.control.async.Handler;
-import hex.control.async.IAsyncCallback;
+import hex.control.async.Expect;
 import hex.control.async.Nothing;
 import hex.error.Exception;
 import hex.error.IllegalArgumentException;
@@ -504,7 +504,7 @@ class AsyncCallbackTest
 			, collection, "collection content should be the same" );
 	}
 	
-	static function _load( result : Result<Nothing> ) : IAsyncCallback<Nothing>
+	static function _load( result : Result<Nothing> ) : Expect<Nothing>
 	{
 		return AsyncCallback.get
 		(
@@ -515,7 +515,7 @@ class AsyncCallbackTest
 		);
 	}
 	
-	static function _loadString<ResultType>( result : Result<String> ) : IAsyncCallback<String>
+	static function _loadString( result : Result<String> ) : Expect<String>
 	{
 		return AsyncCallback.get
 		(
