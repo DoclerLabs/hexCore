@@ -4,8 +4,8 @@ package hex.di.provider;
  * ...
  * @author Francis Bourre
  */
-interface IDependencyProvider
+interface IDependencyProvider<T>
 {
-    function getResult( injector : IDependencyInjector ) : Dynamic;
+    function getResult( injector : IDependencyInjector ) : T;
 	function destroy() : Void;
 }
