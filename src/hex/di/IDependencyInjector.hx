@@ -13,11 +13,11 @@ interface IDependencyInjector extends IBasicInjector
 
     function injectInto( target : Dynamic ) : Void;
 
-    function destroyInstance( instance : Dynamic ) : Void;
+    function destroyInstance<T>( instance : T ) : Void;
 	
 	function addListener( listener: IInjectorListener ) : Bool;
 
 	function removeListener( listener: IInjectorListener ) : Bool;
 	
-	function getProvider( className : String, name : String = '' ) : IDependencyProvider;
+	function getProvider<T>( className : String, name : String = '' ) : IDependencyProvider<T>;
 }
