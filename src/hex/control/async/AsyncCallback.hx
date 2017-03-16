@@ -14,7 +14,7 @@ import hex.error.PrivateConstructorException;
  * ...
  * @author Francis Bourre
  */
-class AsyncCallback<ResultType> implements IAsyncCallback<ResultType>
+class AsyncCallback<ResultType> implements Expect<ResultType>
 {
 	static var _map 		: Map<AsyncCallback<Dynamic>, Bool> = new Map();
 	
