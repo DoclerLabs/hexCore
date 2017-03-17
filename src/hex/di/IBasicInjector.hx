@@ -7,9 +7,9 @@ interface IBasicInjector
 {
     function mapToValue<T>( clazz : Class<T>, value : T, ?name : String = '' ) : Void;
 
-    function mapToType<T>( clazz : Class<T>, type : Class<T>, name:String = '' ) : Void;
+    function mapToType<T>( clazz : Class<T>, type : Class<T>, name : String = '' ) : Void;
 
-    function mapToSingleton<T>( clazz : Class<T>, type : Class<T>, name:String = '' ) : Void;
+    function mapToSingleton<T>( clazz : Class<T>, type : Class<T>, name : String = '' ) : Void;
 
     function getInstance<T>( type : Class<T>, name : String = '' ) : T;
 	
@@ -27,7 +27,7 @@ interface IBasicInjector
 	
 	function mapClassNameToValue<T>( className : String, value : T, ?name : String = '' ) : Void;
 
-    function mapClassNameToType<T>( className : String, type : Class<T>, name:String = '' ) : Void;
+    function mapClassNameToType<T>( className : String, type : Class<T>, name : String = '' ) : Void;
 
-    function mapClassNameToSingleton<T>( className : String, type : Class<T>, name:String = '' ) : Void;
+    function mapClassNameToSingleton<T>( className : String, type : Class<T>, name : String = '' ) : Void;
 }

@@ -7,11 +7,11 @@ import hex.di.provider.IDependencyProvider;
  */
 interface IDependencyInjector extends IBasicInjector
 {
-    function hasDirectMapping( type : Class<Dynamic>, name:String = '' ) : Bool;
+    function hasDirectMapping<T>( type : Class<T>, name : String = '' ) : Bool;
 
-    function satisfies( type : Class<Dynamic>, name : String = '' ) : Bool;
+    function satisfies<T>( type : Class<T>, name : String = '' ) : Bool;
 
-    function injectInto( target : Dynamic ) : Void;
+    function injectInto<T>( target : T ) : Void;
 
     function destroyInstance<T>( instance : T ) : Void;
 	
