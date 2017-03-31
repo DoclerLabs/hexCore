@@ -1,5 +1,6 @@
 package hex.util;
 
+import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Expr.TypeParam;
@@ -212,6 +213,18 @@ class MacroUtil
 				return "Dynamic";
 				
 			case _: return null;
+		}
+	}
+	
+	static public function getFQCNFromComplexType( ct : ComplexType ) : String
+	{
+		switch( ct )
+		{
+			case TPath( p ):
+				return TypeTools.toString( ComplexTypeTools.toType( ct ) );
+	
+			case _:
+				return null;
 		}
 	}
 	
