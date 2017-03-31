@@ -216,15 +216,22 @@ class MacroUtil
 		}
 	}
 	
+	//TODO implements all cases
 	static public function getFQCNFromComplexType( ct : ComplexType ) : String
 	{
 		switch( ct )
 		{
 			case TPath( p ):
 				return TypeTools.toString( ComplexTypeTools.toType( ct ) );
+				
+			case TFunction( args, ret ):
+				var s = '';
+				for ( arg in args ) s += MacroUtil.getFQCNFromComplexType( arg ) + '->';
+				s += MacroUtil.getFQCNFromComplexType( ret );
+				return s;
 	
 			case _:
-				return null;
+				return 'Dynamic';
 		}
 	}
 	
