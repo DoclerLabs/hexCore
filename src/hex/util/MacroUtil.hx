@@ -1,5 +1,6 @@
 package hex.util;
 
+import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Expr.TypeParam;
@@ -212,6 +213,25 @@ class MacroUtil
 				return "Dynamic";
 				
 			case _: return null;
+		}
+	}
+	
+	//TODO implements all cases
+	static public function getFQCNFromComplexType( ct : ComplexType ) : String
+	{
+		switch( ct )
+		{
+			case TPath( p ):
+				return TypeTools.toString( ComplexTypeTools.toType( ct ) );
+				
+			case TFunction( args, ret ):
+				var s = '';
+				for ( arg in args ) s += MacroUtil.getFQCNFromComplexType( arg ) + '->';
+				s += MacroUtil.getFQCNFromComplexType( ret );
+				return s;
+	
+			case _:
+				return 'Dynamic';
 		}
 	}
 	

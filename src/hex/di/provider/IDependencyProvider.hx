@@ -6,6 +6,6 @@ package hex.di.provider;
  */
 interface IDependencyProvider<T>
 {
-    function getResult( injector : IDependencyInjector ) : T;
+    function getResult( injector : IDependencyInjector, target : Class<Dynamic> ) : T;
 	function destroy() : Void;
 }
