@@ -3,10 +3,6 @@ package hex.error;
 import haxe.PosInfos;
 import hex.util.Stringifier;
 
-#if (!macro && debug)
-import hex.log.HexLog.*;
-#end
-
 /**
  * ...
  * @author Francis Bourre
@@ -22,12 +18,6 @@ class Exception
         this.message    = message;
         this.posInfos   = posInfos;
         this.name       = Stringifier.stringify( this );
-		
-		#if (!macro && debug)
-			error(this.toString());
-		#elseif (macro && debug)
-			trace(this.toString());
-		#end
     }
 
     public function toString() : String
