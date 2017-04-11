@@ -204,27 +204,34 @@ class TriggerBuilder
 			return ct.getParameters()[0].name == (macro :Void).getParameters()[0].name;
 		}
 
-		var l = triggerDefinition.args.length;
-		if (triggerDefinition.args.length == 1 && isVoid(triggerDefinition.args[0]))
+		function extractArg( t : ComplexType ):{t:ComplexType,opt:Bool}
 		{
-			l = 0;
-		}
-
-		var args = [];
-		for ( i in 0...l ) 
-		{
-			var t = triggerDefinition.args[ i ];
-			switch( t )
+			return switch(t)
 			{
 				case TPath( p ):
 					var ttype = t.toType().toString().split('<')[0];
 					var tPack = getPack( ttype );
 					//do the dirty job of setting the right pack for each argument if the developer forgets to set it.
 					p.pack = tPack.pack;
-					
+					{t:t, opt:false};
+				case TOptional( to ):
+					{t:extractArg( to ).t, opt:true};
 				case _:
+					{t:t, opt:false};
 			}
-			args.push( { name: 'arg' + i, type: t, opt: false } );
+		}
+		
+		var l = triggerDefinition.args.length;
+		if (triggerDefinition.args.length == 1 && isVoid(triggerDefinition.args[0]))
+		{
+			l = 0;
+		}
+		
+		var args = [];
+		for ( i in 0...l ) 
+		{
+			var arg = extractArg(triggerDefinition.args[ i ]);
+			args.push( { name: 'arg' + i, type: arg.t, opt: arg.opt } );
 		}
 		
 		var className 	= '__Trigger_Class__' + (TriggerBuilder._ID++);

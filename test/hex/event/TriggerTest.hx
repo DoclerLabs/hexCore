@@ -38,6 +38,9 @@ class TriggerTest
 		var voidTriggered = false;
 		model.voidTrigger.connect( function() voidTriggered = true );
 		
+		var optionals = [];
+		model.optionalTrigger.connect( function( ?str : String ) optionals.push(str) );
+		
 		model.changeAllValues( 3, "test", this );
 		Assert.equals( 1, intMockDriver.callbackCallCount );
 		Assert.equals( 1, stringMockDriver.callbackCallCount );
@@ -51,11 +54,13 @@ class TriggerTest
 		Assert.equals('test was parsed', parserResult );
 		Assert.equals('test', parserResult2.name );
 		Assert.isTrue( voidTriggered );
+		Assert.deepEquals([null, "test"], optionals);
 		
 		model.stringOutput.disconnectAll();
 		model.genericOutput.disconnectAll();
 		model.callbacks.disconnectAll();
 		model.voidTrigger.disconnectAll();
+		model.optionalTrigger.disconnectAll();
 
 		voidTriggered = false;
 		
@@ -89,6 +94,8 @@ private class MockModel<T> implements ITriggerOwner
 	public var triggerParser2( default, never ) : ITrigger<IParser<MockTypedef>->Void>;
 	
 	public var voidTrigger( default, never ) : ITrigger<Void->Void>;
+	
+	public var optionalTrigger( default, never ):ITrigger<?String->Void>;
 
     public function new(){}
 	
@@ -102,6 +109,8 @@ private class MockModel<T> implements ITriggerOwner
 		this.triggerParser.trigger( new MockParser() );
 		this.triggerParser2.trigger( new MockParser2() );
 		this.voidTrigger.trigger();
+		this.optionalTrigger.trigger();
+		this.optionalTrigger.trigger(s);
     }
 }
 
