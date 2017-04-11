@@ -199,7 +199,17 @@ class TriggerBuilder
 			return { pack: pack, className: className };
 		}
 
+		var isVoid = function(ct:ComplexType):Bool
+		{
+			return ct.getParameters()[0].name == (macro :Void).getParameters()[0].name;
+		}
+
 		var l = triggerDefinition.args.length;
+		if (triggerDefinition.args.length == 1 && isVoid(triggerDefinition.args[0]))
+		{
+			l = 0;
+		}
+
 		var args = [];
 		for ( i in 0...l ) 
 		{
