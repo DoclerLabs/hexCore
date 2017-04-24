@@ -17,6 +17,32 @@ class ArrayUtil
         throw new PrivateConstructorException();
     }
 	
+	public static function indexOf<T>( a : Array<T>, element : T ) : Int
+	{
+		#if !neko
+			return a.indexOf( element );
+		#else
+		if ( Reflect.isFunction( element ) )
+		{
+			var length = a.length;
+			for ( i in 0...length )
+			{
+				var el = a[ i ];
+				if ( Reflect.compareMethods( el, element ) )
+				{
+					return i;
+				}
+			}
+				
+			return -1;
+		}
+		else
+		{
+			return a.indexOf( element );
+		}
+		#end
+	}
+	
 	static function arrowDecompose( f: Expr ) : { left: Expr, right: Expr }
 	{
 		var l: Expr = null;
