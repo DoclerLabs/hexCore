@@ -1,5 +1,6 @@
 package hex.util;
 
+import haxe.macro.ComplexTypeTools;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Expr.TypeParam;
@@ -215,22 +216,35 @@ class MacroUtil
 		}
 	}
 	
-	static public inline function instantiate( t : TypePath, ?args ) : ExprDef
+	//TODO implements all cases
+	static public function getFQCNFromComplexType( ct : ComplexType ) : String
 	{
-		return ENew( t, args == null ? [] : args );
+		switch( ct )
+		{
+			case TPath( p ):
+				return TypeTools.toString( ComplexTypeTools.toType( ct ) );
+				
+			case TFunction( args, ret ):
+				var s = '';
+				for ( arg in args ) s += MacroUtil.getFQCNFromComplexType( arg ) + '->';
+				s += MacroUtil.getFQCNFromComplexType( ret );
+				return s;
+	
+			case _:
+				return 'Dynamic';
+		}
 	}
+	
+	static public inline function getFQCNFromExpression( e : Expr ) : String
+		return MacroUtil.getFQCNFromComplexType( TypeTools.toComplexType( Context.typeof( e ) ) );
+	
+	static public inline function instantiate( t : TypePath, ?args ) : ExprDef
+		return ENew( t, args == null ? [] : args );
 	
 	static public inline function assertTypeMatching( typeName1 : String, typeName2 : String, ?pos : Position ) : Void
 	{
-		var varType1 = 
-					TypeTools.toComplexType(
-						Context.typeof( 
-							Context.parseInlineString( '( null : ${typeName1})', Context.currentPos() ) ) );
-		
-		var varType2 = 
-					TypeTools.toComplexType(
-						Context.typeof( 
-							Context.parseInlineString( '( null : ${typeName2})', Context.currentPos() ) ) );
+		var varType1 = MacroUtil.getComplexTypeFromString( typeName1 );
+		var varType2 = MacroUtil.getComplexTypeFromString( typeName2 );
 		
 		Context.typeof( 
 			macro @:pos( pos != null? pos: Context.currentPos() ) 
@@ -240,11 +254,15 @@ class MacroUtil
 	static public inline function assertValueMatching( typeName : String, value : Expr, ?pos : Position ) : Void
 	{
 		//check type matching
-		var varType = 
-					TypeTools.toComplexType( 
+		var varType = MacroUtil.getComplexTypeFromString( typeName );
+		Context.typeof( macro @:pos( pos != null? pos: Context.currentPos() ) { var v : $varType = $value; } );
+	}
+	
+	static public inline function getComplexTypeFromString( typeName : String ) : Null<ComplexType>
+	{
+		return TypeTools.toComplexType( 
 						Context.typeof( 
 							Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) ) );
-		Context.typeof( macro @:pos( pos != null? pos: Context.currentPos() ) { var v : $varType = $value; } );
 	}
 	#end
 }

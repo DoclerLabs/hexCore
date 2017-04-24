@@ -1,6 +1,5 @@
 package hex.module;
 
-import hex.di.IContextOwner;
 import hex.domain.Domain;
 import hex.event.MessageType;
 import hex.log.ILogger;
@@ -9,23 +8,11 @@ import hex.log.ILogger;
  * ...
  * @author Francis Bourre
  */
-interface IModule extends IContextOwner
+interface IModule extends IContextModule
 {
-    function initialize() : Void;
-
-    var isInitialized( get, null ) : Bool;
-	
-	function release() : Void;
-
-	var isReleased( get, null ) : Bool;
-
     function dispatchPublicMessage( messageType : MessageType, ?data : Array<Dynamic> ) : Void;
 
-    function addHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Void;
+    function addHandler( messageType : MessageType, scope : Dynamic, callback : haxe.Constraints.Function ) : Void;
 
-    function removeHandler<T:haxe.Constraints.Function>( messageType : MessageType, scope : Dynamic, callback : T ) : Void;
-	
-	function getDomain() : Domain;
-	
-	function getLogger() : ILogger;
+    function removeHandler( messageType : MessageType, scope : Dynamic, callback : haxe.Constraints.Function ) : Void;
 }

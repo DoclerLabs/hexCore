@@ -2,7 +2,7 @@ package hex.domain;
 
 import hex.core.HashCodeFactory;
 import hex.error.IllegalStateException;
-import hex.module.IModule;
+import hex.module.IContextModule;
 
 /**
  * ...
@@ -12,7 +12,7 @@ import hex.module.IModule;
 class DomainExpert
 {
 	var _registeredDomains 	: Map<UInt, Domain>;
-	var _subscribedModules 	: Map<IModule, Domain>;
+	var _subscribedModules 	: Map<IContextModule, Domain>;
 	var _removedModules 	: Map<String, Bool>;
 	
 	static var _Instance 	= new DomainExpert();
@@ -30,7 +30,7 @@ class DomainExpert
 		this._removedModules 	= new Map();
 	}
 	
-	public function getDomainFor( module : IModule ) : Domain
+	public function getDomainFor( module : IContextModule ) : Domain
 	{
 		if ( !this._subscribedModules.exists( module ) )
 		{
@@ -70,7 +70,7 @@ class DomainExpert
 		this._registeredDomains.set( DomainExpert._DomainIndex, domain );
 	}
 	
-	public function releaseDomain( module : IModule ) : Void
+	public function releaseDomain( module : IContextModule ) : Void
 	{
 		if ( module.isReleased )
 		{
