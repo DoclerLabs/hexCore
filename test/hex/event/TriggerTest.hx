@@ -75,6 +75,27 @@ class TriggerTest
 		Assert.equals( 3, callbackResult.i );
 		Assert.isFalse( voidTriggered );
     }
+	
+	@Test( "test trigger instantiation and callbacks" )
+    public function testTriggerWithDisconnect() : Void
+    {
+		var model 					= new MockModel<Bool>();
+		
+		var intMockDriverRemover 	= new IntMockDriverRemover( model.intOutput );
+		var intMockDriver 			= new IntMockDriver();
+		
+		model.intOutput.connect( intMockDriverRemover );
+		model.intOutput.connect( intMockDriver );
+		
+		model.changeAllValues( 3, "test", this );
+
+		Assert.equals( 1, intMockDriver.callbackCallCount );
+		Assert.equals( 1, intMockDriverRemover.callbackCallCount );
+		
+		model.changeAllValues( 4, "hello", this );
+		Assert.equals( 2, intMockDriver.callbackCallCount );
+		Assert.equals( 1, intMockDriverRemover.callbackCallCount );
+	}
 }
 
 private class MockModel<T> implements ITriggerOwner
@@ -143,6 +164,23 @@ private class IntMockDriver implements IIntConnection
 	{
 		this.callbackCallCount++;
 		this.callbackParam = i;
+	}
+}
+
+private class IntMockDriverRemover implements IIntConnection
+{
+	public var callbackCallCount : Int = 0;
+	public var callbackParam 	: Int = 0;
+	
+	var _triggerToRemoveFrom : ITrigger<IIntConnection>;
+	
+	public function new( triggerToRemoveFrom ) { this._triggerToRemoveFrom = triggerToRemoveFrom;  }
+	
+    public function onChangeIntValue( i : Int ) : Void
+	{
+		this.callbackCallCount++;
+		this.callbackParam = i;
+		this._triggerToRemoveFrom.disconnect( this );
 	}
 }
 
