@@ -11,9 +11,9 @@ interface IBasicInjector
 
     function mapToSingleton<T>( clazz : Class<T>, type : Class<T>, name : String = '' ) : Void;
 
-    function getInstance<T>( type : Class<T>, name : String = '' ) : T;
+    function getInstance<T>( type : Class<T>, name : String = '', targetType : Class<Dynamic> = null ) : T;
 	
-	function getInstanceWithClassName<T>( className : String, name : String = '' ) : T;
+	function getInstanceWithClassName<T>( className : String, name : String = '', targetType : Class<Dynamic> = null ) : T;
 
     function instantiateUnmapped<T>( type : Class<T> ) : T;
 
