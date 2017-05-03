@@ -253,7 +253,8 @@ class TriggerBuilder
 		var body = 
 		macro 
 		{
-			for ( input in this._inputs ) input( $a{ methArgs } );
+			var inputs = this._inputs.copy();
+			for ( input in inputs ) input( $a{ methArgs } );
 		};
 		
 		newField.kind = FFun( 
@@ -348,7 +349,8 @@ class TriggerBuilder
 								var body = 
 								macro 
 								{
-									for ( input in this._inputs ) input.$methodName( $a{ methArgs } );
+									var inputs = this._inputs.copy();
+									for ( input in inputs ) input.$methodName( $a{ methArgs } );
 								};
 								
 								
