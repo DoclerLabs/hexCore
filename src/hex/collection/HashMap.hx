@@ -27,8 +27,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 	}
 	
 	/**
-	 * Removes all of the mappings from this map (optional operation).
-	 * The map will be empty after this call returns.
+	 * Removes all of the mappings from this map.
 	 */
 	public function clear() : Void
 	{

@@ -214,6 +214,35 @@ class ArrayMapTest
 		m.put( CustomClass, "CustomClass" );
 		Assert.equals( "CustomClass", m.get( CustomClass ), "'get' should return expected value with 'CustomClass' class key" );
 	}
+	
+	@Test( "Test clone" )
+    public function testClone() : Void
+    {
+		var mockKey     		= new MockKeyClass();
+		var anotherMockKey     	= new MockKeyClass();
+        var mockValue   		= new MockValueClass();
+		var anotherMockValue 	= new MockValueClass();
+		
+        var value 				= this._map.put( mockKey, mockValue );
+        var anotherValue 		= this._map.put( anotherMockKey, anotherMockValue );
+		
+		var map = this._map.clone();
+		
+        Assert.equals( this._map.size(), map.size(), "maps size should be the same" );
+        Assert.isNull( value, "'put' should return null when key was never registered" );
+        Assert.equals( mockValue, map.get( mockKey ), "'get' should return value argument" );
+        Assert.equals( anotherMockValue, map.get( anotherMockKey ), "'get' should return new value argument" );
+        Assert.notEquals( map, this._map, "maps should contain same pairs but not equal" );
+
+		var newKey 				= new MockKeyClass();
+		var newMockValue   		= new MockValueClass();
+		var newValue 			= map.put( newKey, newMockValue );
+		Assert.isTrue( map.containsKey( newKey ) );
+		Assert.isFalse( this._map.containsKey( newKey ) );
+		
+		this._map.clear();
+		Assert.notEquals( this._map.size(), map.size(), "maps size should not be the same" );
+	}
 }
 
 private class CustomClass
