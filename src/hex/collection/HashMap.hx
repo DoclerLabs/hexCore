@@ -54,7 +54,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 		}
 		else
 		{
-			throw new NullPointerException( this + ".containsKey() failed. key can't be null" );
+			throw new NullPointerException( "Key can't be null" );
 		}
 	}
 	
@@ -77,7 +77,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 		}
 		else
 		{
-			throw new NullPointerException( this + ".containsValue() failed. value can't be null" );
+			throw new NullPointerException( "Value can't be null" );
 		}
 	}
 	
@@ -109,7 +109,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 		}
 		else
 		{
-			throw new NullPointerException( this + ".get() failed. key can't be null" );
+			throw new NullPointerException( "Key can't be null" );
 		}
 	}
 	
@@ -144,11 +144,11 @@ class HashMap<K, V> implements IHashMap<K, V>
 		
 		if ( key == null )
 		{
-			throw new NullPointerException( this + ".put() failed. key can't be null" );
+			throw new NullPointerException( "Key can't be null" );
 		} 
 		else if ( value == null )
 		{
-			throw new NullPointerException( this + ".put() failed. value can't be null" );
+			throw new NullPointerException( "Value can't be null" );
 		}
 		else
 		{
@@ -233,7 +233,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 		}
 		else
 		{
-			throw new NullPointerException( this + ".remove() failed. key can't be null" );
+			throw new NullPointerException( "Key can't be null" );
 		}
 	}
 	
