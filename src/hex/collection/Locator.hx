@@ -16,11 +16,11 @@ class Locator<KeyType, ValueType>
 {
 	public var trigger ( default, never ) : ITrigger<ILocatorListener<Dynamic, Dynamic>>;
 	
-    var _map    		: HashMap<KeyType, ValueType>;
+    var _map    		: ArrayMap<KeyType, ValueType>;
 
     public function new()
     {
-        this._map = new HashMap();
+        this._map = new ArrayMap();
     }
 	
 	public function clear() : Void
@@ -64,7 +64,7 @@ class Locator<KeyType, ValueType>
         }
         else
         {
-            throw new NoSuchElementException( "Can't find item with '" + key + "' key in " + this.toString() );
+            throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
         }
     }
 
@@ -83,7 +83,7 @@ class Locator<KeyType, ValueType>
     {
         if ( this._map.containsKey( key ) )
         {
-            throw new IllegalArgumentException( "item is already registered with '" + key + "' key in " + this.toString() );
+            throw new IllegalArgumentException( "item is already registered with '" + key + "' key" );
         }
         else
         {
