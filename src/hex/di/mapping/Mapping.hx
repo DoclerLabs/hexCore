@@ -3,8 +3,16 @@ package hex.di.mapping;
 /**
  * @author Francis Bourre
  */
-typedef Mapping =
+typedef Mapping = MappingDef<Any, Any>;
+
+typedef MappingDef<A, T> =
 {
-	var type : Class<Dynamic>;	
-	var name : String;	
+	var type 					: A;
+	@:optional var name 		: String;
+	
+	@:optional var classValue 	: Class<T>;
+	@:optional var refValue 	: T;
+	
+	@:optional var asSingleton 	: Bool;
+	@:optional var injectInto 	: Bool;
 }
