@@ -1,37 +1,28 @@
 package hex.collection;
 
-import hex.core.HashCodeFactory;
+import hex.collection.IHashMap;
 import hex.error.NullPointerException;
+import hex.util.ArrayUtil;
 
 /**
  * ...
  * @author Francis Bourre
  */
-class HashMap<K, V> implements IHashMap<K, V>
+class ArrayMap<K, V> implements IHashMap<K, V>
 {
-
-	var _keys			: Map<String, V>;
-	var _values			: Map<String, K>;
-	var _size			: Int;
+	var _k : Array<K>;
+	var _v : Array<V>;
 	
 	public function new() 
 	{
-		this._init();
+		this._k = [];
+		this._v = [];
 	}
 	
-	function _init() : Void
+	public function clear() : Void 
 	{
-		this._keys 		= new Map<String, V>();
-		this._values 	= new Map<String, K>();
-		this._size 		= 0;
-	}
-	
-	/**
-	 * Removes all of the mappings from this map.
-	 */
-	public function clear() : Void
-	{
-		this._init();
+		this._k = [];
+		this._v = [];
 	}
 	
 	/**
@@ -45,11 +36,11 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 *          key
 	 * @throws  <code>NullPointerException</code> —  if the specified key is null
 	 */
-	public function containsKey( key : K ) : Bool
+	public function containsKey( key : K ) : Bool 
 	{
 		if ( key != null ) 
 		{
-			return this._keys.exists( this._getName( key ) );
+			return ArrayUtil.indexOf( this._k, key ) != -1;
 		}
 		else
 		{
@@ -68,11 +59,11 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 *         specified value
 	 * @throws  <code>NullPointerException</code> —  if the specified value is null
 	 */
-	public function containsValue( value : V ) : Bool
+	public function containsValue( value : V ) : Bool 
 	{
 		if ( value != null ) 
 		{
-			return this._values.exists( this._getName( value ) );
+			return ArrayUtil.indexOf( this._v, value ) != -1;
 		}
 		else
 		{
@@ -100,11 +91,12 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 *          <code>null</code> if this map contains no mapping for the key
 	 * @throws  <code>NullPointerException</code> —  if the specified key is null
 	 */
-	public function get( key : K ) : V
+	public function get( key : K ) : V 
 	{
 		if ( key != null )
 		{
-			return this._keys.get( this._getName( key ) );
+			var index = ArrayUtil.indexOf( this._k, key );
+			return index != -1 ? this._v[ ArrayUtil.indexOf( this._k, key ) ] : null;
 		}
 		else
 		{
@@ -115,9 +107,9 @@ class HashMap<K, V> implements IHashMap<K, V>
 	/**
 	 * @return <code>true</code> if this map contains no key-value mappings
 	 */
-	public function isEmpty() : Bool
+	public function isEmpty() : Bool 
 	{
-		return ( this._size == 0 );
+		return this._k.length == 0;
 	}
 	
 	/**
@@ -137,9 +129,9 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 *          if the implementation supports <code>null</code> values.)
 	 * @throws  <code>NullPointerException</code> —  if the specified key or value is null
 	 */
-	public function put( key : K, value : V ) : V
+	public function put( key : K, value : V ) : V 
 	{
-		var oldValue : V = null;
+		var oldValue = null;
 		
 		if ( key == null )
 		{
@@ -151,40 +143,19 @@ class HashMap<K, V> implements IHashMap<K, V>
 		}
 		else
 		{
-			if ( this.containsKey( key ) ) 
+			switch ArrayUtil.indexOf( this._k, key )
 			{
-				oldValue = this.remove( key );
+				case -1: 
+					this._k.push( key ); 
+					this._v.push( value );
+					
+				case i: 
+					oldValue = this._v[ i ];
+					this._v[ i ] = value;
 			}
-			
-			this._size++;
-			this._keys.set( this._getName( key ), value );
-			this._values.set( this._getName( value ), key );
-			return oldValue;
-		}
-	}
-	
-	function _getName( o : Dynamic ) : String
-	{
-		var s : String;
-		
-		if ( Std.is( o, String ) ) 
-		{
-			s = '_S' + o;
-		}
-		else if ( Std.is( o, Bool ) )
-		{
-			s = '_B' + o;
-		}
-		else if ( Std.is( o, Float ) )
-		{
-			s = '_N' + o;
-		}
-		else 
-		{
-			s = '_O' + HashCodeFactory.getKey( o );
 		}
 		
-		return s;
+		return oldValue;
 	}
 	
 	/**
@@ -210,65 +181,68 @@ class HashMap<K, V> implements IHashMap<K, V>
 	 *          <code>null</code> if there was no mapping for <code>key</code>.
 	 * @throws  <code>NullPointerException</code> —  if the specified key is null 
 	 */
-	public function remove( key : K ) : V
+	public function remove( key : K ) : V 
 	{
+		var oldValue = null;
+		
 		if ( key != null )
 		{
-			var sKID : String = this._getName( key );
-		
-			if ( this._keys.exists( sKID ) )
+			switch ArrayUtil.indexOf( this._k, key )
 			{
-				var sVID : String = this._getName( this._keys[ sKID ] );
-				var value : V = this._keys.get( sKID );
-				this._values.remove( sVID );
-				this._keys.remove( sKID );
-				this._size--;
-				return value;
-			}
-			else
-			{
-				return null;
+				case -1: 
+					return null;
+					
+				case last if ( last == this._k.length - 1 ):
+					this._k.pop();
+					oldValue = this._v.pop();
+				true;
+				
+			case v:
+					oldValue = this._v[ v ];
+					this._k[ v ] = this._k.pop(); 
+					this._v[ v ] = this._v.pop(); 
 			}
 		}
 		else
 		{
 			throw new NullPointerException( "Key can't be null" );
 		}
+		
+		return oldValue;
 	}
 	
 	/**
 	 * @return the number of key-value mappings in this map
 	 */
-	public function size() : Int
+	public function size() : Int 
 	{
-		return this._size;
+		return this._k.length;
 	}
 	
 	/**
 	 * @return an array view of the keys contained in this map
 	 */
-	public function getKeys() : Array<K>
+	public function getKeys() : Array<K> 
 	{
-		var a = new Array<K>();
-		var it = this._values.iterator();
-		while ( it.hasNext() )
-		{
-			a.push( it.next() );
-		}
-		return a;
+		return this._k.copy();
 	}
 	
 	/**
 	 * @return an array view of the values contained in this map
 	 */
-	public function getValues() : Array<V>
+	public function getValues() : Array<V> 
 	{
-		var a = new Array<V>();
-		var it = this._keys.iterator();
-		while ( it.hasNext() )
-		{
-			a.push( it.next() );
-		}
-		return a;
+		return this._v.copy();
+	}
+	
+	/**
+	 * @return a deep cloned map
+	 */
+	public function clone() : ArrayMap<K, V>
+	{
+		var m = new ArrayMap();
+		m._k = this._k.copy();
+		m._v = this._v.copy();
+		return m;
 	}
 }

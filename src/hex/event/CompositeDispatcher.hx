@@ -1,7 +1,6 @@
 package hex.event;
 
 import hex.error.UnsupportedOperationException;
-import hex.util.Stringifier;
 
 /**
  * ...
@@ -72,12 +71,12 @@ class CompositeDispatcher
 	
 	public function addListener( listener : {} ) : Bool 
 	{
-		throw ( new UnsupportedOperationException( "'addListener' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
+		throw ( new UnsupportedOperationException( "'addListener' is not supported" ) );
 	}
 	
 	public function removeListener( listener : {} ) : Bool 
 	{
-		throw ( new UnsupportedOperationException( "'removeListener' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
+		throw ( new UnsupportedOperationException( "'removeListener' is not supported" ) );
 	}
 	
 	public function removeAllListeners() : Void 
@@ -109,7 +108,7 @@ class CompositeDispatcher
 	
 	public function isRegistered( listener : {}, ?messageType : MessageType ) : Bool 
 	{
-		throw ( new UnsupportedOperationException( "'isRegistered' is not supported in '" + Stringifier.stringify( this ) + "'" ) );
+		throw ( new UnsupportedOperationException( "'isRegistered' is not supported" ) );
 	}
 	
 	public function hasHandler( messageType : MessageType, ?scope : Dynamic ) : Bool

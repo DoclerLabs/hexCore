@@ -1,7 +1,5 @@
 package hex.di;
 
-import hex.di.mapping.MappingDefinitionTest;
-
 /**
  * ...
  * @author Francis Bourre
@@ -9,6 +7,6 @@ import hex.di.mapping.MappingDefinitionTest;
 class CoreDiSuite
 {
     @Suite( "Di" )
-    public var list : Array<Class<Dynamic>> = [ MappingDefinitionTest ];
+    public var list : Array<Class<Dynamic>> = [];
 	
 }
