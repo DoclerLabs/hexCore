@@ -5,9 +5,9 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Expr.TypeParam;
 import haxe.macro.Expr.TypePath;
+import haxe.macro.ExprTools;
 import haxe.macro.Type.ClassType;
 import haxe.macro.TypeTools;
-import hex.error.PrivateConstructorException;
 
 /**
  * ...
@@ -15,11 +15,7 @@ import hex.error.PrivateConstructorException;
  */
 class MacroUtil
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 
 	macro public static function classImplementsInterface( classRef : haxe.macro.Expr.ExprOf<String>, interfaceRef : haxe.macro.Expr.ExprOf<String> ) : Expr
 	{
@@ -32,14 +28,28 @@ class MacroUtil
 
 	macro public static function classIsSubClassOf( classRef : haxe.macro.Expr.ExprOf<String>, subClassRef : haxe.macro.Expr.ExprOf<String> ) : Expr
 	{
-		var classType = MacroUtil.getClassType( haxe.macro.ExprTools.toString( classRef ) );
-		var subClassType = MacroUtil.getClassType( haxe.macro.ExprTools.toString( subClassRef ) );
-
-		var b = MacroUtil.isSubClassOf( classType, subClassType );
-		return macro { $v{ b } };
+		var classType 		= MacroUtil.getClassType( haxe.macro.ExprTools.toString( classRef ) );
+		var subClassType 	= MacroUtil.getClassType( haxe.macro.ExprTools.toString( subClassRef ) );
+		return macro { $v{ MacroUtil.isSubClassOf( classType, subClassType ) } };
 	}
 	
 	#if macro
+	static public function flatToExpr( a : Array<Expr>, to : Expr )
+	{
+		a = a.copy();
+		a.unshift( to );
+		return macro $b{a};
+	}
+	
+	static public function append( eThis, eTo ) : Expr
+	{
+		return switch( eTo.expr )
+		{
+			case EBlock( exprs ): { expr: EBlock( exprs.concat( [ eThis ] ) ), pos: eThis.pos };
+			case _: { expr: EBlock( [ eTo, eThis ] ), pos: eThis.pos };
+		}
+	}
+	
 	static public function getClassNameFromExpr( e : Expr ) : String
 	{
 		var s = haxe.macro.ExprTools.toString( e );
@@ -91,9 +101,9 @@ class MacroUtil
 	
 	static public function getStaticVariable( staticReference : String, position : Position = null ) : Expr
 	{
-		var className = ClassUtil.getClassNameFromStaticReference( staticReference );
-		var staticVarName = ClassUtil.getStaticVariableNameFromStaticReference( staticReference );
-		var tp = MacroUtil.getPack( className );
+		var className 		= ClassUtil.getClassNameFromStaticReference( staticReference );
+		var staticVarName 	= ClassUtil.getStaticVariableNameFromStaticReference( staticReference );
+		var tp 				= MacroUtil.getPack( className );
 
 		if ( position != null )
 		{
@@ -259,10 +269,8 @@ class MacroUtil
 	}
 	
 	static public inline function getComplexTypeFromString( typeName : String ) : Null<ComplexType>
-	{
 		return TypeTools.toComplexType( 
 						Context.typeof( 
 							Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) ) );
-	}
 	#end
 }
