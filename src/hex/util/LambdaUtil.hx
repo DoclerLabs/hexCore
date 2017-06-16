@@ -26,24 +26,17 @@ class LambdaUtil
 		return l;
 	}
 	
-	public static function transformAndPartition<O, T>( a : Iterable<O>, f : O->Transformation<O, T> ) : Split<Iterable<T>,Iterable<O>>
+	public static function transformAndPartition<O, T>( a : Iterable<O>, f : O->Transformation<O, T> ) : Split<Array<T>,Array<O>>
 	{
-		var o = new List<O>();
-		var t = new List<T>();
-		
-		for ( e in a )
+		return a.fold( function( e : O, a : Split<Array<T>,Array<O>> ) 
 		{
 			switch( f( e ) )
 			{
-				case Transformed( v ):
-					t.add( v );
-					
-				case Original( v ):
-					o.add( v );
+				case Transformed( v ): 	a.is.push( v );
+				case Original( v ): 	a.isNot.push( v );
 			}
-		}
-		
-		return { is: t, isNot: o };
+			return a;
+		}, { is: new Array<T>(), isNot: new Array<O>() } );
 	}
 }
 
