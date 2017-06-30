@@ -232,7 +232,15 @@ class MacroUtil
 		switch( ct )
 		{
 			case TPath( p ):
-				return TypeTools.toString( ComplexTypeTools.toType( ct ) );
+				var t = ComplexTypeTools.toType( ct );
+				var type = TypeTools.toString( t ).split(' ').join( '' );
+				switch ( t )
+				{
+					case TType( _.get().module => module, _ ): 
+						if ( type != module ) type = module + '.' + type.split('.').pop();
+					default: 
+				}
+				return type;
 				
 			case TFunction( args, ret ):
 				var s = '';
