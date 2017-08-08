@@ -7,5 +7,5 @@ package hex.module;
 class CoreModuleSuite
 {
     @Suite( "Module" )
-    public var list : Array<Class<Dynamic>> = [ ModuleMessageTest ];
+    public var list : Array<Class<Dynamic>> = [];
 }
