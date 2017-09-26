@@ -149,7 +149,7 @@ class ArrayMap<K, V> implements IHashMap<K, V>
 					this._k.push( key ); 
 					this._v.push( value );
 					
-				case i: 
+				case var i: 
 					oldValue = this._v[ i ];
 					this._v[ i ] = value;
 			}
@@ -192,12 +192,12 @@ class ArrayMap<K, V> implements IHashMap<K, V>
 				case -1: 
 					return null;
 					
-				case last if ( last == this._k.length - 1 ):
+				case var last if ( last == this._k.length - 1 ):
 					this._k.pop();
 					oldValue = this._v.pop();
 				true;
 				
-			case v:
+			case var v:
 					oldValue = this._v[ v ];
 					this._k[ v ] = this._k.pop(); 
 					this._v[ v ] = this._v.pop(); 
