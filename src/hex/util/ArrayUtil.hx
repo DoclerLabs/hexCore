@@ -19,7 +19,7 @@ class ArrayUtil
 	
 	public static function indexOf<T>( a : Array<T>, element : T ) : Int
 	{
-		#if !neko
+		#if (!neko || !php)
 			return a.indexOf( element );
 		#else
 		if ( Reflect.isFunction( element ) )

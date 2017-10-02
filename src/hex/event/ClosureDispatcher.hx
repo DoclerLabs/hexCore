@@ -38,7 +38,7 @@ class ClosureDispatcher implements IClosureDispatcher
 
         var callbacks = this._callbacks.get( messageType );
 
-		#if !neko
+		#if (!neko || !php)
 		var index : Int = callbacks.indexOf( callback );
         if ( index == -1 )
         {
@@ -74,7 +74,7 @@ class ClosureDispatcher implements IClosureDispatcher
 
 		var callbacks = this._callbacks.get( messageType );
 		
-		#if !neko
+		#if (!neko || !php)
 		var index : Int = callbacks.indexOf( callback );
         if ( index == -1 )
         {
@@ -139,7 +139,7 @@ class ClosureDispatcher implements IClosureDispatcher
         }
         else
         {
-            #if !neko
+            #if (!neko || !php)
             return this._callbacks.get( messageType ).indexOf( callback ) != -1;
 			#else
 			var closures = this._callbacks.get( messageType );
