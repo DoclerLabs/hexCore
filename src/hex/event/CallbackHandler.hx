@@ -25,7 +25,7 @@ class CallbackHandler
 	
 	public function add( callback : Dynamic ) : Bool
 	{
-		#if (!neko || !php)
+		#if (!neko && !php)
 		if ( this.callbacks.indexOf( callback ) == -1 )
 		{
 			this.callbacks.push( callback );
@@ -51,7 +51,7 @@ class CallbackHandler
 	
 	public function remove( callback : Dynamic ) : Bool
 	{
-		#if (!neko || !php)
+		#if (!neko && !php)
 		var index : Int = this.callbacks.indexOf( callback );
 		if (  index != -1 )
 		{
