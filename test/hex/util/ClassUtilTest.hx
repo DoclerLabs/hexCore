@@ -9,8 +9,9 @@ import hex.unittest.assertion.Assert;
  */
 class ClassUtilTest
 {
-	public static inline var STATIC_REF : String = "static_ref";
-	
+	public static var STATIC_REF : String = "static_ref";
+	public static inline var STATIC_INLINE_REF : String = "static_inline_ref";
+
 	@Test( "test constructor is private" ) 
 	public function testPrivateConstructor() : Void
 	{
@@ -28,6 +29,7 @@ class ClassUtilTest
     public function testGetStaticVariableReference() : Void
     {
 		Assert.equals( "static_ref", ClassUtil.getStaticVariableReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticReference' should return the right static property" );
+		Assert.equals( "static_inline_ref", ClassUtil.getStaticVariableReference( "hex.util.ClassUtilTest.STATIC_INLINE_REF" ), "'getStaticReference' should return the right static inline property" );
 		Assert.methodCallThrows( IllegalArgumentException, ClassUtil, ClassUtil.getStaticVariableReference, ["hex.util.ClassUtilTest.UnavailableStaticRef"], "'getStaticReference' should throw IllegalArgumentException" );
 	}
 
@@ -35,12 +37,14 @@ class ClassUtilTest
     public function testGetClassNameFromStaticReference() : Void
     {
 		Assert.equals( "hex.util.ClassUtilTest", ClassUtil.getClassNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getClassNameFromStaticReference' should return the right static property" );
+		Assert.equals( "hex.util.ClassUtilTest", ClassUtil.getClassNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_INLINE_REF" ), "'getClassNameFromStaticReference' should return the right static inline property" );
 	}
 	
 	@Test( "Test getStaticVariableNameFromStaticReference" )
     public function testGetStaticVariableNameFromStaticReference() : Void
     {
 		Assert.equals( "STATIC_REF", ClassUtil.getStaticVariableNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticVariableNameFromStaticReference' should return the right static property" );
+		Assert.equals( "STATIC_INLINE_REF", ClassUtil.getStaticVariableNameFromStaticReference( "hex.util.ClassUtilTest.STATIC_INLINE_REF" ), "'getStaticVariableNameFromStaticReference' should return the right static inline 	property" );
 	}
 	
 	@Test( "Test getClassName" )

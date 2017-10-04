@@ -45,8 +45,8 @@ class AsyncCallback<ResultType> implements Expect<ResultType>
 		return AsyncCallbackUtil.whenComplete( ethis, clazz );
 	}
 	
-	@:final 
 	public var isWaiting( get, null ) : Bool;
+	@:final 
     public function get_isWaiting() : Bool
 	{
 		switch( this._result )
@@ -59,8 +59,8 @@ class AsyncCallback<ResultType> implements Expect<ResultType>
 		}
 	}
 	
-	@:final 
 	public var isCompleted( get, null ) : Bool;
+	@:final 
     public function get_isCompleted() : Bool
 	{
 		switch( this._result )
@@ -73,8 +73,8 @@ class AsyncCallback<ResultType> implements Expect<ResultType>
 		}
 	}
 	
-	@:final 
 	public var isFailed( get, null ) : Bool;
+	@:final 
     public function get_isFailed() : Bool
 	{
 		switch( this._result )
@@ -87,8 +87,8 @@ class AsyncCallback<ResultType> implements Expect<ResultType>
 		}
 	}
 	
-	@:final 
 	public var isCancelled( get, null ) : Bool;
+	@:final 
     public function get_isCancelled() : Bool
 	{
 		switch( this._result )
