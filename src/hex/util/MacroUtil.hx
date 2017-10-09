@@ -237,7 +237,7 @@ class MacroUtil
 				switch ( t )
 				{
 					case TType( _.get().module => module, _ ): 
-						if ( type != module ) type = module + '.' + type.split('.').pop();
+						if ( type.split('<')[0] != module ) type = module + '.' + type.split('.').pop();
 					default: 
 				}
 				return type;
