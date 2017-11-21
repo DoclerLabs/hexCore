@@ -13,7 +13,7 @@ interface IBasicInjector
 
     function getInstance<T>( type : Class<T>, name : String = '', targetType : Class<Dynamic> = null ) : T;
 	
-	function getInstanceWithClassName<T>( className : String, name : String = '', targetType : Class<Dynamic> = null ) : T;
+	function getInstanceWithClassName<T>( className : String, name : String = '', targetType : Class<Dynamic> = null, shouldThrowAnError : Bool = true ) : T;
 
     function instantiateUnmapped<T>( type : Class<T> ) : T;
 
