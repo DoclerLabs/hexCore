@@ -16,14 +16,11 @@ class BasicStringifierStrategy implements IStringifierStrategy
     public function stringify( target : Dynamic ) : String
     {
 		var type = Type.getClass( target );
-        return type != null ? Type.getClassName( type ) : "Dynamic";//+ "#" + HashCodeFactory.getKey( target );
+        return type != null ? Type.getClassName( type ) : "Dynamic";
     }
 
     /**
      * @return The string representation of this instance
      */
-    public function toString() : String
-    {
-        return Stringifier.stringify( this );
-    }
+    public function toString() return Stringifier.stringify( this );
 }

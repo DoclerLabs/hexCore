@@ -1,32 +1,20 @@
 package hex.collection;
 
-import hex.error.IllegalArgumentException;
-import hex.error.NoSuchElementException;
-import hex.event.ITrigger;
-import hex.event.ITriggerOwner;
-import hex.util.Stringifier;
-
 /**
  * ...
  * @author Francis Bourre
  */
 class Locator<KeyType, ValueType> 
-	implements ITriggerOwner
+	implements hex.event.ITriggerOwner
 	implements ILocator<KeyType, ValueType>
 {
-	public var trigger ( default, never ) : ITrigger<ILocatorListener<Dynamic, Dynamic>>;
+	public var trigger ( default, never ) : hex.event.ITrigger<ILocatorListener<Dynamic, Dynamic>>;
 	
-    var _map    		: ArrayMap<KeyType, ValueType>;
+    var _map    		: ArrayMap<KeyType, ValueType> = new ArrayMap();
 
-    public function new()
-    {
-        this._map = new ArrayMap();
-    }
+    public function new(){}
 	
-	public function clear() : Void
-	{
-		this._map.clear();
-	}
+	public function clear() this._map.clear();
 	
 	public function release() : Void
 	{
@@ -36,20 +24,11 @@ class Locator<KeyType, ValueType>
 		#end
 	}
 	
-	public function isEmpty() : Bool
-	{
-		return this._map.size() == 0;
-	}
+	public function isEmpty() return this._map.size() == 0;
 
-    public function keys() : Array<KeyType>
-    {
-        return this._map.getKeys();
-    }
+    public function keys() return this._map.getKeys();
 	
-    public function values() : Array<ValueType>
-    {
-        return this._map.getValues();
-    }
+    public function values() return this._map.getValues();
 
     public function isRegisteredWithKey( key : KeyType ) : Bool
     {
@@ -64,14 +43,13 @@ class Locator<KeyType, ValueType>
         }
         else
         {
-            throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
+            throw new hex.error.NoSuchElementException( "Can't find item with '" + key + "' key" );
         }
     }
 
     public function add( m : Map<KeyType, ValueType> ) : Void
     {
         var iterator = m.keys();
-
         while( iterator.hasNext() )
         {
             var key : KeyType = iterator.next();
@@ -83,7 +61,7 @@ class Locator<KeyType, ValueType>
     {
         if ( this._map.containsKey( key ) )
         {
-            throw new IllegalArgumentException( "item is already registered with '" + key + "' key" );
+            throw new hex.error.IllegalArgumentException( "item is already registered with '" + key + "' key" );
         }
         else
         {
@@ -121,10 +99,7 @@ class Locator<KeyType, ValueType>
 		return this.trigger.disconnect( listener );
     }
 
-    public function toString() : String
-    {
-        return Stringifier.stringify( this );
-    }
+    public function toString() return hex.util.Stringifier.stringify( this );
 
     function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {

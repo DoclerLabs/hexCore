@@ -6,6 +6,6 @@ package hex.util;
  */
 class CoreUtilSuite
 {
-	 @Suite( "Util" )
+	@Suite( "Util" )
     public var list : Array<Class<Dynamic>> = [ ClassUtilTest, StringifierTest ];
 }

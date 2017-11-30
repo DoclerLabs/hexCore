@@ -9,8 +9,6 @@ import hex.error.IllegalArgumentException;
 import hex.error.IllegalStateException;
 import hex.unittest.assertion.Assert;
 
-using hex.util.ArrayUtil;
-
 /**
  * ...
  * @author Francis Bourre
@@ -475,33 +473,6 @@ class AsyncCallbackTest
 		Assert.isInstanceOf( error, IllegalArgumentException );
 		Assert.equals( 'message', error.message );
 		Assert.equals( 0.0, r0 );
-	}
-	
-	@Test( "test chaining with ArrayUtil" )
-	public function testChainingWithArrayUtil() 
-	{
-		var collection = [ for ( i in 0...10 ) { id: i, name: "user_" + i, isMember: i % 2 == 0 } ];
-		
-		var async = AsyncCallback.get
-		(
-			function ( handler : Handler<Array<User>> )
-			{
-				handler( collection );
-			}
-		);
-		
-		async
-			.whenComplete( a => a.forEach( e => e.name += "Test" ) )
-			.whenComplete( a => collection = a.filters( e => e.isMember ) )
-			.whenComplete( a => a.forEach( e => if ( e.id > 5 ) collection.remove( e ) ) );
-
-		Assert.deepEquals( 
-			[
-				{ id:0, name: "user_0Test", isMember: true },
-				{ id:2, name: "user_2Test", isMember: true },
-				{ id:4, name: "user_4Test", isMember: true }
-			]
-			, collection, "collection content should be the same" );
 	}
 	
 	static function _load( result : Result<Nothing> ) : Expect<Nothing>
