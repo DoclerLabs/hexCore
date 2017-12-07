@@ -13,6 +13,8 @@ import hex.unittest.assertion.Assert;
  */
 class PayloadUtilTest
 {
+	public function new() { }
+	
 	@Test( "test constructor is private" ) 
 	public function testPrivateConstructor() : Void
 	{

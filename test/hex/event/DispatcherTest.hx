@@ -11,6 +11,8 @@ class DispatcherTest
 {
 	var _dispatcher   		: Dispatcher<IMockListener>;
     var _listener     		: MockEventListener;
+	
+	public function new() { }
 
     @Before
     public function setUp() : Void

@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class PointFTest
 {
+	public function new() { }
+	
 	@Test( "test constructor" )
 	public function testConstructor() 
 	{

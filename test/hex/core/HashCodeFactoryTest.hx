@@ -5,6 +5,8 @@ import hex.unittest.assertion.Assert;
 
 class HashCodeFactoryTest
 {
+	public function new() { }
+	
 	@Test( "test constructor is private" ) 
 	public function testPrivateConstructor() : Void
 	{

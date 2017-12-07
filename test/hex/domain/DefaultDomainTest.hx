@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class DefaultDomainTest
 {
+	public function new() { }
+	
     @Test( "Test if DefaultDomain static variable exists" )
     public function testIfDefaultDomainStaticVariableExists() : Void
     {

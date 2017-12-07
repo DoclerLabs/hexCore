@@ -15,6 +15,8 @@ import hex.unittest.assertion.Assert;
  */
 class AsyncCallbackTest 
 {
+	public function new() { }
+	
 	@Test( 'Test with argument result' )
 	public function testWithArgumentResult() : Void
 	{

@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class SizeTest
 {
+	public function new() { }
+	
     @Test( "Test 'width' and 'height' property passed to constructor" )
     public function testConstructor() : Void
     {

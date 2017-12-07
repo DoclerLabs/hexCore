@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class GUIDTest
 {
+	public function new() { }
+	
 	@Test( "test constructor is private" ) 
 	public function testPrivateConstructor() : Void
 	{
