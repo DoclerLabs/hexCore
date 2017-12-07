@@ -9,5 +9,5 @@ import hex.control.payload.CorePayloadSuite;
 class CoreControlSuite
 {
 	@Suite( "Control" )
-    public var list : Array<Class<Dynamic>> = [ AsyncResponderTest, CorePayloadSuite ];
+    public var list : Array<Class<Dynamic>> = [ CorePayloadSuite ];
 }
