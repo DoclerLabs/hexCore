@@ -257,10 +257,21 @@ class MacroUtil
 			case TPath( p ):
 				var t = ComplexTypeTools.toType( ct );
 				var type = TypeTools.toString( t ).split(' ').join( '' );
+
 				switch ( t )
 				{
-					case TType( _.get().module => module, _ ): 
-						if ( type.split('<')[0] != module ) type = module + '.' + type.split('.').pop();
+					case TType( tt, params ): 
+						
+						var module = tt.get().module;
+						
+						if ( type.split('<')[0] != module ) 
+						{
+							var a =  type.split('<');
+							var s = '';
+							a.shift();
+							if ( a.length > 0 ) s += '<' + a.join('<');
+							type = module + '.' + (( '' + tt).split('.').pop()) + s;
+						}
 					default: 
 				}
 				return type;
