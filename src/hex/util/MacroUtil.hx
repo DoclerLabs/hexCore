@@ -57,6 +57,11 @@ class MacroUtil
 		}
 	}
 	
+	static public function getClassName( ct : ClassType ) : String
+	{
+		return ct.pack.join( "." ) + "." + ct.name;
+	}
+	
 	static public function flatToExpr( a : Array<Expr>, to : Expr )
 	{
 		a = a.copy();
