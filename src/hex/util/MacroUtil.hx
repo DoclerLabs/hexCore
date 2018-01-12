@@ -284,8 +284,8 @@ class MacroUtil
 			case TFunction( args, ret ):
 				var s = '';
 				for ( arg in args ) s += MacroUtil.getFQCNFromComplexType( arg ) + '->';
-				s += MacroUtil.getFQCNFromComplexType( ret );
-				return s;
+				var ret = MacroUtil.getFQCNFromComplexType( ret );
+				return s != '' ? s + ret : 'Void->' + ret;
 	
 			case _:
 				return 'Dynamic';
