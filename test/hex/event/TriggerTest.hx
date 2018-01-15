@@ -11,6 +11,8 @@ import hex.unittest.assertion.Assert;
  */
 class TriggerTest
 {
+	public function new() { }
+	
 	@Test( "test trigger instantiation and callbacks" )
     public function testTriggerInstantiationAndCallbacks() : Void
     {

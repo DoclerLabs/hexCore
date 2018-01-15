@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class ExceptionTest 
 {
+	public function new() { }
+	
 	@Test( "Test 'name' property passed to constructor" )
     public function testConstructor() : Void
     {

@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class ServiceConfigurationTest
 {
+	public function new() { }
+	
     @Test( "Test 'timeout' property passed to constructor" )
     public function testConstructor() : Void
     {

@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class BasicEventTest
 {
+	public function new() { }
+	
     @Test( "Test 'type' parameter passed to constructor" )
     public function testType() : Void
     {

@@ -13,6 +13,8 @@ class ExecutionPayloadTest
 {
 	var _data 				: MockData;
 	var _executionPayload 	: ExecutionPayload;
+	
+	public function new() { }
 
     @Before
     public function setUp() : Void

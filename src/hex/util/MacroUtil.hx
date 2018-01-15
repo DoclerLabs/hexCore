@@ -34,6 +34,34 @@ class MacroUtil
 	}
 	
 	#if macro
+	static public function compressField( e : Expr, ?previousValue : String = "" ) : String
+	{
+		return switch( e.expr )
+		{
+			case EField( ee, field ):
+				previousValue = previousValue == "" ? field : field + "." + previousValue;
+				return compressField( ee, previousValue );
+				
+			case ECall( _.expr => EField( ee, field ), params ):
+				previousValue = previousValue == "" ? field : field + "." + previousValue;
+				return compressField( ee, previousValue );
+				
+			case ECall( _.expr => EConst(CIdent(id)), params ):
+				return previousValue == "" ? id : id + "." + previousValue;
+				
+			case EConst(CIdent(id)):
+				return previousValue == "" ? id : id + "." + previousValue;
+
+			default:
+				return previousValue;
+		}
+	}
+	
+	static public function getClassName( ct : ClassType ) : String
+	{
+		return ct.pack.join( "." ) + "." + ct.name;
+	}
+	
 	static public function flatToExpr( a : Array<Expr>, to : Expr )
 	{
 		a = a.copy();
@@ -234,10 +262,21 @@ class MacroUtil
 			case TPath( p ):
 				var t = ComplexTypeTools.toType( ct );
 				var type = TypeTools.toString( t ).split(' ').join( '' );
+
 				switch ( t )
 				{
-					case TType( _.get().module => module, _ ): 
-						if ( type.split('<')[0] != module ) type = module + '.' + type.split('.').pop();
+					case TType( tt, params ): 
+						
+						var module = tt.get().module;
+						
+						if ( type.split('<')[0] != module ) 
+						{
+							var a =  type.split('<');
+							var s = '';
+							a.shift();
+							if ( a.length > 0 ) s += '<' + a.join('<');
+							type = module + '.' + (( '' + tt).split('.').pop()) + s;
+						}
 					default: 
 				}
 				return type;
@@ -245,8 +284,8 @@ class MacroUtil
 			case TFunction( args, ret ):
 				var s = '';
 				for ( arg in args ) s += MacroUtil.getFQCNFromComplexType( arg ) + '->';
-				s += MacroUtil.getFQCNFromComplexType( ret );
-				return s;
+				var ret = MacroUtil.getFQCNFromComplexType( ret );
+				return s != '' ? s + ret : 'Void->' + ret;
 	
 			case _:
 				return 'Dynamic';

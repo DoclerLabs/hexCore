@@ -1,6 +1,5 @@
 package hex.collection;
 
-import hex.error.PrivateConstructorException;
 import hex.event.MessageType;
 
 /**
@@ -9,12 +8,7 @@ import hex.event.MessageType;
  */
 class LocatorMessage
 {
-	/** @private */
-	function new() 
-	{
-		throw new PrivateConstructorException();
-	}
-	
+	/** @private */ function new() throw new hex.error.PrivateConstructorException();
 	inline static public var REGISTER	= new MessageType( "onRegister" );
 	inline static public var UNREGISTER	= new MessageType( "onUnregister" );
 }

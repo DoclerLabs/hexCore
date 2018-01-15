@@ -8,6 +8,8 @@ import hex.unittest.assertion.Assert;
  */
 class TopLevelDomainTest
 {
+	public function new() { }
+	
 	@Test( "Test if 'TopLevelDomain' static variable exists" )
     public function testIfTopLevelDomainStaticVariableExists() : Void
     {
