@@ -319,5 +319,8 @@ class MacroUtil
 		return TypeTools.toComplexType( 
 						Context.typeof( 
 							Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) ) );
+							
+	static public inline function getTypeFromString( typeName : String ) : haxe.macro.Type
+		return Context.typeof( Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) );
 	#end
 }
