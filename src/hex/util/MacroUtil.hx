@@ -143,7 +143,7 @@ class MacroUtil
 		}
 	}
 	
-	static public function getClassType( qualifiedClassName : String, position : Position = null ) : ClassType
+	static public function getClassType( qualifiedClassName : String, position : Position = null, shouldThrow = true ) : ClassType
 	{
 		var type = null;
 		
@@ -153,7 +153,14 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.error( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			if ( shouldThrow )
+			{
+				Context.error( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			}
+			else
+			{
+				return null;
+			}
 		}
 		
 		switch type 
