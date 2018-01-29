@@ -57,6 +57,11 @@ class MacroUtil
 		}
 	}
 	
+	static public function getIdent( e : Expr ) : String
+	{
+		return switch( e.expr ) { case EConst(CIdent(id)): id; case _: null; };
+	}
+	
 	static public function getClassName( ct : ClassType ) : String
 	{
 		return ct.pack.join( "." ) + "." + ct.name;
