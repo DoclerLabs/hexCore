@@ -39,7 +39,7 @@ install:
   - git clone --recursive -b $DEPENDENCIES_BRANCH https://github.com/DoclerLabs/hexUnit.git ./hexunit
   - haxelib dev hexunit ./hexunit
 #tink_macro
-  - haxelib install tink_macro 0.15.0
+  - haxelib install tink_macro 0.16.1
 #hexCore
   - haxelib dev hexcore .
   - haxelib path hexcore
