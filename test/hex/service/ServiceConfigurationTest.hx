@@ -8,11 +8,9 @@ import hex.unittest.assertion.Assert;
  */
 class ServiceConfigurationTest
 {
-	public function new() { }
-	
     @Test( "Test 'timeout' property passed to constructor" )
     public function testConstructor() : Void
-    {
+    {Type.createInstance
         var serviceConfiguration = new ServiceConfiguration( 3000 );
         Assert.equals( 3000, serviceConfiguration.serviceTimeout, "'timeout' property should be the same passed to constructor" );
     }
