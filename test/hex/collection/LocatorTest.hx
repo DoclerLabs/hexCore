@@ -12,8 +12,6 @@ import hex.unittest.assertion.Assert;
  */
 class LocatorTest
 {
-	public function new() { }
-	
 	var _locator : MockLocator;
 
 	@Before

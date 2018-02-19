@@ -8,8 +8,6 @@ class CompositeDispatcherTest
 {
 	var _dispatcher : CompositeDispatcher;
 	
-	public function new() { }
-	
 	@Before
     public function setUp() : Void
     {

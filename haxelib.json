@@ -8,8 +8,9 @@
   "releasenote": "First release. Still alpha testing",
   "version": "git",
   "url": "https://github.com/DoclerLabs/hexCore",
-  "dependencies": 
+  "dependencies":
   {
-    "hexlog": "git:https://github.com/DoclerLabs/hexLog.git"
+    "hexlog": "git:https://github.com/DoclerLabs/hexLog.git",
+    "tink_macro": "0.16.1"
   }
 }

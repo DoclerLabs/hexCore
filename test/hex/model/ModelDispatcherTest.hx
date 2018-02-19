@@ -11,8 +11,6 @@ class ModelDispatcherTest
 {
 	var _dispatcher : MockDispatcher;
 	
-	public function new() { }
-	
 	@Before
 	public function setUp() : Void
 	{

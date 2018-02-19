@@ -11,8 +11,6 @@ class ClosuredispatcherTest
     var _dispatcher   		: ClosureDispatcher;
     var _listener     		: MockEventListener;
 	
-	public function new() { }
-
     @Before
     public function setUp() : Void
     {

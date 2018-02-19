@@ -9,8 +9,6 @@ import hex.unittest.assertion.Assert;
  */
 class HashMapTest
 {
-	public function new() { }
-	
 	var _map : HashMap<MockKeyClass, MockValueClass>;
 
 	@Before

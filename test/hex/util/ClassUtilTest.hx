@@ -12,8 +12,6 @@ class ClassUtilTest
 	public static var STATIC_REF : String = "static_ref";
 	public static inline var STATIC_INLINE_REF : String = "static_inline_ref";
 
-	public function new() { }
-	
 	@Test( "test constructor is private" ) 
 	public function testPrivateConstructor() : Void
 	{

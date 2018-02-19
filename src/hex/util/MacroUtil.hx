@@ -57,6 +57,11 @@ class MacroUtil
 		}
 	}
 	
+	static public function getIdent( e : Expr ) : String
+	{
+		return switch( e.expr ) { case EConst(CIdent(id)): id; case _: null; };
+	}
+	
 	static public function getClassName( ct : ClassType ) : String
 	{
 		return ct.pack.join( "." ) + "." + ct.name;
@@ -143,7 +148,7 @@ class MacroUtil
 		}
 	}
 	
-	static public function getClassType( qualifiedClassName : String, position : Position = null ) : ClassType
+	static public function getClassType( qualifiedClassName : String, position : Position = null, shouldThrow = true ) : ClassType
 	{
 		var type = null;
 		
@@ -153,7 +158,14 @@ class MacroUtil
 		}
 		catch( e : Dynamic )
 		{
-			Context.error( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			if ( shouldThrow )
+			{
+				Context.error( "Fails to retrieve ClassType for class named '" + qualifiedClassName + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			}
+			else
+			{
+				return null;
+			}
 		}
 		
 		switch type 
@@ -319,5 +331,8 @@ class MacroUtil
 		return TypeTools.toComplexType( 
 						Context.typeof( 
 							Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) ) );
+							
+	static public inline function getTypeFromString( typeName : String ) : haxe.macro.Type
+		return Context.typeof( Context.parseInlineString( '( null : ${typeName})', Context.currentPos() ) );
 	#end
 }

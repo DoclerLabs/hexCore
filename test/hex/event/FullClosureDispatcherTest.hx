@@ -10,8 +10,6 @@ class FullClosureDispatcherTest
     var _dispatcher   		: FullClosureDispatcher;
     var _listener     		: MockEventListener;
 
-	public function new() { }
-	
     @Before
     public function setUp() : Void
     {
