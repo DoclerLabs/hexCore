@@ -40,8 +40,6 @@ install:
   - haxelib dev hexunit ./hexunit
 #tink_macro
   - haxelib install tink_macro 0.16.1
-#tink_core
-  - haxelib install tink_core 1.16.1
 #hexCore
   - haxelib dev hexcore .
   - haxelib path hexcore
