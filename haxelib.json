@@ -11,6 +11,7 @@
   "dependencies":
   {
     "hexlog": "git:https://github.com/DoclerLabs/hexLog.git",
-    "tink_macro": "0.16.1"
+    "tink_macro": "0.16.1",
+    "tink_core": "1.16.1"
   }
 }
