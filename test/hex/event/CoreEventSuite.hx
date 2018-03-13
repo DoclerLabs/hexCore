@@ -9,11 +9,8 @@ class CoreEventSuite
     @Suite( "Event" )
     public var list : Array<Class<Dynamic>> 
 	= [	
-		BasicEventTest, 
 		ClosuredispatcherTest, 
-		CompositeDispatcherTest, 
 		DispatcherTest, 
-		FullClosureDispatcherTest, 
 		TriggerTest
 	];
 }

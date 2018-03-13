@@ -504,3 +504,20 @@ private class MockEventListenerForTestingSealingOnRemoveAllListeners extends Moc
 		this.dispatcher.removeAllListeners();
     }
 }
+
+private class BasicEvent
+{
+    public var type     : String;
+    public var target   : Dynamic;
+
+    public function new( type : String, target : Dynamic )
+    {
+        this.type   = type;
+        this.target = target;
+    }
+
+    public function clone() : BasicEvent
+    {
+        return new BasicEvent( this.type, this.target );
+    }
+}
