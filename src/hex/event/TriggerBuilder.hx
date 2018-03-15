@@ -15,6 +15,7 @@ import hex.util.MacroUtil;
 
 using haxe.macro.Context;
 using haxe.macro.Tools;
+using tink.MacroApi;
 
 /**
  * ...
@@ -88,6 +89,7 @@ class TriggerBuilder
 		var triggerDefinition 	= TriggerBuilder._getTriggerDefinition( f );
 		
 		var classVO : ClassVO = null;
+		
 		if ( triggerDefinition.tPath != null )
 		{
 			classVO = TriggerBuilder._buildClassVOFromTPath( triggerDefinition.tPath );
@@ -123,11 +125,15 @@ class TriggerBuilder
 										case TInst( t, pp ):
 											return { tPath: { name: t.get().name, triggerParamType: tp, typePath: p }, tFun: null };
 											
+										case TType( n, args ):
+											return { tPath: { name: n.get().name, triggerParamType: tp, typePath: p }, tFun: null };
+											
 										case _:
 									}
 								
-									case TFunction( args, ret ):
+								case TFunction( args, ret ):
 										return { tPath: null, tFun: { args: args, ret: ret, triggerParamType: tp } };
+								
 								case _:
 							}
 							
@@ -209,7 +215,7 @@ class TriggerBuilder
 			return switch(t)
 			{
 				case TPath( p ):
-					var ttype = t.toType().toString().split('<')[0];
+					var ttype = ComplexTypeTools.toType( t ).toString().split('<')[0];
 					var tPack = getPack( ttype );
 					//do the dirty job of setting the right pack for each argument if the developer forgets to set it.
 					p.pack = tPack.pack;
@@ -291,89 +297,22 @@ class TriggerBuilder
 			dispatcherClass = TriggerBuilder._getClassSkeleton( className, triggerDefinition.triggerParamType );
 
 			var newFields = dispatcherClass.fields;
-			switch( ComplexTypeTools.toType( triggerDefinition.triggerParamType ) )
+			var ct = ComplexTypeTools.toType( triggerDefinition.triggerParamType );
+			switch( ct )
 			{
 				case TInst( _.get() => cls, params ):
-
-					var fields : Array<ClassField> = cls.fields.get();
-
-					for ( field in fields )
-					{
-						switch( field.kind )
-						{
-							case FMethod( k ):
-								
-								var fieldType 					= field.type;
-								var ret : ComplexType 			= null;
-								var args : Array<FunctionArg> 	= [];
-							
-								switch( fieldType )
-								{
-									case TFun( a, r ):
+					_buildFields( newFields, cls, params, cls.fields.get() );
+					
+				case TType( t, params ):
+					_buildFields( newFields, t.get(), params, ct.getFields().sure() );
 										
-										ret = r.toComplexType();
-
-										if ( a.length > 0 )
-										{
-											args = a.map( function( arg )
-											{
-												switch( arg.t )
-												{
-													case TInst( t, p ):
-														var i = _getIndex( t, cls.params );
-														if ( i != -1 )
-														{
-															return cast { name: arg.name, type: params[i].toComplexType(), opt: arg.opt };
-														}
-
-													case _:
-												}
-												return cast { name: arg.name, type: arg.t.toComplexType(), opt: arg.opt };
-											} );
-										}
-									
-									case _:
-								}
-
-								var newField : Field = 
-								{
-									meta: field.meta.get(),
-									name: field.name,
-									pos: field.pos,
-									kind: null,
-									access: [ APublic ]
-								}
-
-								var methodName  = field.name;
-								var methArgs = [ for ( arg in args ) macro $i { arg.name } ];
-								var body = 
-								macro 
-								{
-									var inputs = this._inputs.copy();
-									for ( input in inputs ) input.$methodName( $a{ methArgs } );
-								};
-								
-								
-								newField.kind = FFun( 
-									{
-										args: args,
-										ret: ret,
-										expr: body
-									}
-								);
-								
-								newFields.push( newField );
-								
-							case _:
-						}
-					}
-
-					case _:
+				case _:
 			}
 			
 			var typePath 	: TypePath;
 			var pack 		: Array<String>;
-			
+		
+			var shouldImplement = false;	
 			switch( triggerDefinition.triggerParamType )
 			{
 				case TPath( p ):
@@ -384,13 +323,17 @@ class TriggerBuilder
 						case TInst( t, p ):
 							var ct = t.get();
 							pack = ct.pack.copy();
+							shouldImplement = true;
+							
+						case TType( t, p ):
+							var ct = t.get();
+							pack = ct.pack.copy();
 							
 						case _:
 					}
 
 					typePath = p;
 
-					
 				case _:
 			}
 
@@ -399,13 +342,13 @@ class TriggerBuilder
 			switch( dispatcherClass.kind )
 			{
 				case TDClass( superClass, interfaces, isInterface ):
-					interfaces.push( typePath );
+					if ( shouldImplement ) interfaces.push( typePath );
 					//interfaces.push( interfaceName.typePath );
 					interfaces.push( MacroUtil.getTypePath( Type.getClassName( ITrigger ), [ TPType( triggerDefinition.triggerParamType ) ] ) );
 					
 				case _:
 			}
-			
+
 			Context.defineType( dispatcherClass );
 			TriggerBuilder._cache.set( className, dispatcherClass );
 		}
@@ -415,6 +358,80 @@ class TriggerBuilder
 		}
 		
 		return { name: dispatcherClass.name, pack: dispatcherClass.pack, fullClassName: dispatcherClass.pack.join( '.' ) + '.' + dispatcherClass.name };
+	}
+	
+	static function _buildFields( newFields, cls, params : Array<haxe.macro.Type>, fields : Array<ClassField> )
+	{
+		for ( field in fields )
+		{
+			switch( field.kind )
+			{
+				case FMethod( k ):
+					
+					var fieldType 					= field.type;
+					var ret : ComplexType 			= null;
+					var args : Array<FunctionArg> 	= [];
+				
+					switch( fieldType )
+					{
+						case TFun( a, r ):
+							
+							ret = r.toComplexType();
+
+							if ( a.length > 0 )
+							{
+								args = a.map( function( arg )
+								{
+									switch( arg.t )
+									{
+										case TInst( t, p ):
+											var i = _getIndex( t, cls.params );
+											if ( i != -1 )
+											{
+												return cast { name: arg.name, type: params[i].toComplexType(), opt: arg.opt };
+											}
+
+										case _:
+									}
+									return cast { name: arg.name, type: arg.t.toComplexType(), opt: arg.opt };
+								} );
+							}
+						
+						case _:
+					}
+
+					var newField : Field = 
+					{
+						meta: field.meta.get(),
+						name: field.name,
+						pos: field.pos,
+						kind: null,
+						access: [ APublic ]
+					}
+
+					var methodName  = field.name;
+					var methArgs = [ for ( arg in args ) macro $i { arg.name } ];
+					var body = 
+					macro 
+					{
+						var inputs = this._inputs.copy();
+						for ( input in inputs ) input.$methodName( $a{ methArgs } );
+					};
+					
+					
+					newField.kind = FFun( 
+						{
+							args: args,
+							ret: ret,
+							expr: body
+						}
+					);
+					
+					newFields.push( newField );
+					
+				case _:
+			}
+		}
 	}
 
 	static function _getIndex( t:Ref<ClassType>, params : Array<TypeParameter> ): Int
