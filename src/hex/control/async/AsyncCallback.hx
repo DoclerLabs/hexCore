@@ -9,6 +9,7 @@ import haxe.ds.StringMap;
 import hex.error.Exception;
 import hex.error.IllegalStateException;
 import hex.error.PrivateConstructorException;
+import tink.core.Callback;
 
 /**
  * ...

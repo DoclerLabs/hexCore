@@ -1,6 +1,7 @@
 package hex.control.async;
 
 import hex.error.Exception;
+import tink.core.Callback;
 
 /**
  * @author Francis Bourre
