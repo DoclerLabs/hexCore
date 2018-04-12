@@ -76,8 +76,7 @@ class DomainTest
 	public function testToString() : Void
 	{
         var domain = Type.createInstance( Domain, [ "testToString" ] );
-        var expectedString = "hex.domain.Domain with name 'testToString'";
-        Assert.equals( expectedString, domain.toString(), "toString method should return expected string value" );
+        Assert.equals( 'testToString', domain.toString(), "toString method should return expected string value" );
 	}
 	
 	@Test( "Test `getDomain` method" )

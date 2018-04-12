@@ -2,7 +2,6 @@ package hex.domain;
 
 import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
-import hex.util.Stringifier;
 
 /**
  * ...
@@ -63,7 +62,7 @@ class Domain
 
     public function toString() : String
     {
-        return Stringifier.stringify( this ) + " with name '" + this.getName() + "'";
+        return this.getName();
     }
 	
 	static function _reparent() : Void

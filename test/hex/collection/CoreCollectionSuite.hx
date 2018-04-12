@@ -7,5 +7,5 @@ package hex.collection;
 class CoreCollectionSuite
 {
 	@Suite( "Collection" )
-    public var list : Array<Class<Dynamic>> = [ArrayMapTest, HashMapTest, LocatorMessageTest, LocatorTest];
+    public var list : Array<Class<Dynamic>> = [ArrayMapTest, HashMapTest, LocatorTest];
 }
