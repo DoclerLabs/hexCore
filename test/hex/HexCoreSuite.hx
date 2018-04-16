@@ -1,7 +1,6 @@
 package hex;
 
 import hex.collection.CoreCollectionSuite;
-import hex.control.CoreControlSuite;
 import hex.core.CoreCoreSuite;
 import hex.data.CoreDataSuite;
 import hex.di.CoreDiSuite;
@@ -22,7 +21,6 @@ class HexCoreSuite
     public var list : Array<Class<Dynamic>> = 
 	[ 
 		CoreCollectionSuite, 
-		CoreControlSuite, 
 		CoreCoreSuite, 
 		CoreDataSuite, 
 		CoreDiSuite, 
