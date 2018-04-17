@@ -5,8 +5,8 @@ package hex.di.mapping;
  */
 typedef MappingDefinition =
 {
-	var fromType 				: String;
-	@:optional var withName 	: String;
+	var fromType 				: ClassName;
+	@:optional var withName 	: MappingName;
 	
 	@:optional var toClass 		: Class<Dynamic>;
 	@:optional var toValue 		: Any;

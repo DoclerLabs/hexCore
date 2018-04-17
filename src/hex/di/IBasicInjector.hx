@@ -5,29 +5,29 @@ package hex.di;
  */
 interface IBasicInjector
 {
-    function mapToValue<T>( clazz : Class<T>, value : T, ?name : String = '' ) : Void;
+    function mapToValue<T>( clazz : ClassRef<T>, value : T, ?name : MappingName ) : Void;
 
-    function mapToType<T>( clazz : Class<T>, type : Class<T>, name : String = '' ) : Void;
+    function mapToType<T>( clazz : ClassRef<T>, type : Class<T>, ?name : MappingName ) : Void;
 
-    function mapToSingleton<T>( clazz : Class<T>, type : Class<T>, name : String = '' ) : Void;
+    function mapToSingleton<T>( clazz : ClassRef<T>, type : Class<T>, ?name : MappingName ) : Void;
 
-    function getInstance<T>( type : Class<T>, name : String = '', targetType : Class<Dynamic> = null ) : T;
+    function getInstance<T>( type : ClassRef<T>, ?name : MappingName, targetType : Class<Dynamic> = null ) : T;
 	
-	function getInstanceWithClassName<T>( className : String, name : String = '', targetType : Class<Dynamic> = null, shouldThrowAnError : Bool = true ) : T;
+	function getInstanceWithClassName<T>( className : ClassName, ?name : MappingName, targetType : Class<Dynamic> = null, shouldThrowAnError : Bool = true ) : T;
 
     function instantiateUnmapped<T>( type : Class<T> ) : T;
+	
+	function getOrCreateNewInstance<T>( type : Class<T> ) : T;
+	
+	function hasMapping<T>( type : ClassRef<T>, ?name : MappingName ) : Bool;
+	
+	function unmap<T>( type : ClassRef<T>, ?name : MappingName ) : Void;
+	
+	function unmapClassName( className : ClassName, ?name : MappingName ) : Void;
+	
+	function mapClassNameToValue<T>( className : ClassName, value : T, ?name : MappingName ) : Void;
 
-    function getOrCreateNewInstance<T>( type : Class<T> ) : T;
-	
-	function hasMapping<T>( type : Class<T>, name : String = '' ) : Bool;
-	
-	function unmap<T>( type : Class<T>, name : String = '' ) : Void;
-	
-	function unmapClassName( className : String, name : String = '' ) : Void;
-	
-	function mapClassNameToValue<T>( className : String, value : T, ?name : String = '' ) : Void;
+    function mapClassNameToType<T>( className : ClassName, type : Class<T>, ?name : MappingName ) : Void;
 
-    function mapClassNameToType<T>( className : String, type : Class<T>, name : String = '' ) : Void;
-
-    function mapClassNameToSingleton<T>( className : String, type : Class<T>, name : String = '' ) : Void;
+    function mapClassNameToSingleton<T>( className : ClassName, type : Class<T>, ?name : MappingName ) : Void;
 }

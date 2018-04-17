@@ -3,7 +3,6 @@ package hex.module;
 import hex.core.IApplicationContext;
 import hex.di.IContextOwner;
 import hex.di.IDependencyInjector;
-import hex.domain.Domain;
 import hex.log.ILogger;
 
 /**
@@ -17,8 +16,7 @@ interface IContextModule extends IContextOwner
 	
 	function initialize( context : IApplicationContext ) : Void;
 	function release() : Void;
-	
-	function getDomain() : Domain;
+
 	function getInjector() : IDependencyInjector;
 	function getLogger() : ILogger;
 }

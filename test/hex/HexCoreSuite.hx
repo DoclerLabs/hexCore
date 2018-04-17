@@ -4,7 +4,6 @@ import hex.collection.CoreCollectionSuite;
 import hex.core.CoreCoreSuite;
 import hex.data.CoreDataSuite;
 import hex.di.CoreDiSuite;
-import hex.domain.CoreDomainSuite;
 import hex.event.CoreEventSuite;
 import hex.error.CoreErrorSuite;
 import hex.module.CoreModuleSuite;
@@ -24,7 +23,6 @@ class HexCoreSuite
 		CoreCoreSuite, 
 		CoreDataSuite, 
 		CoreDiSuite, 
-		CoreDomainSuite, 
 		CoreEventSuite, 
 		CoreErrorSuite,
 		CoreModuleSuite, 
