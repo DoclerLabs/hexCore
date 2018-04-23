@@ -223,7 +223,7 @@ class MacroUtil
 		return false;
 	}
 	
-	public static function getInterfaces( c : ClassType, recursive : Bool = false ) : Array<{ t : Ref<ClassType>, params : Array<Type> }>
+	public static function getInterfaces( c : ClassType, recursive : Bool = false )
     {
         var interfaces = c.interfaces;
         if ( !recursive ) 
@@ -232,7 +232,7 @@ class MacroUtil
 		}
         else 
 		{
-			return interfaces.length == 0 ? [] : interfaces.concat( c.interfaces.flatMap(function(o) return getInterfaces( o.t.get(), true ) ).array() );
+			return interfaces.length == 0 ? [] : interfaces.concat( c.interfaces.flatMap( function(o) return getInterfaces( o.t.get(), true ) ).array() );
 		}
     }
 
