@@ -219,7 +219,7 @@ class MacroUtil
 				cls = null;
 			}
 		}
-		trace( false );
+
 		return false;
 	}
 	
