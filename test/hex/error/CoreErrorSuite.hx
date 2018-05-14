@@ -9,6 +9,6 @@ class CoreErrorSuite
     @Suite( "Error" )
     public var list : Array<Class<Dynamic>> = 
 	[ 
-		ExceptionTest
+		
 	];
 }

@@ -1,6 +1,5 @@
 package hex.collection;
 
-import hex.error.Exception;
 import hex.error.IllegalArgumentException;
 import hex.error.NullPointerException;
 import hex.error.NoSuchElementException;

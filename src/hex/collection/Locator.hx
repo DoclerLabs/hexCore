@@ -99,8 +99,6 @@ class Locator<KeyType, ValueType>
 		return this.trigger.disconnect( listener );
     }
 
-    public function toString() return hex.util.Stringifier.stringify( this );
-
     function _dispatchRegisterEvent( key : KeyType, element : ValueType ) : Void
     {
 		#if !macro
