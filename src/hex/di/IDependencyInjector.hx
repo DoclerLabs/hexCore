@@ -7,11 +7,11 @@ import hex.di.provider.IDependencyProvider;
  */
 interface IDependencyInjector extends IBasicInjector
 {
-    function hasDirectMapping<T>( type : Class<T>, name : String = '' ) : Bool;
+    function hasDirectMapping<T>( type : ClassRef<T>, ?name : MappingName) : Bool;
 
-    function satisfies<T>( type : Class<T>, name : String = '' ) : Bool;
+    function satisfies<T>( type : ClassRef<T>, ?name : MappingName ) : Bool;
 
-    function injectInto<T>( target : T ) : Void;
+    function injectInto( target : IInjectorAcceptor ) : Void;
 
     function destroyInstance<T>( instance : T ) : Void;
 	
@@ -19,5 +19,5 @@ interface IDependencyInjector extends IBasicInjector
 
 	function removeListener( listener: IInjectorListener ) : Bool;
 	
-	function getProvider<T>( className : String, name : String = '' ) : IDependencyProvider<T>;
+	function getProvider<T>( className : ClassName, ?name : MappingName ) : IDependencyProvider<T>;
 }

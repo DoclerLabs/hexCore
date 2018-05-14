@@ -14,9 +14,13 @@ class HashMap<K, V> implements IHashMap<K, V>
 	var _values			: Map<String, K>;
 	var _size			: Int;
 	
-	public function new() 
+	public function new( ?initial : Map<K, V> )
 	{
 		this._init();
+		if ( initial != null )
+		{
+			for ( k in initial.keys() ) this.put( k, initial[ k ] );
+		}
 	}
 	
 	function _init() : Void

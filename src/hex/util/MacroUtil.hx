@@ -9,6 +9,8 @@ import haxe.macro.ExprTools;
 import haxe.macro.Type.ClassType;
 import haxe.macro.TypeTools;
 
+using Lambda;
+
 /**
  * ...
  * @author Francis Bourre
@@ -198,17 +200,10 @@ class MacroUtil
 	{
 		while ( cls != null ) 
 		{
-			for ( i in cls.interfaces ) 
+			var interfaces = getInterfaces( cls, true );
+			
+			for ( i in interfaces ) 
 			{
-				//check super interfaces
-				for ( ie in i.t.get().interfaces )
-				{
-					if ( isSameClass( ie.t.get(), interfaceToMatch ) )
-					{
-						return true;
-					}
-				}
-
 				if ( isSameClass( i.t.get(), interfaceToMatch ) ) 
 				{
 					return true;
@@ -224,9 +219,22 @@ class MacroUtil
 				cls = null;
 			}
 		}
-		
+
 		return false;
 	}
+	
+	public static function getInterfaces( c : ClassType, recursive : Bool = false )
+    {
+        var interfaces = c.interfaces;
+        if ( !recursive ) 
+		{
+			return interfaces;
+		}
+        else 
+		{
+			return interfaces.length == 0 ? [] : interfaces.concat( c.interfaces.flatMap( function(o) return getInterfaces( o.t.get(), true ) ).array() );
+		}
+    }
 
 	static public function isSameClass( a : ClassType, b : ClassType ) : Bool 
 	{
