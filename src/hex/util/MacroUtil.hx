@@ -120,6 +120,7 @@ class MacroUtil
 			catch( e : Dynamic )
 			{
 				Context.error( "Fails to retrieve TypePath for class named '" + className + "'\nError caught: " + e, position );
+				throw( e );
 			}
 		}
 		else
@@ -249,7 +250,8 @@ class MacroUtil
 		}
 		catch ( e : Dynamic )
 		{
-			Context.error( "Fails to retrieve pack for class named '" + className + "'\nError caught: " + e, position == null ? Context.currentPos() : position );
+			Context.error( "Fails to retrieve pack for class named '" + className + "'\nError caught: " + e, e.pos );
+			throw( e );
 		}
 		
 		return className.split( "." );
