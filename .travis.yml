@@ -3,14 +3,42 @@ dist: trusty
 
 language: haxe
 
+os:
+  - linux
+
 # haxe versions : http://haxe.org/website-content/downloads/versions.json
 haxe:
   - "3.4.7"
   - development
 
+env:
+  - HAXE_TARGET=cpp
+  - HAXE_TARGET=cs
+  - HAXE_TARGET=flash
+  - HAXE_TARGET=lua
+  - HAXE_TARGET=neko
+  - HAXE_TARGET=node
+  - HAXE_TARGET=php
+  - HAXE_TARGET=php7
+  - HAXE_TARGET=python
+  - HAXE_TARGET=js
+  - HAXE_TARGET=java
+  - HAXE_TARGET=hl
+
 matrix:
+  fast_finish: true
   allow_failures:
-  - haxe: development
+    - haxe: development
+    - env: HAXE_TARGET=flash # cannot trust that guy
+    - env: HAXE_TARGET=cpp # Not supported yet
+    - env: HAXE_TARGET=cs # Not supported yet
+    - env: HAXE_TARGET=lua # Not supported yet
+    - env: HAXE_TARGET=python # Not supported yet
+    - env: HAXE_TARGET=java # Not supported yet
+    - env: HAXE_TARGET=hl # Not supported yet
+  exclude:
+    - haxe: "3.4.7"
+      env: HAXE_TARGET=hl
     
 before_install:
   - echo $TRAVIS_BRANCH
@@ -20,9 +48,8 @@ before_install:
   - echo $DEPENDENCIES_BRANCH
 
 install:
-  - haxelib newrepo
-  - haxelib install travix --always
   - export BRANCH_REF=$DEPENDENCIES_BRANCH
+  - haxelib install travix --always
 # hexCore
   - haxelib dev hexcore .
   - haxelib install haxelib.json --always
@@ -40,10 +67,7 @@ install:
   - haxelib path hexcore
 
 script:
-  - haxelib run travix php
-  - haxelib run travix neko
-  - haxelib run travix js
-  - haxelib run travix flash -swf-version 10.1 -D swf-script-timeout=180
+  - haxelib run travix $HAXE_TARGET
   
 notifications:
   email:
