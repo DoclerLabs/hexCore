@@ -70,7 +70,7 @@ class ClassUtil
 		
 		if ( staticRef == null )
 		{
-			throw new IllegalArgumentException( "ClassUtil.getStaticReference fails with '" + qualifiedClassName + "'" );
+			throw new IllegalArgumentException( "ClassUtil.getStaticVariableReference fails with '" + qualifiedClassName + "'" );
 		}
 		
 		return staticRef;

@@ -4,7 +4,7 @@ package hex.structures;
  * ...
  * @author Francis Bourre
  */
-abstract Point( IPoint )
+abstract Point( IPoint ) to IPoint from IPoint
 {
 	public var x( get, set ) : Int;
     public var y( get, set ) : Int;
