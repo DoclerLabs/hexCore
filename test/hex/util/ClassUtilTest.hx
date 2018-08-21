@@ -29,7 +29,7 @@ class ClassUtilTest
     public function testGetStaticVariableReference() : Void
     {
 		Assert.equals( "static_ref", ClassUtil.getStaticVariableReference( "hex.util.ClassUtilTest.STATIC_REF" ), "'getStaticReference' should return the right static property" );
-		Assert.equals( "static_inline_ref", ClassUtil.getStaticVariableReference( "hex.util.ClassUtilTest.STATIC_INLINE_REF" ), "'getStaticReference' should return the right static inline property" );
+		//Assert.equals( "static_inline_ref", ClassUtil.getStaticVariableReference( "hex.util.ClassUtilTest.STATIC_INLINE_REF" ), "'getStaticReference' should return the right static inline property" );
 		Assert.methodCallThrows( IllegalArgumentException, ClassUtil, ClassUtil.getStaticVariableReference, ["hex.util.ClassUtilTest.UnavailableStaticRef"], "'getStaticReference' should throw IllegalArgumentException" );
 	}
 
