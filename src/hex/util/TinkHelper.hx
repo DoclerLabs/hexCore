@@ -14,7 +14,7 @@ class TinkHelper
 	static public function fcqn( ct : haxe.macro.Expr.ComplexType ) : String
 	{
 		var s = ct.toType().sure().toComplex().toString();
-		return s.split( 'StdTypes.' ).join( '' ).split(' ').join('');
+		return s.split( 'StdTypes.' ).join( '' ).split(' ').join('').split('()').join('Void');
 	}
 }
 #end
