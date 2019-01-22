@@ -8,6 +8,7 @@ import haxe.macro.Expr.TypePath;
 import haxe.macro.ExprTools;
 import haxe.macro.Type.ClassType;
 import haxe.macro.TypeTools;
+using hex.error.Error;
 
 using Lambda;
 
@@ -17,7 +18,7 @@ using Lambda;
  */
 class MacroUtil
 {
-	/** @private */ function new() throw new hex.error.PrivateConstructorException();
+	/** @private */ function new() throw new PrivateConstructorException();
 
 	macro public static function classImplementsInterface( classRef : haxe.macro.Expr.ExprOf<String>, interfaceRef : haxe.macro.Expr.ExprOf<String> ) : Expr
 	{

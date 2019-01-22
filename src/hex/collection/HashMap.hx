@@ -1,7 +1,7 @@
 package hex.collection;
 
 import hex.core.HashCodeFactory;
-import hex.error.NullPointerException;
+using hex.error.Error;
 
 /**
  * ...

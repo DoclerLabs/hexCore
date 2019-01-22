@@ -1,7 +1,6 @@
 package hex.util;
 
-import hex.error.IllegalArgumentException;
-import hex.error.PrivateConstructorException;
+using hex.error.Error;
 
 /**
  * ...
@@ -9,11 +8,7 @@ import hex.error.PrivateConstructorException;
  */
 class ClassUtil
 {
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 
     static public function getInheritanceChain( clazz : Class<Dynamic> ) : Array<Class<Dynamic>>
     {

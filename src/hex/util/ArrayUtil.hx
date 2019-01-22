@@ -1,6 +1,6 @@
 package hex.util;
 
-import hex.error.PrivateConstructorException;
+using hex.error.Error;
 
 /**
  * ...

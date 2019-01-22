@@ -1,5 +1,7 @@
 package hex.collection;
 
+using hex.error.Error;
+
 /**
  * ...
  * @author Francis Bourre
@@ -43,7 +45,7 @@ class Locator<KeyType, ValueType>
         }
         else
         {
-            throw new hex.error.NoSuchElementException( "Can't find item with '" + key + "' key" );
+            throw new NoSuchElementException( "Can't find item with '" + key + "' key" );
         }
     }
 
@@ -61,7 +63,7 @@ class Locator<KeyType, ValueType>
     {
         if ( this._map.containsKey( key ) )
         {
-            throw new hex.error.IllegalArgumentException( "item is already registered with '" + key + "' key" );
+            throw new IllegalArgumentException( "item is already registered with '" + key + "' key" );
         }
         else
         {

@@ -9,13 +9,13 @@ import haxe.macro.Type.ClassType;
 import haxe.macro.Type.Ref;
 import haxe.macro.Type.TypeParameter;
 import haxe.macro.TypeTools;
-import hex.error.PrivateConstructorException;
 import hex.event.ITrigger;
 import hex.util.MacroUtil;
 
 using haxe.macro.Context;
 using haxe.macro.Tools;
 using tink.MacroApi;
+using hex.error.Error;
 
 /**
  * ...

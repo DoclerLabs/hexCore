@@ -1,8 +1,8 @@
 package hex.collection;
 
 import hex.collection.IHashMap;
-import hex.error.NullPointerException;
 import hex.util.ArrayUtil;
+using hex.error.Error;
 
 /**
  * ...
