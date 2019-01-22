@@ -1,9 +1,8 @@
 package hex.collection;
 
-import hex.error.IllegalArgumentException;
-import hex.error.NullPointerException;
-import hex.error.NoSuchElementException;
 import hex.unittest.assertion.Assert;
+
+using hex.error.Error;
 
 /**
  * ...
