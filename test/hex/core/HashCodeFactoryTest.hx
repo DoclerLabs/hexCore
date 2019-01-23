@@ -1,7 +1,8 @@
 package hex.core;
 
-import hex.error.PrivateConstructorException;
 import hex.unittest.assertion.Assert;
+
+using hex.error.Error;
 
 class HashCodeFactoryTest
 {

@@ -9,37 +9,20 @@ using hex.error.Error;
 @:final 
 class HashCodeFactory
 {
-    /** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+    /** @private */ function new() throw new PrivateConstructorException();
 
-    static var _nKEY    : Int               = 0;
+    static var _nKEY    = 0;
     static var _M       = new Map<{}, Int>();
 
-    public static function getNextKEY() : Int
-    {
-        return HashCodeFactory._nKEY++;
-    }
+    public static function getNextKEY() return HashCodeFactory._nKEY++;
 
-    public static function getNextName() : String
-    {
-        return "" + HashCodeFactory._nKEY;
-    }
+    public static function getNextName() return "" + HashCodeFactory._nKEY;
 
     public static function getKey( o : Dynamic ) : Int
     {
-        if ( !HashCodeFactory._M.exists( o ) )
-        {
-            HashCodeFactory._M.set( o, HashCodeFactory.getNextKEY() );
-        }
-
+        if ( !HashCodeFactory._M.exists( o ) ) HashCodeFactory._M.set( o, HashCodeFactory.getNextKEY() );
         return HashCodeFactory._M.get( o );
     }
 
-    public static function previewNextKey() : Int
-    {
-        return HashCodeFactory._nKEY;
-    }
+    public static function previewNextKey() return HashCodeFactory._nKEY;
 }

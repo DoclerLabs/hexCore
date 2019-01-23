@@ -17,10 +17,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 	public function new( ?initial : Map<K, V> )
 	{
 		this._init();
-		if ( initial != null )
-		{
-			for ( k in initial.keys() ) this.put( k, initial[ k ] );
-		}
+		if ( initial != null ) for ( k in initial.keys() ) this.put( k, initial[ k ] );
 	}
 	
 	function _init() : Void
@@ -33,10 +30,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 	/**
 	 * Removes all of the mappings from this map.
 	 */
-	public function clear() : Void
-	{
-		this._init();
-	}
+	public function clear() this._init();
 	
 	/**
 	 * Returns <code>true</code> if this map contains a mapping for the specified
@@ -119,10 +113,7 @@ class HashMap<K, V> implements IHashMap<K, V>
 	/**
 	 * @return <code>true</code> if this map contains no key-value mappings
 	 */
-	public function isEmpty() : Bool
-	{
-		return ( this._size == 0 );
-	}
+	public function isEmpty() return ( this._size == 0 );
 	
 	/**
 	 * Associates the specified value with the specified key in this map
@@ -243,11 +234,8 @@ class HashMap<K, V> implements IHashMap<K, V>
 	/**
 	 * @return the number of key-value mappings in this map
 	 */
-	public function size() : Int
-	{
-		return this._size;
-	}
-	
+	public function size() return this._size;
+
 	/**
 	 * @return an array view of the keys contained in this map
 	 */

@@ -2,6 +2,7 @@ package hex.collection;
 
 import hex.collection.IHashMap;
 import hex.util.ArrayUtil;
+
 using hex.error.Error;
 
 /**
@@ -107,10 +108,7 @@ class ArrayMap<K, V> implements IHashMap<K, V>
 	/**
 	 * @return <code>true</code> if this map contains no key-value mappings
 	 */
-	public function isEmpty() : Bool 
-	{
-		return this._k.length == 0;
-	}
+	public function isEmpty() return this._k.length == 0;
 	
 	/**
 	 * Associates the specified value with the specified key in this map
@@ -214,27 +212,18 @@ class ArrayMap<K, V> implements IHashMap<K, V>
 	/**
 	 * @return the number of key-value mappings in this map
 	 */
-	public function size() : Int 
-	{
-		return this._k.length;
-	}
+	public function size() return this._k.length;
 	
 	/**
 	 * @return an array view of the keys contained in this map
 	 */
-	public function getKeys() : Array<K> 
-	{
-		return this._k.copy();
-	}
+	public function getKeys() return this._k.copy();
 	
 	/**
 	 * @return an array view of the values contained in this map
 	 */
-	public function getValues() : Array<V> 
-	{
-		return this._v.copy();
-	}
-	
+	public function getValues() return this._v.copy();
+
 	/**
 	 * @return a deep cloned map
 	 */
