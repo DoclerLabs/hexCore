@@ -8,9 +8,9 @@ import haxe.macro.Expr.TypePath;
 import haxe.macro.ExprTools;
 import haxe.macro.Type.ClassType;
 import haxe.macro.TypeTools;
-using hex.error.Error;
 
 using Lambda;
+using hex.error.Error;
 
 /**
  * ...

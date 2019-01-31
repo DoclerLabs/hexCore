@@ -27,11 +27,7 @@ class TriggerBuilder
 	static var _cache 	: Map<String, TypeDefinition> 	= new Map();
 	static var _ID 		: UInt 							= 0;
 	
-	/** @private */
-    function new()
-    {
-        throw new PrivateConstructorException();
-    }
+	/** @private */ function new() throw new PrivateConstructorException();
 	
 	static function _isOutput( f ) : Bool
 	{
