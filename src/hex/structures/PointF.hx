@@ -106,13 +106,7 @@ abstract PointF( IPoint )
 	@:op( A != B ) public static inline function unequals( p1 : PointF, p2 : PointF ) : Bool
 	{
 		return ( p1.x != p2.x ) ||  ( p1.y != p2.y );
-	}
-	
-	@:op( A = B ) public static inline function assigns( p1 : PointF, p2 : PointF ) : Void
-	{
-		p1.x = p2.x;
-		p1.y = p2.y;
-	}
+	}	
 }
 
 private typedef IPoint =
