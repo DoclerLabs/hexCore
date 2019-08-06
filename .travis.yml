@@ -49,7 +49,7 @@ before_install:
 
 install:
   - export BRANCH_REF=$DEPENDENCIES_BRANCH
-  - haxelib install travix --always
+  - haxelib install travix 0.0.12 --always
 # hexCore
   - haxelib dev hexcore .
   - haxelib install haxelib.json --always
@@ -67,7 +67,7 @@ install:
   - haxelib path hexcore
 
 script:
-  - haxelib run travix:0.12.2 $HAXE_TARGET
+  - haxelib run travix:0.0.12 $HAXE_TARGET
   
 notifications:
   email:
