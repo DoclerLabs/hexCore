@@ -11,7 +11,6 @@ haxe:
   - "3.4.7"
   - development
 
-language: node_js
 node_js:
   - "8"
 
@@ -52,6 +51,7 @@ before_install:
   - echo $DEPENDENCIES_BRANCH
 
 install:
+  - nvm install 8
   - export BRANCH_REF=$DEPENDENCIES_BRANCH
   - haxelib install travix --always
 # hexCore
