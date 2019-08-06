@@ -67,7 +67,7 @@ install:
   - haxelib path hexcore
 
 script:
-  - haxelib run travix $HAXE_TARGET
+  - haxelib run travix:0.12.2 $HAXE_TARGET
   
 notifications:
   email:
