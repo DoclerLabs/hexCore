@@ -11,6 +11,7 @@ haxe:
   - "3.4.7"
   - development
 
+language: node_js
 node_js:
   - "8"
 
