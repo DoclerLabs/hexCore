@@ -11,6 +11,10 @@ haxe:
   - "3.4.7"
   - development
 
+language: node_js
+node_js:
+  - "8"
+
 env:
   - HAXE_TARGET=cpp
   #- HAXE_TARGET=cs
@@ -49,7 +53,7 @@ before_install:
 
 install:
   - export BRANCH_REF=$DEPENDENCIES_BRANCH
-  - haxelib install travix 0.12.2 --always
+  - haxelib install travix --always
 # hexCore
   - haxelib dev hexcore .
   - haxelib install haxelib.json --always
@@ -67,7 +71,7 @@ install:
   - haxelib path hexcore
 
 script:
-  - haxelib run travix:0.12.2 $HAXE_TARGET
+  - haxelib run travix $HAXE_TARGET
   
 notifications:
   email:
