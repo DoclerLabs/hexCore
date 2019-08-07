@@ -11,9 +11,6 @@ haxe:
   - "3.4.7"
   - development
 
-node_js:
-  - "8"
-
 env:
   - HAXE_TARGET=cpp
   #- HAXE_TARGET=cs
